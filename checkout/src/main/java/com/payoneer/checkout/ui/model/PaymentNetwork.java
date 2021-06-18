@@ -60,7 +60,7 @@ public class PaymentNetwork {
     }
 
     public String getLabel() {
-        return Localization.translate(network.getCode(), NETWORK_LABEL);
+        return Localization.translateNetworkLabel(network.getCode());
     }
 
     public String getRecurrence() {

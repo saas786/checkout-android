@@ -8,6 +8,7 @@
 
 package com.payoneer.checkout.ui.dialog;
 
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_DISPLAYLABEL;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_CANCEL;
@@ -30,6 +31,7 @@ import com.payoneer.checkout.core.PaymentNetworkCodes;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.Interaction;
 
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -95,17 +97,20 @@ public class PaymentDialogHelper {
         return dialog;
     }
 
-    public static PaymentDialogFragment createDeleteDialog(PaymentDialogFragment.PaymentDialogListener listener) {
+    public static PaymentDialogFragment createDeleteAccountDialog(PaymentDialogFragment.PaymentDialogListener listener, String accountLabel) {
         PaymentDialogFragment dialog = new PaymentDialogFragment();
         dialog.setListener(listener);
         dialog.setTitle(Localization.translate(ACCOUNTS_DELETE_TITLE));
-        dialog.setMessage(Localization.translate(ACCOUNTS_DELETE_TEXT));
+
+        String message = Localization.translate(ACCOUNTS_DELETE_TEXT);
+        message = message.replace(ACCOUNTS_DELETE_DISPLAYLABEL, accountLabel);
+        dialog.setMessage(message);
+
         dialog.setNegativeButton(Localization.translate(BUTTON_CANCEL));
         dialog.setPositiveButton(Localization.translate(BUTTON_DELETE));
         dialog.setTag("dialog_delete");
         return dialog;
     }
-
 
     private static int getHintImageResId(String networkCode, String type) {
 

@@ -92,7 +92,11 @@ public final class AccountCard implements PaymentCard {
 
     @Override
     public String getLabel() {
-        return Localization.translate(account.getCode(), NETWORK_LABEL);
+        AccountMask accountMask = account.getMaskedAccount();
+        if (accountMask != null) {
+            return PaymentUtils.getAccountMaskLabel(accountMask, getPaymentMethod());
+        }
+        return Localization.translateNetworkLabel(account.getCode());
     }
 
     /**

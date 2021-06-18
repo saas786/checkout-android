@@ -93,8 +93,8 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
      * {@inheritDoc}
      */
     @Override
-    public void showDeleteDialog(PaymentDialogListener listener) {
-        PaymentDialogFragment dialog = PaymentDialogHelper.createDeleteDialog(listener);
+    public void showDeleteAccountDialog(PaymentDialogListener listener, String displayLabel) {
+        PaymentDialogFragment dialog = PaymentDialogHelper.createDeleteAccountDialog(listener, displayLabel);
         showPaymentDialog(dialog);
     }
 

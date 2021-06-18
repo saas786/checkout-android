@@ -51,14 +51,13 @@ final class PresetCardViewHolder extends PaymentCardViewHolder {
 
         PaymentUtils.setTestId(itemView, "card", "preset");
         PresetCard card = (PresetCard) paymentCard;
-        AccountMask mask = card.getMaskedAccount();
         subtitle.setVisibility(View.GONE);
+        title.setText(card.getLabel());
 
+        AccountMask mask = card.getMaskedAccount();
         if (mask != null) {
-            bindAccountMask(title, subtitle, mask, card.getPaymentMethod());
-        } else {
-            title.setText(card.getLabel());
-        }
+            setExpiryDateSubtitle(subtitle, mask);
+        } 
         bindCardLogo(paymentCard.getCode(), card.getLink("logo"));
     }
 

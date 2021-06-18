@@ -283,19 +283,11 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    void bindAccountMask(TextView title, TextView subtitle, AccountMask mask, String method) {
-        switch (method) {
-            case PaymentMethod.CREDIT_CARD:
-            case PaymentMethod.DEBIT_CARD:
-                title.setText(mask.getNumber());
-                String date = PaymentUtils.getExpiryDateString(mask);
-                if (date != null) {
-                    subtitle.setVisibility(View.VISIBLE);
-                    subtitle.setText(date);
-                }
-                break;
-            default:
-                title.setText(mask.getDisplayLabel());
+    void setExpiryDateSubtitle(TextView subtitle, AccountMask accountMask) {
+        String date = PaymentUtils.getExpiryDateString(accountMask);
+        if (date != null) {
+            subtitle.setVisibility(View.VISIBLE);
+            subtitle.setText(date);
         }
     }
 

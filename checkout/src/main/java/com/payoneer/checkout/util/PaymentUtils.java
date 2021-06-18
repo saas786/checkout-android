@@ -8,6 +8,9 @@
 
 package com.payoneer.checkout.util;
 
+import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +62,16 @@ public final class PaymentUtils {
         return String.format(Locale.getDefault(), format, args);
     }
 
+    /** 
+     * Check if the paymentMethod is a card payment method.
+     * 
+     * @param paymentMethod to be checked if it is a card payment
+     * @return true when card payment, false otherwise 
+     */
+    public static boolean isCardPaymentMethod(String paymentMethod) {
+        return DEBIT_CARD.equals(paymentMethod) || CREDIT_CARD.equals(paymentMethod);
+    }
+    
     /**
      * Compare String values of two Objects by obtaining the String values using the toString method.
      *
@@ -83,6 +96,18 @@ public final class PaymentUtils {
         return value == null ? 0 : value;
     }
 
+    /** 
+     * Get the label for this AccountMask, if the paymentMethod is a card then return the 
+     * number from the mask. Else return the DisplayLabel from this mask.
+     *
+     * @param accountMask containing the label information 
+     * @param paymentMethod to which this accountMask belongs to
+     * @return the label for this AccountMask 
+     */
+    public static String getAccountMaskLabel(AccountMask accountMask, String paymentMethod) {
+        return isCardPaymentMethod(paymentMethod) ? accountMask.getNumber() : accountMask.getDisplayLabel();
+    }
+    
     /**
      * Create am expiry date string from the AccountMask.
      * If the AccountMask does not contain the expiryMonth and expiryYear values then return null.

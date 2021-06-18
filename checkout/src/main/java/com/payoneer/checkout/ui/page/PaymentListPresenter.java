@@ -136,7 +136,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         if (!(paymentCard instanceof AccountCard)) {
             return;
         }
-        view.showDeleteDialog(new PaymentDialogListener() {
+        view.showDeleteAccountDialog(new PaymentDialogListener() {
             @Override
             public void onPositiveButtonClicked() {
                 deleteAccountCard((AccountCard) paymentCard);
@@ -149,7 +149,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             @Override
             public void onDismissed() {
             }
-        });
+        }, paymentCard.getLabel());
     }
 
     @Override
