@@ -31,7 +31,6 @@ import com.payoneer.checkout.core.PaymentNetworkCodes;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.Interaction;
 
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -97,7 +96,8 @@ public class PaymentDialogHelper {
         return dialog;
     }
 
-    public static PaymentDialogFragment createDeleteAccountDialog(PaymentDialogFragment.PaymentDialogListener listener, String accountLabel) {
+    public static PaymentDialogFragment createDeleteAccountDialog(PaymentDialogFragment.PaymentDialogListener listener,
+        String accountLabel) {
         PaymentDialogFragment dialog = new PaymentDialogFragment();
         dialog.setListener(listener);
         dialog.setTitle(Localization.translate(ACCOUNTS_DELETE_TITLE));

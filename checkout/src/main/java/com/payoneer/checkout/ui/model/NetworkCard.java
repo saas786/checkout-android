@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.model.InputElement;
-import com.payoneer.checkout.model.PaymentMethod;
 import com.payoneer.checkout.util.PaymentUtils;
 
 /**

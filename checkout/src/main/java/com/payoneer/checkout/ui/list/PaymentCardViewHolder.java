@@ -24,7 +24,6 @@ import com.payoneer.checkout.R;
 import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.InputElementType;
-import com.payoneer.checkout.model.PaymentMethod;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.widget.ButtonWidget;
 import com.payoneer.checkout.ui.widget.CheckBoxWidget;

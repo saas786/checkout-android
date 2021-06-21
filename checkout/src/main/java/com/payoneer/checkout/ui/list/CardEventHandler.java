@@ -18,8 +18,8 @@ import com.payoneer.checkout.validation.Validator;
 import android.view.View;
 
 /**
- * Internal class taking care of handling and routing events that happened inside a card including its widgets. 
- * For example, if a user clicked the Pay button inside the card, this eventHandler will forward this event by calling the 
+ * Internal class taking care of handling and routing events that happened inside a card including its widgets.
+ * For example, if a user clicked the Pay button inside the card, this eventHandler will forward this event by calling the
  * appropiate message in the CardListener.
  */
 class CardEventHandler implements WidgetPresenter {

@@ -8,8 +8,6 @@
 
 package com.payoneer.checkout.ui.model;
 
-import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;

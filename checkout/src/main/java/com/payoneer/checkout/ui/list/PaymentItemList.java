@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class containing the payment ListItems and keeping track of the currently selected ListItem. 
+ * Class containing the payment ListItems and keeping track of the currently selected ListItem.
  */
 final class PaymentItemList {
 
