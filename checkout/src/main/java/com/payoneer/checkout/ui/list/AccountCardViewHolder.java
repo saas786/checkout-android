@@ -65,13 +65,12 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
         PaymentUtils.setTestId(itemView, "card", "savedaccount");
         AccountCard card = (AccountCard) paymentCard;
-        AccountMask mask = card.getMaskedAccount();
         subtitle.setVisibility(View.GONE);
+        title.setText(card.getLabel());
 
+        AccountMask mask = card.getMaskedAccount();
         if (mask != null) {
-            bindAccountMask(title, subtitle, mask, card.getPaymentMethod());
-        } else {
-            title.setText(card.getLabel());
+            setExpiryDateSubtitle(subtitle, mask);
         }
         bindCardLogo(card.getCode(), card.getLink("logo"));
     }

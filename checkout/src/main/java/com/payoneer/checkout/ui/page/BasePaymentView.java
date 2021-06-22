@@ -35,11 +35,12 @@ interface BasePaymentView {
     void showConnectionErrorDialog(PaymentDialogListener listener);
 
     /**
-     * Show the delete dialog to the user, notify the listener of events in this dialog.
+     * Show the delete account dialog to the user, notify the listener of events in this dialog.
      *
      * @param listener to be notified of dialog events
+     * @param accountLabel label of the account this is being deleted
      */
-    void showDeleteDialog(PaymentDialogListener listener);
+    void showDeleteAccountDialog(PaymentDialogListener listener, String accountLabel);
 
     /**
      * Show the interaction text to the user, notify the listener of events in this dialog.

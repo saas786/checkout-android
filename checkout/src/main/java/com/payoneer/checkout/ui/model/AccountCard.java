@@ -9,7 +9,6 @@
 package com.payoneer.checkout.ui.model;
 
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_UPDATE_ACCOUNT;
-import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
 import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
 
 import java.net.URL;
@@ -92,7 +91,11 @@ public final class AccountCard implements PaymentCard {
 
     @Override
     public String getLabel() {
-        return Localization.translate(account.getCode(), NETWORK_LABEL);
+        AccountMask accountMask = account.getMaskedAccount();
+        if (accountMask != null) {
+            return PaymentUtils.getAccountMaskLabel(accountMask, getPaymentMethod());
+        }
+        return Localization.translateNetworkLabel(account.getCode());
     }
 
     /**

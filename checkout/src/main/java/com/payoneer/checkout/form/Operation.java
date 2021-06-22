@@ -22,7 +22,6 @@ import com.payoneer.checkout.util.GsonHelper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Class holding Operation form values

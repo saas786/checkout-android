@@ -8,8 +8,6 @@
 
 package com.payoneer.checkout.ui.model;
 
-import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -97,7 +95,11 @@ public final class PresetCard implements PaymentCard {
      */
     @Override
     public String getLabel() {
-        return Localization.translate(account.getCode(), NETWORK_LABEL);
+        AccountMask accountMask = account.getMaskedAccount();
+        if (accountMask != null) {
+            return PaymentUtils.getAccountMaskLabel(accountMask, getPaymentMethod());
+        }
+        return Localization.translateNetworkLabel(account.getCode());
     }
 
     /**

@@ -8,8 +8,6 @@
 
 package com.payoneer.checkout.ui.model;
 
-import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
-
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -60,7 +58,7 @@ public class PaymentNetwork {
     }
 
     public String getLabel() {
-        return Localization.translate(network.getCode(), NETWORK_LABEL);
+        return Localization.translateNetworkLabel(network.getCode());
     }
 
     public String getRecurrence() {

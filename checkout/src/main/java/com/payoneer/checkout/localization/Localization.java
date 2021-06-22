@@ -9,6 +9,7 @@
 package com.payoneer.checkout.localization;
 
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
 
 import java.util.Map;
 
@@ -166,6 +167,16 @@ public final class Localization {
      */
     public static String translateAccountHint(String networkCode, String account, String labelType) {
         return translate(networkCode, LocalizationKey.accountHintKey(account, labelType));
+    }
+
+    /**
+     * Helper method to obtain the translation of the network label given the networkCode
+     *
+     * @param networkCode to translate it into a label
+     * @return the translated network label
+     */
+    public static String translateNetworkLabel(String networkCode) {
+        return translate(networkCode, NETWORK_LABEL);
     }
 
     /**

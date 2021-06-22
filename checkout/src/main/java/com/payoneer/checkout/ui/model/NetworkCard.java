@@ -8,16 +8,17 @@
 
 package com.payoneer.checkout.ui.model;
 
+import static com.payoneer.checkout.core.PaymentInputType.ACCOUNT_NUMBER;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.model.InputElement;
-import com.payoneer.checkout.model.PaymentMethod;
+import com.payoneer.checkout.util.PaymentUtils;
 
 /**
  * Class for holding the data of a NetworkCard in the list
@@ -148,12 +149,8 @@ public final class NetworkCard implements PaymentCard {
         if (networks.size() == 1) {
             return false;
         }
-        switch (getPaymentMethod()) {
-            case PaymentMethod.CREDIT_CARD:
-            case PaymentMethod.DEBIT_CARD:
-                if (PaymentInputType.ACCOUNT_NUMBER.equals(type)) {
-                    return smartSwitch.validate(text);
-                }
+        if (PaymentUtils.isCardPaymentMethod(getPaymentMethod()) && ACCOUNT_NUMBER.equals(type)) {
+            return smartSwitch.validate(text);
         }
         return false;
     }
