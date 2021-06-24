@@ -28,7 +28,6 @@ import com.payoneer.checkout.ui.page.PaymentListActivity;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 class AbstractTest {
 

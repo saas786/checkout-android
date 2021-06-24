@@ -8,14 +8,13 @@
 
 package com.payoneer.checkout.util;
 
+import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.WALLET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
-import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
-import static com.payoneer.checkout.model.PaymentMethod.WALLET;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentInputType;
-import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.AccountMask;
+import com.payoneer.checkout.model.InputElement;
 
 import android.content.res.Resources;
 import androidx.test.core.app.ApplicationProvider;
@@ -75,7 +74,7 @@ public class PaymentUtilsTest {
 
     }
 
-    @Test    
+    @Test
     public void isCardPaymentMethod() {
         assertTrue(PaymentUtils.isCardPaymentMethod(CREDIT_CARD));
         assertTrue(PaymentUtils.isCardPaymentMethod(DEBIT_CARD));
@@ -86,7 +85,7 @@ public class PaymentUtilsTest {
     public void getAccountMaskLabel() {
         String numberLabel = "numberLabel";
         String displayLabel = "displayLabel";
-        
+
         AccountMask accountMask = new AccountMask();
         accountMask.setNumber(numberLabel);
         accountMask.setDisplayLabel(displayLabel);
@@ -95,7 +94,7 @@ public class PaymentUtilsTest {
         assertEquals(numberLabel, PaymentUtils.getAccountMaskLabel(accountMask, DEBIT_CARD));
         assertEquals(displayLabel, PaymentUtils.getAccountMaskLabel(accountMask, WALLET));
     }
-    
+
     @Test(expected = IOException.class)
     public void readRawResource_missing_resource() throws IOException {
         Resources res = ApplicationProvider.getApplicationContext().getResources();

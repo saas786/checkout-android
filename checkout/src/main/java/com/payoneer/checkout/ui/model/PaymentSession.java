@@ -14,12 +14,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.model.ListResult;
+import com.payoneer.checkout.util.PaymentUtils;
 
 /**
  * Class for storing the ListResult and the payment sections. The following sections
  * are supported: preset accounts, saved accounts and payment networks.
  */
 public final class PaymentSession {
+
+    public final static String LINK_SELF = "self";
+    public final static String LINK_OPERATION = "operation";
+    public final static String LINK_LOGO = "logo";
+    public final static String LINK_LANGUAGE = "lang";
+
     private final ListResult listResult;
     private final List<PaymentSection> paymentSections;
 
@@ -42,37 +49,22 @@ public final class PaymentSession {
         return paymentSections;
     }
 
-    public URL getLink(String name) {
-        Map<String, URL> links = listResult.getLinks();
-        return links != null ? links.get(name) : null;
+    public URL getListLanguageLink() {
+        return getListLink(LINK_LANGUAGE);
     }
-
-    public String getListUrl() {
-        URL url = getLink("self");
+    
+    public String getListSelfUrl() {
+        URL url = getListLink(LINK_SELF);
         return url != null ? url.toString() : null;
-    }
-
-    public boolean isListUrl(String listUrl) {
-        URL url = getLink("self");
-        return url != null && url.toString().equals(listUrl);
     }
 
     public boolean isEmpty() {
         return paymentSections.size() == 0;
     }
 
-    public boolean containsSelfLink(URL url) {
-        for (PaymentSection section : paymentSections) {
-            if (section.containsLink("self", url)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean containsOperationLink(URL url) {
         for (PaymentSection section : paymentSections) {
-            if (section.containsLink("operation", url)) {
+            if (section.containsLink(LINK_OPERATION, url)) {
                 return true;
             }
         }
@@ -85,5 +77,10 @@ public final class PaymentSession {
             section.putLanguageLinks(links);
         }
         return links;
+    }
+
+    private URL getListLink(String name) {
+        Map<String, URL> links = listResult.getLinks();
+        return links != null ? links.get(name) : null;
     }
 }

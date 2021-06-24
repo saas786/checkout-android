@@ -124,7 +124,7 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void addElementWidgets(PaymentCard card) {
-        String code = card.getCode();
+        String code = card.getNetworkCode();
         List<InputElement> elements = card.getInputElements();
         boolean elementsContainExpiryDate = PaymentUtils.containsExpiryDate(elements);
 
@@ -233,6 +233,10 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void expand(boolean expand) {
+        if (paymentCard.hideInputForm()) {
+            formLayout.setVisibility(View.GONE);
+            return;
+        }
         formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
     }
 
@@ -257,23 +261,23 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bindButtonWidget(ButtonWidget widget, PaymentCard card) {
-        widget.onBind(card.getCode(), card.getButton());
+        widget.onBind(card.getButton());
     }
 
     void bindVerificationCodeWidget(VerificationCodeWidget widget, PaymentCard card) {
         InputElement element = card.getInputElement(VERIFICATION_CODE);
-        widget.onBind(card.getCode(), element);
+        widget.onBind(card.getNetworkCode(), element);
     }
 
     void bindDateWidget(DateWidget widget, PaymentCard card) {
         InputElement month = card.getInputElement(EXPIRY_MONTH);
         InputElement year = card.getInputElement(EXPIRY_YEAR);
-        widget.onBind(card.getCode(), month, year);
+        widget.onBind(card.getNetworkCode(), month, year);
     }
 
     void bindElementWidget(FormWidget widget, PaymentCard card) {
         InputElement element = card.getInputElement(widget.getName());
-        String code = card.getCode();
+        String code = card.getNetworkCode();
 
         if (widget instanceof SelectWidget) {
             ((SelectWidget) widget).onBind(code, element);

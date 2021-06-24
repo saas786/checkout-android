@@ -8,8 +8,6 @@
 
 package com.payoneer.checkout.ui.list;
 
-import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
-
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.model.AccountMask;
@@ -30,7 +28,7 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
     private final TextView title;
     private final TextView subtitle;
     private final IconView iconView;
-    private final MaterialCardView card;
+    private final MaterialCardView cardView;
 
     private AccountCardViewHolder(ListAdapter listAdapter, View parent, AccountCard accountCard) {
         super(listAdapter, parent, accountCard);
@@ -44,9 +42,7 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
                 handleIconClicked(index);
             }
         });
-        card = parent.findViewById(R.id.card_account);
-        card.setCheckable(true);
-
+        cardView = parent.findViewById(R.id.card_account);
         addElementWidgets(accountCard);
         addButtonWidget();
         layoutWidgets();
@@ -65,6 +61,8 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
         PaymentUtils.setTestId(itemView, "card", "savedaccount");
         AccountCard card = (AccountCard) paymentCard;
+        cardView.setCheckable(card.isCheckable());
+
         subtitle.setVisibility(View.GONE);
         title.setText(card.getLabel());
 
@@ -72,16 +70,19 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         if (mask != null) {
             setExpiryDateSubtitle(subtitle, mask);
         }
-        bindCardLogo(card.getCode(), card.getLink("logo"));
+        bindCardLogo(card.getNetworkCode(), card.getLogoLink());
     }
 
     @Override
     void expand(boolean expand) {
         super.expand(expand);
-        card.setChecked(expand);
 
-        boolean update = UPDATE.equals(paymentCard.getOperationType());
-        if (update) {
+        AccountCard accountCard = (AccountCard) paymentCard;
+        if (accountCard.isCheckable()) {
+            cardView.setChecked(expand);
+        }
+
+        if (accountCard.isDeletable()) {
             iconView.showIcon(expand ? 1 : 0);
         }
     }

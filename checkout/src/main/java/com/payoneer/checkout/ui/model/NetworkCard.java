@@ -23,7 +23,7 @@ import com.payoneer.checkout.util.PaymentUtils;
 /**
  * Class for holding the data of a NetworkCard in the list
  */
-public final class NetworkCard implements PaymentCard {
+public final class NetworkCard extends PaymentCard {
     private final List<PaymentNetwork> networks;
     private final SmartSwitch smartSwitch;
 
@@ -31,13 +31,18 @@ public final class NetworkCard implements PaymentCard {
      * Construct a new NetworkCard
      */
     public NetworkCard() {
+        super(false, false);
         this.networks = new ArrayList<>();
         this.smartSwitch = new SmartSwitch(networks);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void putLanguageLinks(Map<String, URL> links) {
+        for (PaymentNetwork network : networks) {
+            network.putLanguageLink(links);
+        }
+    }
+
     @Override
     public boolean containsLink(String name, URL url) {
         for (PaymentNetwork network : networks) {
@@ -48,46 +53,19 @@ public final class NetworkCard implements PaymentCard {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void putLanguageLinks(Map<String, URL> links) {
-        for (PaymentNetwork network : networks) {
-            network.putLanguageLink(links);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URL getOperationLink() {
-        return getVisibleNetwork().getLink("operation");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getOperationType() {
         return getVisibleNetwork().getOperationType();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getPaymentMethod() {
         return getVisibleNetwork().getPaymentMethod();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getCode() {
-        return getVisibleNetwork().getCode();
+    public String getNetworkCode() {
+        return getVisibleNetwork().getNetworkCode();
     }
 
     @Override
@@ -98,33 +76,13 @@ public final class NetworkCard implements PaymentCard {
         return Localization.translate(LocalizationKey.LIST_GROUPEDCARDS_TITLE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<InputElement> getInputElements() {
         return getVisibleNetwork().getInputElements();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public InputElement getInputElement(String name) {
-
-        for (InputElement element : getInputElements()) {
-            if (element.getName().equals(name)) {
-                return element;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean isPreselected() {
-
         for (PaymentNetwork network : networks) {
             if (network.isPreselected()) {
                 return true;
@@ -133,30 +91,25 @@ public final class NetworkCard implements PaymentCard {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getButton() {
-        return LocalizationKey.operationButtonKey(getOperationType());
+        return getVisibleNetwork().getButton();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean onTextInputChanged(String type, String text) {
-        if (networks.size() == 1) {
+        if (getPaymentNetworkCount() <= 1) {
             return false;
         }
-        if (PaymentUtils.isCardPaymentMethod(getPaymentMethod()) && ACCOUNT_NUMBER.equals(type)) {
-            return smartSwitch.validate(text);
+        if (!(ACCOUNT_NUMBER.equals(type) || PaymentUtils.isCardPaymentMethod(getPaymentMethod()))) {
+            return false;
         }
-        return false;
+        return smartSwitch.validate(text);
     }
 
-    public URL getLink(String name) {
-        return getVisibleNetwork().getLink(name);
+    @Override
+    public Map<String, URL> getLinks() {
+        return getVisibleNetwork().getLinks();
     }
 
     /**

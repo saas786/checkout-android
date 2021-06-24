@@ -58,7 +58,7 @@ final class PresetCardViewHolder extends PaymentCardViewHolder {
         if (mask != null) {
             setExpiryDateSubtitle(subtitle, mask);
         }
-        bindCardLogo(paymentCard.getCode(), card.getLink("logo"));
+        bindCardLogo(paymentCard.getNetworkCode(), card.getLink("logo"));
     }
 
     void expand(boolean expand) {

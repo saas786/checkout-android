@@ -63,7 +63,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         title.setText(networkCard.getLabel());
 
         if (networkCard.getPaymentNetworkCount() == 1) {
-            bindCardLogo(networkCard.getCode(), networkCard.getLink("logo"));
+            bindCardLogo(networkCard.getNetworkCode(), networkCard.getLink("logo"));
             setTestId("network");
         } else {
             bindCardLogo(R.drawable.ic_card);
@@ -81,7 +81,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         SmartSwitch smartSwitch = card.getSmartSwitch();
         if (smartSwitch.getSelectedCount() == 1) {
             PaymentNetwork network = smartSwitch.getFirstSelected();
-            networkLogosView.setSelected(network.getCode());
+            networkLogosView.setSelected(network.getNetworkCode());
             return;
         }
         networkLogosView.setSelected(null);
