@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.InputElementType;
 import com.payoneer.checkout.ui.model.PaymentCard;
@@ -35,6 +34,7 @@ import com.payoneer.checkout.ui.widget.VerificationCodeWidget;
 import com.payoneer.checkout.util.NetworkLogoLoader;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,11 +233,9 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void expand(boolean expand) {
-        if (paymentCard.hideInputForm()) {
-            formLayout.setVisibility(View.GONE);
-            return;
+        if (!paymentCard.hasEmptyForm()) {
+            formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
         }
-        formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
     }
 
     void onBind() {
@@ -286,11 +284,12 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    void setExpiryDateSubtitle(TextView subtitle, AccountMask accountMask) {
-        String date = PaymentUtils.getExpiryDateString(accountMask);
-        if (date != null) {
-            subtitle.setVisibility(View.VISIBLE);
-            subtitle.setText(date);
+    void bindLabel(TextView view, String label, boolean hideWhenEmpty) {
+        view.setText(label);
+        if (hideWhenEmpty && TextUtils.isEmpty(label)) {
+            view.setVisibility(View.GONE);
+        } else {
+            view.setVisibility(View.VISIBLE);
         }
     }
 

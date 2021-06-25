@@ -31,7 +31,7 @@ public final class NetworkCard extends PaymentCard {
      * Construct a new NetworkCard
      */
     public NetworkCard() {
-        super(false, false);
+        super(false);
         this.networks = new ArrayList<>();
         this.smartSwitch = new SmartSwitch(networks);
     }
@@ -69,11 +69,16 @@ public final class NetworkCard extends PaymentCard {
     }
 
     @Override
-    public String getLabel() {
+    public String getTitle() {
         if (networks.size() == 1) {
-            return getVisibleNetwork().getLabel();
+            return getVisibleNetwork().getTitle();
         }
         return Localization.translate(LocalizationKey.LIST_GROUPEDCARDS_TITLE);
+    }
+
+    @Override
+    public String getSubtitle() {
+        return null;
     }
 
     @Override
@@ -98,10 +103,12 @@ public final class NetworkCard extends PaymentCard {
 
     @Override
     public boolean onTextInputChanged(String type, String text) {
+        // Smartswitch works only when the NetworkCard contains 2 or more networks
         if (getPaymentNetworkCount() <= 1) {
             return false;
         }
-        if (!(ACCOUNT_NUMBER.equals(type) || PaymentUtils.isCardPaymentMethod(getPaymentMethod()))) {
+        // Smartswitch works only for card payments and if the input field is a "number"
+        if (!(PaymentUtils.isCardPaymentMethod(getPaymentMethod()) || ACCOUNT_NUMBER.equals(type))) {
             return false;
         }
         return smartSwitch.validate(text);

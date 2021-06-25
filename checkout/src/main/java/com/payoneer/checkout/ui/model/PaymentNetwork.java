@@ -9,7 +9,6 @@
 package com.payoneer.checkout.ui.model;
 
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +57,7 @@ public final class PaymentNetwork {
         return network.getCode();
     }
 
-    public String getLabel() {
+    public String getTitle() {
         return Localization.translateNetworkLabel(getNetworkCode());
     }
 

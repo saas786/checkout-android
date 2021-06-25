@@ -149,7 +149,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             @Override
             public void onDismissed() {
             }
-        }, paymentCard.getLabel());
+        }, paymentCard.getTitle());
     }
 
     @Override

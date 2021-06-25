@@ -28,8 +28,8 @@ public final class AccountCard extends PaymentCard {
     private final String buttonKey;
     private final boolean deletable;
 
-    public AccountCard(AccountRegistration account, String buttonKey, boolean hideInputForm, boolean deletable, boolean checkable) {
-        super(hideInputForm, checkable);
+    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean checkable) {
+        super(checkable);
         this.account = account;
         this.buttonKey = buttonKey;
         this.deletable = deletable;
@@ -59,12 +59,23 @@ public final class AccountCard extends PaymentCard {
     }
 
     @Override
-    public String getLabel() {
+    public boolean hasEmptyForm() {
+        return getInputElements().size() == 0;
+    }
+
+    @Override
+    public String getTitle() {
         AccountMask accountMask = account.getMaskedAccount();
         if (accountMask != null) {
             return PaymentUtils.getAccountMaskLabel(accountMask, getPaymentMethod());
         }
         return Localization.translateNetworkLabel(account.getCode());
+    }
+
+    @Override
+    public String getSubtitle() {
+        AccountMask accountMask = account.getMaskedAccount();
+        return accountMask != null ? PaymentUtils.getExpiryDateString(accountMask) : null;
     }
 
     @Override

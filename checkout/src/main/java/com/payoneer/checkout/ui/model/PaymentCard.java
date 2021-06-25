@@ -22,27 +22,16 @@ import com.payoneer.checkout.model.InputElement;
  */
 public abstract class PaymentCard {
 
-    private final boolean hideInputForm;
     private final boolean checkable;
 
     /**
-     * Construct a PaymentCard
+     * Construct a PaymentCard, when a card is checkable and marked as checked
+     * a highlighted border is drawn around the card.
      *
-     * @param hideInputForm should the input form be hidden from the user
      * @param checkable is the PaymentCard checkable
      */
-    public PaymentCard(boolean hideInputForm, boolean checkable) {
-        this.hideInputForm = hideInputForm;
+    public PaymentCard(boolean checkable) {
         this.checkable = checkable;
-    }
-
-    /**
-     * Should the input form be hidden from the user
-     *
-     * @return true when the input form should be hidden, false otherwise
-     */
-    public boolean hideInputForm() {
-        return hideInputForm;
     }
 
     /**
@@ -112,6 +101,15 @@ public abstract class PaymentCard {
     }
 
     /**
+     * Does this PaymentCard has an empty form and could be hidden from the user
+     *
+     * @return true when the input form is empty, false otherwise
+     */
+    public boolean hasEmptyForm() {
+        return false;
+    }
+
+    /**
      * Check if this card contains a link with the provided name. If the card contains multiple networks then
      * all networks must be checked if at least one of them contains the link.
      *
@@ -165,24 +163,30 @@ public abstract class PaymentCard {
     public abstract boolean isPreselected();
 
     /**
-     * Get the label of this PaymentCard
+     * Get the title of this PaymentCard
      *
-     * @return label of this PaymentCard
+     * @return title of this PaymentCard
      */
-    public abstract String getLabel();
+    public abstract String getTitle();
 
     /**
-     * Get the list of links. This method must not return null.
+     * Get the subtitle of this PaymentCard
      *
-     * @return the list of links
+     * @return subtitle of this PaymentCard
+     */
+    public abstract String getSubtitle();
+
+    /**
+     * Get the map of links. The key of this map is the name of the link
+     *
+     * @return the map of links, this must not return null
      */
     public abstract Map<String, URL> getLinks();
 
     /**
      * Get the list of input elements supported by this  payment card.
-     * This method must not return null.
      *
-     * @return list of InputElements
+     * @return list of InputElements, this must not return null
      */
     public abstract List<InputElement> getInputElements();
 }

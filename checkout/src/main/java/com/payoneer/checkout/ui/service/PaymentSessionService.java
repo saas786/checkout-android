@@ -19,7 +19,6 @@ import static com.payoneer.checkout.model.IntegrationType.MOBILE_NATIVE;
 import static com.payoneer.checkout.model.NetworkOperationType.CHARGE;
 import static com.payoneer.checkout.model.NetworkOperationType.PRESET;
 import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
-import static com.payoneer.checkout.ui.model.PaymentSession.LINK_LANGUAGE;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -246,16 +245,14 @@ public final class PaymentSessionService {
 
         if (UPDATE.equals(operationType)) {
             buttonKey = BUTTON_UPDATE_ACCOUNT;
-            hideInputForm = true;
             deletable = true;
             checkable = true;
         } else {
             buttonKey = LocalizationKey.operationButtonKey(operationType);
-            hideInputForm = false;
             deletable = false;
             checkable = false;
         }
-        return new AccountCard(account, buttonKey, hideInputForm, deletable, checkable);
+        return new AccountCard(account, buttonKey, deletable, checkable);
     }
 
     private PaymentSection createNetworkSection(ListResult listResult, Context context, boolean containsAccounts)

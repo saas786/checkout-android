@@ -10,7 +10,6 @@ package com.payoneer.checkout.ui.list;
 
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.ui.model.AccountCard;
 import com.payoneer.checkout.util.PaymentUtils;
 
@@ -25,15 +24,18 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
-    private final TextView title;
-    private final TextView subtitle;
+    private final static int ICON_PENCIL = 0;
+    private final static int ICON_TRASHCAN = 1;
+
+    private final TextView titleView;
+    private final TextView subtitleView;
     private final IconView iconView;
     private final MaterialCardView cardView;
 
     private AccountCardViewHolder(ListAdapter listAdapter, View parent, AccountCard accountCard) {
         super(listAdapter, parent, accountCard);
-        this.title = parent.findViewById(R.id.text_title);
-        this.subtitle = parent.findViewById(R.id.text_subtitle);
+        this.titleView = parent.findViewById(R.id.text_title);
+        this.subtitleView = parent.findViewById(R.id.text_subtitle);
 
         iconView = new IconView(parent);
         iconView.setListener(new IconView.IconClickListener() {
@@ -63,13 +65,8 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         AccountCard card = (AccountCard) paymentCard;
         cardView.setCheckable(card.isCheckable());
 
-        subtitle.setVisibility(View.GONE);
-        title.setText(card.getLabel());
-
-        AccountMask mask = card.getMaskedAccount();
-        if (mask != null) {
-            setExpiryDateSubtitle(subtitle, mask);
-        }
+        bindLabel(titleView, card.getTitle(), false);
+        bindLabel(subtitleView, card.getSubtitle(), true);
         bindCardLogo(card.getNetworkCode(), card.getLogoLink());
     }
 
@@ -83,7 +80,7 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         }
 
         if (accountCard.isDeletable()) {
-            iconView.showIcon(expand ? 1 : 0);
+            iconView.showIcon(expand ? ICON_TRASHCAN : ICON_PENCIL);
         }
     }
 

@@ -29,7 +29,7 @@ public final class PresetCard extends PaymentCard {
     private final String buttonKey;
 
     public PresetCard(PresetAccount account, String buttonKey) {
-        super(false, true);
+        super(true);
         this.account = account;
         this.buttonKey = buttonKey;
     }
@@ -73,12 +73,18 @@ public final class PresetCard extends PaymentCard {
     }
 
     @Override
-    public String getLabel() {
+    public String getTitle() {
         AccountMask accountMask = account.getMaskedAccount();
         if (accountMask != null) {
             return PaymentUtils.getAccountMaskLabel(accountMask, getPaymentMethod());
         }
         return Localization.translateNetworkLabel(getNetworkCode());
+    }
+
+    @Override
+    public String getSubtitle() {
+        AccountMask accountMask = account.getMaskedAccount();
+        return accountMask != null ? PaymentUtils.getExpiryDateString(accountMask) : null;
     }
 
     @Override
