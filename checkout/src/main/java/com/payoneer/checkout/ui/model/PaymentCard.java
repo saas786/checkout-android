@@ -23,7 +23,8 @@ import com.payoneer.checkout.model.InputElement;
 public abstract class PaymentCard {
 
     private final boolean checkable;
-
+    private boolean hideInputForm;
+    
     /**
      * Construct a PaymentCard, when a card is checkable and marked as checked
      * a highlighted border is drawn around the card.
@@ -101,11 +102,30 @@ public abstract class PaymentCard {
     }
 
     /**
-     * Does this PaymentCard has an empty form and could be hidden from the user
+     * Is the input form hidden from the user or not. 
+     *
+     * @return true when the input form should be hidden, false otherwise
+     */
+    public boolean getHideInputForm() {
+        return hideInputForm;
+    }
+
+    /**
+     * Set in this PaymentCard that the input form must be hidden.
+     * By default the input form is shown to the user.
+     *
+     * @param hideInputForm indicates if the input form should be hidden from the user
+     */
+    public void setHideInputForm(boolean hideInputForm) {
+        this.hideInputForm = hideInputForm;
+    }
+    
+    /**
+     * Does this PaymentCard has an empty form
      *
      * @return true when the input form is empty, false otherwise
      */
-    public boolean hasEmptyForm() {
+    public boolean hasEmptyInputForm() {
         return false;
     }
 

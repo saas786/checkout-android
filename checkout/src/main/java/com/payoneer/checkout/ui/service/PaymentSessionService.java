@@ -238,21 +238,17 @@ public final class PaymentSessionService {
 
     private AccountCard createAccountCard(AccountRegistration account) {
         String operationType = account.getOperationType();
-        boolean hideInputForm;
-        boolean deletable;
-        boolean checkable;
-        String buttonKey;
+        boolean update = UPDATE.equals(operationType);
+        String buttonKey = update ? BUTTON_UPDATE_ACCOUNT :
+            LocalizationKey.operationButtonKey(operationType);
 
-        if (UPDATE.equals(operationType)) {
-            buttonKey = BUTTON_UPDATE_ACCOUNT;
-            deletable = true;
-            checkable = true;
-        } else {
-            buttonKey = LocalizationKey.operationButtonKey(operationType);
-            deletable = false;
-            checkable = false;
+        AccountCard card = new AccountCard(account, buttonKey, update, update);
+
+        // Only in update flow and when the input form is empty, the input form is hidden
+        if (update && card.hasEmptyInputForm()) {
+            card.setHideInputForm(true);
         }
-        return new AccountCard(account, buttonKey, deletable, checkable);
+        return card;
     }
 
     private PaymentSection createNetworkSection(ListResult listResult, Context context, boolean containsAccounts)

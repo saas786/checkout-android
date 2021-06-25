@@ -155,10 +155,13 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         switch (element.getType()) {
             case InputElementType.SELECT:
                 widget = new SelectWidget(name);
+                break;
             case InputElementType.CHECKBOX:
                 widget = new CheckBoxWidget(name);
+                break;
             default:
                 widget = new TextInputWidget(name);
+                break;
         }
         addWidget(widget);
     }
@@ -233,7 +236,7 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void expand(boolean expand) {
-        if (!paymentCard.hasEmptyForm()) {
+        if (!paymentCard.getHideInputForm()) {
             formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
         }
     }

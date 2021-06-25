@@ -57,6 +57,11 @@ public final class PaymentSession {
         return url != null ? url.toString() : null;
     }
 
+    public URL getListLink(String name) {
+        Map<String, URL> links = listResult.getLinks();
+        return links != null ? links.get(name) : null;
+    }
+    
     public boolean isEmpty() {
         return paymentSections.size() == 0;
     }
@@ -76,10 +81,5 @@ public final class PaymentSession {
             section.putLanguageLinks(links);
         }
         return links;
-    }
-
-    private URL getListLink(String name) {
-        Map<String, URL> links = listResult.getLinks();
-        return links != null ? links.get(name) : null;
     }
 }

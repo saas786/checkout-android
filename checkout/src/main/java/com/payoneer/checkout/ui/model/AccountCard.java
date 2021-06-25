@@ -59,7 +59,7 @@ public final class AccountCard extends PaymentCard {
     }
 
     @Override
-    public boolean hasEmptyForm() {
+    public boolean hasEmptyInputForm() {
         return getInputElements().size() == 0;
     }
 
