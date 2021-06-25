@@ -108,10 +108,10 @@ public final class NetworkCard extends PaymentCard {
             return false;
         }
         // Smartswitch only works for debit/credit cards and if the input field is a "number"
-        if (!(PaymentUtils.isCardPaymentMethod(getPaymentMethod()) || ACCOUNT_NUMBER.equals(type))) {
-            return false;
+        if (PaymentUtils.isCardPaymentMethod(getPaymentMethod()) && ACCOUNT_NUMBER.equals(type)) {
+            return smartSwitch.validate(text);
         }
-        return smartSwitch.validate(text);
+        return false;
     }
 
     @Override
