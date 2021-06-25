@@ -50,12 +50,12 @@ android {
         release {
             minifyEnabled true
             signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'	    
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "ExampleCheckout_${getCurrentBranch()}_${variant.buildType.name}.apk"
-                }
+            variant.outputs.all {
+                outputFileName = "ExampleCheckout_${getCurrentBranch()}_${variant.buildType.name}.apk"
+            }
         }
     }
 }

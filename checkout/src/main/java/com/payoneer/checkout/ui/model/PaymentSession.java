@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.model.ListResult;
-import com.payoneer.checkout.util.PaymentUtils;
 
 /**
  * Class for storing the ListResult and the payment sections. The following sections
@@ -52,7 +51,7 @@ public final class PaymentSession {
     public URL getListLanguageLink() {
         return getListLink(LINK_LANGUAGE);
     }
-    
+
     public String getListSelfUrl() {
         URL url = getListLink(LINK_SELF);
         return url != null ? url.toString() : null;
