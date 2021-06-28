@@ -290,12 +290,9 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bindLabel(TextView view, String label, boolean hideWhenEmpty) {
+        int visibility = (hideWhenEmpty && TextUtils.isEmpty(label)) ? View.GONE : View.VISIBLE;
+        view.setVisibility(visibility);
         view.setText(label);
-        if (hideWhenEmpty && TextUtils.isEmpty(label)) {
-            view.setVisibility(View.GONE);
-        } else {
-            view.setVisibility(View.VISIBLE);
-        }
     }
 
     void bindCardLogo(int logoResId) {
