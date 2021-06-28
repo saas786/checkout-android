@@ -68,7 +68,7 @@ public final class SmartSwitch {
 
         if (text != null) {
             for (PaymentNetwork network : networks) {
-                Pattern pattern = smartMapping.get(network.getCode());
+                Pattern pattern = smartMapping.get(network.getNetworkCode());
 
                 if (pattern != null && pattern.matcher(text).matches()) {
                     smartBuffer.add(network);

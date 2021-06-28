@@ -10,7 +10,6 @@ package com.payoneer.checkout.ui.list;
 
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.ui.model.PresetCard;
 import com.payoneer.checkout.util.PaymentUtils;
 
@@ -25,14 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 final class PresetCardViewHolder extends PaymentCardViewHolder {
 
-    private final TextView title;
-    private final TextView subtitle;
+    private final TextView titleView;
+    private final TextView subtitleView;
     private final MaterialCardView card;
 
     private PresetCardViewHolder(ListAdapter adapter, View parent, PresetCard presetCard) {
         super(adapter, parent, presetCard);
-        title = parent.findViewById(R.id.text_title);
-        subtitle = parent.findViewById(R.id.text_subtitle);
+        titleView = parent.findViewById(R.id.text_title);
+        subtitleView = parent.findViewById(R.id.text_subtitle);
         card = parent.findViewById(R.id.card_preset);
         card.setCheckable(true);
 
@@ -51,14 +50,10 @@ final class PresetCardViewHolder extends PaymentCardViewHolder {
 
         PaymentUtils.setTestId(itemView, "card", "preset");
         PresetCard card = (PresetCard) paymentCard;
-        subtitle.setVisibility(View.GONE);
-        title.setText(card.getLabel());
 
-        AccountMask mask = card.getMaskedAccount();
-        if (mask != null) {
-            setExpiryDateSubtitle(subtitle, mask);
-        }
-        bindCardLogo(paymentCard.getCode(), card.getLink("logo"));
+        bindLabel(titleView, card.getTitle(), false);
+        bindLabel(subtitleView, card.getSubtitle(), true);
+        bindCardLogo(paymentCard.getNetworkCode(), card.getLogoLink());
     }
 
     void expand(boolean expand) {

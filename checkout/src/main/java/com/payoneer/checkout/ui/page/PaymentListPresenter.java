@@ -149,7 +149,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             @Override
             public void onDismissed() {
             }
-        }, paymentCard.getLabel());
+        }, paymentCard.getTitle());
     }
 
     @Override
@@ -352,7 +352,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             if (CHARGE.equals(operation.getOperationType())) {
                 listView.showChargePaymentScreen(CHARGEPAYMENT_REQUEST_CODE, operation);
             } else {
-                networkService = loadNetworkService(paymentCard.getCode(), paymentCard.getPaymentMethod());
+                networkService = loadNetworkService(paymentCard.getNetworkCode(), paymentCard.getPaymentMethod());
                 networkService.setListener(this);
 
                 processPayment(operation);
@@ -364,7 +364,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
 
     private void deleteAccountCard(AccountCard card) {
         try {
-            networkService = loadNetworkService(card.getCode(), card.getPaymentMethod());
+            networkService = loadNetworkService(card.getNetworkCode(), card.getPaymentMethod());
             networkService.setListener(this);
 
             URL url = card.getLink("self");
@@ -387,7 +387,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
 
     private Operation createOperation(PaymentCard card, Map<String, FormWidget> widgets) throws PaymentException {
         URL url = card.getOperationLink();
-        Operation operation = new Operation(card.getCode(), card.getPaymentMethod(), card.getOperationType(), url);
+        Operation operation = new Operation(card.getNetworkCode(), card.getPaymentMethod(), card.getOperationType(), url);
 
         for (FormWidget widget : widgets.values()) {
             widget.putValue(operation);

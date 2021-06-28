@@ -28,7 +28,6 @@ import org.hamcrest.Matcher;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
-import com.payoneer.checkout.sharedtest.view.PaymentMatchers;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
 
 import android.view.View;

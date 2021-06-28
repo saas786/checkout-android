@@ -8,6 +8,7 @@
 
 package com.payoneer.checkout.ui.service;
 
+import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_UPDATE_ACCOUNT;
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_ACCOUNTS;
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_ACCOUNTS_UPDATE;
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_NETWORKS;
@@ -36,6 +37,7 @@ import com.payoneer.checkout.localization.LocalLocalizationHolder;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.localization.LocalizationCache;
 import com.payoneer.checkout.localization.LocalizationHolder;
+import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.localization.MultiLocalizationHolder;
 import com.payoneer.checkout.model.AccountRegistration;
 import com.payoneer.checkout.model.ApplicableNetwork;
@@ -208,7 +210,9 @@ public final class PaymentSessionService {
             return null;
         }
         List<PaymentCard> cards = new ArrayList<>();
-        cards.add(new PresetCard(account));
+        String buttonKey = LocalizationKey.operationButtonKey(PRESET);
+        PresetCard presetCard = new PresetCard(account, buttonKey);
+        cards.add(presetCard);
         return new PaymentSection(LIST_HEADER_PRESET, cards);
     }
 
@@ -221,7 +225,7 @@ public final class PaymentSessionService {
         }
         for (AccountRegistration account : accounts) {
             if (NetworkServiceLookup.supports(account.getCode(), account.getMethod())) {
-                cards.add(new AccountCard(account));
+                cards.add(createAccountCard(account));
             }
         }
         if (cards.size() == 0) {
@@ -232,6 +236,21 @@ public final class PaymentSessionService {
         return new PaymentSection(labelKey, cards);
     }
 
+    private AccountCard createAccountCard(AccountRegistration account) {
+        String operationType = account.getOperationType();
+        boolean update = UPDATE.equals(operationType);
+        String buttonKey = update ? BUTTON_UPDATE_ACCOUNT :
+            LocalizationKey.operationButtonKey(operationType);
+
+        AccountCard card = new AccountCard(account, buttonKey, update, update);
+
+        // Only in update flow and when the input form is empty, the input form is hidden
+        if (update && card.hasEmptyInputForm()) {
+            card.setHideInputForm(true);
+        }
+        return card;
+    }
+
     private PaymentSection createNetworkSection(ListResult listResult, Context context, boolean containsAccounts)
         throws PaymentException {
         Map<String, PaymentGroup> groups = loadPaymentGroups(context);
@@ -240,7 +259,7 @@ public final class PaymentSessionService {
         PaymentGroup group;
 
         for (PaymentNetwork network : networks.values()) {
-            group = groups.get(network.getCode());
+            group = groups.get(network.getNetworkCode());
 
             if (group == null) {
                 addNetwork2SingleCard(cards, network);
@@ -276,20 +295,25 @@ public final class PaymentSessionService {
         for (ApplicableNetwork network : an) {
             String code = network.getCode();
             if (NetworkServiceLookup.supports(code, network.getMethod())) {
-                items.put(code, new PaymentNetwork(network));
+                items.put(code, createPaymentNetwork(network));
             }
         }
         return items;
     }
 
+    private PaymentNetwork createPaymentNetwork(ApplicableNetwork network) {
+        String buttonKey = LocalizationKey.operationButtonKey(network.getOperationType());
+        return new PaymentNetwork(network, buttonKey);
+    }
+
     private void addNetwork2SingleCard(Map<String, NetworkCard> cards, PaymentNetwork network) {
         NetworkCard card = new NetworkCard();
         card.addPaymentNetwork(network);
-        cards.put(network.getCode(), card);
+        cards.put(network.getNetworkCode(), card);
     }
 
     private void addNetwork2GroupCard(Map<String, NetworkCard> cards, PaymentNetwork network, PaymentGroup group) throws PaymentException {
-        String code = network.getCode();
+        String code = network.getNetworkCode();
         String groupId = group.getId();
         String regex = group.getSmartSelectionRegex(code);
 
@@ -321,13 +345,13 @@ public final class PaymentSessionService {
     }
 
     private void loadLocalizations(Context context, PaymentSession session) throws PaymentException {
-        String listUrl = session.getListUrl();
+        String listUrl = session.getListSelfUrl();
         if (!listUrl.equals(cache.getCacheId())) {
             cache.clear();
             cache.setCacheId(listUrl);
         }
         LocalizationHolder localHolder = new LocalLocalizationHolder(context);
-        LocalizationHolder sharedHolder = loadLocalizationHolder(session.getLink("lang"), localHolder);
+        LocalizationHolder sharedHolder = loadLocalizationHolder(session.getListLanguageLink(), localHolder);
 
         Map<String, LocalizationHolder> holders = new HashMap<>();
         Map<String, URL> links = session.getLanguageLinks();

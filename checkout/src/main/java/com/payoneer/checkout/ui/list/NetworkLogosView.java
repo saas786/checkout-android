@@ -58,7 +58,7 @@ class NetworkLogosView {
     }
 
     private void addNetworkLogo(PaymentNetwork network, LinearLayout layout) {
-        String code = network.getCode();
+        String code = network.getNetworkCode();
         ImageView imageView = inflateLogoImage(layout);
         logos.put(code, new NetworkLogo(code, network.getLink("logo"), imageView));
         layout.addView(imageView);

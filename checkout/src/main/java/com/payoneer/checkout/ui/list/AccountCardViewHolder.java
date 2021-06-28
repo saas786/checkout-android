@@ -8,11 +8,8 @@
 
 package com.payoneer.checkout.ui.list;
 
-import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
-
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.ui.model.AccountCard;
 import com.payoneer.checkout.util.PaymentUtils;
 
@@ -27,15 +24,18 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
-    private final TextView title;
-    private final TextView subtitle;
+    private final static int ICON_PENCIL = 0;
+    private final static int ICON_TRASHCAN = 1;
+
+    private final TextView titleView;
+    private final TextView subtitleView;
     private final IconView iconView;
-    private final MaterialCardView card;
+    private final MaterialCardView cardView;
 
     private AccountCardViewHolder(ListAdapter listAdapter, View parent, AccountCard accountCard) {
         super(listAdapter, parent, accountCard);
-        this.title = parent.findViewById(R.id.text_title);
-        this.subtitle = parent.findViewById(R.id.text_subtitle);
+        this.titleView = parent.findViewById(R.id.text_title);
+        this.subtitleView = parent.findViewById(R.id.text_subtitle);
 
         iconView = new IconView(parent);
         iconView.setListener(new IconView.IconClickListener() {
@@ -44,9 +44,7 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
                 handleIconClicked(index);
             }
         });
-        card = parent.findViewById(R.id.card_account);
-        card.setCheckable(true);
-
+        cardView = parent.findViewById(R.id.card_account);
         addElementWidgets(accountCard);
         addButtonWidget();
         layoutWidgets();
@@ -65,24 +63,24 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
         PaymentUtils.setTestId(itemView, "card", "savedaccount");
         AccountCard card = (AccountCard) paymentCard;
-        subtitle.setVisibility(View.GONE);
-        title.setText(card.getLabel());
+        cardView.setCheckable(card.isCheckable());
 
-        AccountMask mask = card.getMaskedAccount();
-        if (mask != null) {
-            setExpiryDateSubtitle(subtitle, mask);
-        }
-        bindCardLogo(card.getCode(), card.getLink("logo"));
+        bindLabel(titleView, card.getTitle(), false);
+        bindLabel(subtitleView, card.getSubtitle(), true);
+        bindCardLogo(card.getNetworkCode(), card.getLogoLink());
     }
 
     @Override
     void expand(boolean expand) {
         super.expand(expand);
-        card.setChecked(expand);
 
-        boolean update = UPDATE.equals(paymentCard.getOperationType());
-        if (update) {
-            iconView.showIcon(expand ? 1 : 0);
+        AccountCard accountCard = (AccountCard) paymentCard;
+        if (accountCard.isCheckable()) {
+            cardView.setChecked(expand);
+        }
+
+        if (accountCard.isDeletable()) {
+            iconView.showIcon(expand ? ICON_TRASHCAN : ICON_PENCIL);
         }
     }
 

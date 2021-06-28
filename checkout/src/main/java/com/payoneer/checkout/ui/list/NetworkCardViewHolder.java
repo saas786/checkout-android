@@ -30,13 +30,13 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 final class NetworkCardViewHolder extends PaymentCardViewHolder {
 
-    private final TextView title;
+    private final TextView titleView;
     private NetworkLogosView networkLogosView;
 
 
     public NetworkCardViewHolder(ListAdapter adapter, View parent, NetworkCard networkCard) {
         super(adapter, parent, networkCard);
-        this.title = parent.findViewById(R.id.text_title);
+        this.titleView = parent.findViewById(R.id.text_title);
 
         addElementWidgets(networkCard);
         addRegisterWidgets();
@@ -59,17 +59,17 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         super.onBind();
 
         NetworkCard networkCard = (NetworkCard) paymentCard;
-        PaymentNetwork network = networkCard.getVisibleNetwork();
-        title.setText(networkCard.getLabel());
+        bindLabel(titleView, networkCard.getTitle(), false);
 
         if (networkCard.getPaymentNetworkCount() == 1) {
-            bindCardLogo(networkCard.getCode(), networkCard.getLink("logo"));
+            bindCardLogo(networkCard.getNetworkCode(), networkCard.getLogoLink());
             setTestId("network");
         } else {
             bindCardLogo(R.drawable.ic_card);
             bindNetworkLogos(networkCard);
             setTestId("group");
         }
+        PaymentNetwork network = networkCard.getVisibleNetwork();
         bindRegistrationWidget(network);
         bindRecurrenceWidget(network);
     }
@@ -81,7 +81,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         SmartSwitch smartSwitch = card.getSmartSwitch();
         if (smartSwitch.getSelectedCount() == 1) {
             PaymentNetwork network = smartSwitch.getFirstSelected();
-            networkLogosView.setSelected(network.getCode());
+            networkLogosView.setSelected(network.getNetworkCode());
             return;
         }
         networkLogosView.setSelected(null);

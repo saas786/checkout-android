@@ -61,7 +61,7 @@ class CardEventHandler implements WidgetPresenter {
     public void onHintClicked(String type) {
         if (holder.hasValidPosition()) {
             PaymentCard card = holder.getPaymentCard();
-            getCardListener().onHintClicked(card.getCode(), type);
+            getCardListener().onHintClicked(card.getNetworkCode(), type);
         }
     }
 
@@ -93,10 +93,10 @@ class CardEventHandler implements WidgetPresenter {
         if (holder.hasValidPosition()) {
             PaymentCard card = holder.getPaymentCard();
             Validator validator = Validator.getInstance();
-            ValidationResult result = validator.validate(card.getPaymentMethod(), card.getCode(), type, value1, value2);
+            ValidationResult result = validator.validate(card.getPaymentMethod(), card.getNetworkCode(), type, value1, value2);
 
             if (result.isError()) {
-                result.setMessage(Localization.translateError(card.getCode(), result.getError()));
+                result.setMessage(Localization.translateError(card.getNetworkCode(), result.getError()));
             }
             return result;
         }

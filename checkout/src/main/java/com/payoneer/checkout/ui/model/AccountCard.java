@@ -8,16 +8,13 @@
 
 package com.payoneer.checkout.ui.model;
 
-import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_UPDATE_ACCOUNT;
-import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
+import static com.payoneer.checkout.ui.model.PaymentSession.LINK_LANGUAGE;
 
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.model.AccountRegistration;
 import com.payoneer.checkout.model.InputElement;
@@ -26,71 +23,48 @@ import com.payoneer.checkout.util.PaymentUtils;
 /**
  * Class for holding the data of a AccountCard in the list
  */
-public final class AccountCard implements PaymentCard {
+public final class AccountCard extends PaymentCard {
     private final AccountRegistration account;
+    private final String buttonKey;
+    private final boolean deletable;
 
-    public AccountCard(AccountRegistration account) {
+    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean checkable) {
+        super(checkable);
         this.account = account;
+        this.buttonKey = buttonKey;
+        this.deletable = deletable;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean containsLink(String name, URL url) {
-        return PaymentUtils.equalsAsString(getLink(name), url);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putLanguageLinks(Map<String, URL> links) {
-        URL url = getLink("lang");
+        URL url = getLink(LINK_LANGUAGE);
         if (url != null) {
-            links.put(getCode(), url);
+            links.put(getNetworkCode(), url);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URL getOperationLink() {
-        return getLink("operation");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getOperationType() {
         return account.getOperationType();
     }
 
-    public URL getLink(String name) {
-        Map<String, URL> links = account.getLinks();
-        return links != null ? links.get(name) : null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getPaymentMethod() {
         return account.getMethod();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getCode() {
+    public String getNetworkCode() {
         return account.getCode();
     }
 
     @Override
-    public String getLabel() {
+    public boolean hasEmptyInputForm() {
+        return getInputElements().size() == 0;
+    }
+
+    @Override
+    public String getTitle() {
         AccountMask accountMask = account.getMaskedAccount();
         if (accountMask != null) {
             return PaymentUtils.getAccountMaskLabel(accountMask, getPaymentMethod());
@@ -98,51 +72,44 @@ public final class AccountCard implements PaymentCard {
         return Localization.translateNetworkLabel(account.getCode());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public String getSubtitle() {
+        AccountMask accountMask = account.getMaskedAccount();
+        return accountMask != null ? PaymentUtils.getExpiryDateString(accountMask) : null;
+    }
+
+    @Override
+    public Map<String, URL> getLinks() {
+        return PaymentUtils.emptyMapIfNull(account.getLinks());
+    }
+
     @Override
     public List<InputElement> getInputElements() {
-        List<InputElement> elements = account.getInputElements();
-        return elements == null ? Collections.emptyList() : elements;
+        return PaymentUtils.emptyListIfNull(account.getInputElements());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public InputElement getInputElement(String name) {
-        for (InputElement element : getInputElements()) {
-            if (element.getName().equals(name)) {
-                return element;
-            }
-        }
-        return null;
+    public String getButton() {
+        return Localization.translate(getNetworkCode(), buttonKey);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isPreselected() {
         return PaymentUtils.isTrue(account.getSelected());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getButton() {
-        String operationType = getOperationType();
-        return UPDATE.equals(operationType) ? BUTTON_UPDATE_ACCOUNT : LocalizationKey.operationButtonKey(getOperationType());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean onTextInputChanged(String type, String text) {
         return false;
+    }
+
+    @Override
+    public boolean containsLink(final String name, final URL url) {
+        return PaymentUtils.equalsAsString(getLink(name), url);
+    }
+
+    public boolean isDeletable() {
+        return deletable;
     }
 
     public AccountMask getMaskedAccount() {
