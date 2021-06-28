@@ -236,9 +236,11 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void expand(boolean expand) {
-        if (!paymentCard.getHideInputForm()) {
-            formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
+        if (paymentCard.getHideInputForm()) {
+            formLayout.setVisibility(View.GONE);            
+            return;
         }
+        formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
     }
 
     void onBind() {

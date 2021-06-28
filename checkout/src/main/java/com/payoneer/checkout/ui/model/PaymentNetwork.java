@@ -8,6 +8,8 @@
 
 package com.payoneer.checkout.ui.model;
 
+import static com.payoneer.checkout.ui.model.PaymentSession.LINK_LANGUAGE;
+
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,7 @@ public final class PaymentNetwork {
     }
 
     public void putLanguageLink(Map<String, URL> links) {
-        URL url = getLink("lang");
+        URL url = getLink(LINK_LANGUAGE);
         if (url != null) {
             links.put(getNetworkCode(), url);
         }

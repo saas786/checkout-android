@@ -103,12 +103,10 @@ public final class NetworkCard extends PaymentCard {
 
     @Override
     public boolean onTextInputChanged(String type, String text) {
-        // Smartswitch does not work when the NetworkCard contains 1 or less PaymentNetworks
-        if (getPaymentNetworkCount() <= 1) {
-            return false;
-        }
-        // Smartswitch works for debit/credit cards and if the input field is a "number"
-        if (PaymentUtils.isCardPaymentMethod(getPaymentMethod()) && ACCOUNT_NUMBER.equals(type)) {
+        // Smartswitch works for 2 or more PaymentNetworks but only for debit/credit cards
+        // and if the input field is a "number"
+        if ((getPaymentNetworkCount() >= 2) && (PaymentUtils.isCardPaymentMethod(getPaymentMethod())) &&
+            (ACCOUNT_NUMBER.equals(type))) {
             return smartSwitch.validate(text);
         }
         return false;
