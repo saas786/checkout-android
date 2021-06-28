@@ -18,7 +18,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +54,20 @@ public class PaymentUtilsTest {
         assertEquals(PaymentUtils.trimToEmpty("   "), empty);
     }
 
+    @Test
+    public void emptyListIfNull() {
+        List<String> list = new ArrayList<>();
+        assertEquals(list, PaymentUtils.emptyListIfNull(list));
+        assertNotNull(PaymentUtils.emptyListIfNull(null));
+    }
+
+    @Test
+    public void emptyMapIfNull() {
+        Map<String, String> map = new HashMap<>();
+        assertEquals(map, PaymentUtils.emptyMapIfNull(map));
+        assertNotNull(PaymentUtils.emptyMapIfNull(null));
+    }
+    
     @Test
     public void toInt() {
         assertEquals(PaymentUtils.toInt(null), 0);
