@@ -19,6 +19,7 @@ import static com.payoneer.checkout.model.IntegrationType.MOBILE_NATIVE;
 import static com.payoneer.checkout.model.NetworkOperationType.CHARGE;
 import static com.payoneer.checkout.model.NetworkOperationType.PRESET;
 import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
+import static com.payoneer.checkout.model.RegistrationType.NONE;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,10 +56,12 @@ import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.PaymentSection;
 import com.payoneer.checkout.ui.model.PaymentSession;
 import com.payoneer.checkout.ui.model.PresetCard;
+import com.payoneer.checkout.ui.widget.CheckboxSettings;
 import com.payoneer.checkout.validation.Validator;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * The PaymentSessionService providing asynchronous loading of the PaymentSession.
@@ -294,16 +297,36 @@ public final class PaymentSessionService {
         }
         for (ApplicableNetwork network : an) {
             String code = network.getCode();
-            if (NetworkServiceLookup.supports(code, network.getMethod())) {
-                items.put(code, createPaymentNetwork(network));
+            if (supportsApplicableNetwork(listResult, network)) {
+                items.put(code, createPaymentNetwork(listResult, network));
             }
         }
         return items;
     }
 
-    private PaymentNetwork createPaymentNetwork(ApplicableNetwork network) {
+    private boolean supportsApplicableNetwork(ListResult listResult, ApplicableNetwork network) {
+        String operationType = listResult.getOperationType();
+        String recurrence = network.getRecurrence();
+        String registration = network.getRegistration();
+
+        // Special case to hide networks in Update flow with both registration settings set to NONE.
+        if (UPDATE.equals(operationType) && NONE.equals(recurrence) && NONE.equals(registration)) {
+            return false;
+        }
+        return NetworkServiceLookup.supports(network.getCode(), network.getMethod());
+    }
+    
+    private PaymentNetwork createPaymentNetwork(ListResult listResult, ApplicableNetwork network) {
         String buttonKey = LocalizationKey.operationButtonKey(network.getOperationType());
-        return new PaymentNetwork(network, buttonKey);
+
+        RegisterCheckboxBuilder builder = new RegisterCheckboxBuilder()
+            .setOperationType(listResult.getOperationType())
+            .setRegistration(network.getRegistration())
+            .setRecurrence(network.getRecurrence());
+
+        CheckboxSettings registration = builder.buildRegistrationCheckboxSettings();
+        CheckboxSettings recurrence = builder.buildRecurrenceCheckboxSettings();
+        return new PaymentNetwork(network, buttonKey, registration, recurrence);
     }
 
     private void addNetwork2SingleCard(Map<String, NetworkCard> cards, PaymentNetwork network) {

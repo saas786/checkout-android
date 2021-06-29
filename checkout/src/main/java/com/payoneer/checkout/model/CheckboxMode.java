@@ -18,6 +18,7 @@ import androidx.annotation.StringDef;
  */
 public class CheckboxMode {
 
+    public final static String NONE = "NONE";
     public final static String OPTIONAL = "OPTIONAL";
     public final static String OPTIONAL_PRESELECTED = "OPTIONAL_PRESELECTED";
     public final static String REQUIRED = "REQUIRED";

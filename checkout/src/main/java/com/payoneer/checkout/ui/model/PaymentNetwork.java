@@ -17,6 +17,7 @@ import java.util.Map;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.ApplicableNetwork;
 import com.payoneer.checkout.model.InputElement;
+import com.payoneer.checkout.ui.widget.CheckboxSettings;
 import com.payoneer.checkout.util.PaymentUtils;
 
 /**
@@ -26,10 +27,15 @@ public final class PaymentNetwork {
 
     private final ApplicableNetwork network;
     private final String buttonKey;
+    private final CheckboxSettings registrationSettings;
+    private final CheckboxSettings recurrenceSettings;
 
-    public PaymentNetwork(ApplicableNetwork network, String buttonKey) {
+    
+    public PaymentNetwork(ApplicableNetwork network, String buttonKey, CheckboxSettings registrationSettings, CheckboxSettings recurrenceSettings) {
         this.network = network;
         this.buttonKey = buttonKey;
+        this.registrationSettings = registrationSettings;
+        this.recurrenceSettings = recurrenceSettings;
     }
 
     public void putLanguageLink(Map<String, URL> links) {
@@ -67,12 +73,12 @@ public final class PaymentNetwork {
         return Localization.translate(getNetworkCode(), buttonKey);
     }
 
-    public String getRecurrence() {
-        return network.getRecurrence();
+    public CheckboxSettings getRecurrenceSettings() {
+        return recurrenceSettings;
     }
 
-    public String getRegistration() {
-        return network.getRegistration();
+    public CheckboxSettings getRegistrationSettings() {
+        return registrationSettings;
     }
 
     public boolean isPreselected() {
