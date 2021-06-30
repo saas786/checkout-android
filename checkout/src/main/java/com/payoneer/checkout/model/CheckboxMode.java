@@ -36,6 +36,7 @@ public class CheckboxMode {
 
         if (mode != null) {
             switch (mode) {
+                case NONE:
                 case OPTIONAL:
                 case OPTIONAL_PRESELECTED:
                 case REQUIRED:
@@ -50,6 +51,7 @@ public class CheckboxMode {
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({
+        NONE,
         OPTIONAL,
         OPTIONAL_PRESELECTED,
         REQUIRED,

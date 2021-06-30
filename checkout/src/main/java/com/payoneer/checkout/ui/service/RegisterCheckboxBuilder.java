@@ -68,7 +68,7 @@ public final class RegisterCheckboxBuilder {
             case RegistrationType.FORCED_DISPLAYED:
                 return new CheckboxSettings(CheckboxMode.FORCED_DISPLAYED, AUTO_REGISTRATION_FORCED);
             default:
-                return new CheckboxSettings(CheckboxMode.NONE, AUTO_REGISTRATION_OPTIONAL);
+                return new CheckboxSettings(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);
         }
     }
     
@@ -98,7 +98,7 @@ public final class RegisterCheckboxBuilder {
             case RegistrationType.FORCED_DISPLAYED:
                 return new CheckboxSettings(CheckboxMode.FORCED_DISPLAYED, ALLOW_RECURRENCE_FORCED);
             default:
-                return new CheckboxSettings(CheckboxMode.NONE, ALLOW_RECURRENCE_OPTIONAL);
+                return new CheckboxSettings(CheckboxMode.NONE, ALLOW_RECURRENCE_FORCED);
         }
     }
     

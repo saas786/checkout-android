@@ -36,9 +36,6 @@ public class CheckboxWidget extends FormWidget {
         super(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_checkbox);
@@ -47,14 +44,19 @@ public class CheckboxWidget extends FormWidget {
         return widgetView;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putValue(Operation operation) throws PaymentException {
         operation.putBooleanValue(name, switchView.isChecked());
     }
 
+    /** 
+     * Bind this CheckboxWidget to the mode and label.
+     * For now the required and required preselected are not handled client-side and will result
+     * in a server-side error if the user did not select it.
+     *
+     * @param mode checkbox mode
+     * @param label shown to the user
+     */
     public void onBind(String mode, String label) {
         labelView.setText(label);
         switch (mode) {

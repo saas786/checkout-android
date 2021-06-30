@@ -32,6 +32,10 @@ public final class CheckboxSettings {
         return mode;
     }
 
+    public String getLabelKey() {
+        return labelKey;
+    }
+
     public String getLabel() {
         return Localization.translate(labelKey);
     }
