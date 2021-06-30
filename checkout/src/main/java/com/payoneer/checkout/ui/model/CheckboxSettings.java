@@ -17,9 +17,9 @@ public final class CheckboxSettings {
     private final String mode;
     private final String labelKey;
 
-    /** 
+    /**
      * Construct a new CheckBoxSettings
-     * 
+     *
      * @param mode the mode of the checkbox
      * @param labelKey localization key for the checkbox label
      */

@@ -21,7 +21,7 @@ import com.payoneer.checkout.ui.model.CheckboxSettings;
 import android.text.TextUtils;
 
 /**
- * Class for building the Checkbox settings for both 
+ * Class for building the Checkbox settings for both
  * recurrence and registration settings
  */
 public final class RegisterCheckboxBuilder {
@@ -53,7 +53,7 @@ public final class RegisterCheckboxBuilder {
             case RegistrationType.FORCED_DISPLAYED:
                 return new CheckboxSettings(CheckboxMode.FORCED, AUTO_REGISTRATION_FORCED);
             default:
-                return new CheckboxSettings(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);            
+                return new CheckboxSettings(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);
         }
     }
 
@@ -71,7 +71,7 @@ public final class RegisterCheckboxBuilder {
                 return new CheckboxSettings(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);
         }
     }
-    
+
     /**
      * Build the recurrence Checkbox settings
      *
@@ -101,7 +101,7 @@ public final class RegisterCheckboxBuilder {
                 return new CheckboxSettings(CheckboxMode.NONE, ALLOW_RECURRENCE_FORCED);
         }
     }
-    
+
     private CheckboxSettings buildUpdateRecurrenceCheckboxSettings() {
         switch (recurrence) {
             case RegistrationType.OPTIONAL:
@@ -113,12 +113,12 @@ public final class RegisterCheckboxBuilder {
                 return new CheckboxSettings(CheckboxMode.NONE, ALLOW_RECURRENCE_FORCED);
         }
     }
-    
+
     public RegisterCheckboxBuilder setOperationType(String operationType) {
         this.operationType = operationType;
         return this;
     }
-    
+
     public RegisterCheckboxBuilder setRegistration(String registration) {
         this.registration = registration;
         return this;

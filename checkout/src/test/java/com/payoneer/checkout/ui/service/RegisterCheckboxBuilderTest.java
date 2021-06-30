@@ -50,14 +50,14 @@ public class RegisterCheckboxBuilderTest {
         builder.setOperationType(NetworkOperationType.UPDATE);
         builder.buildRecurrenceCheckboxSettings();
     }
-    
+
     @Test
     public void buildCheckboxSettings_CHARGE_OPTIONAL() {
         RegisterCheckboxBuilder builder = new RegisterCheckboxBuilder()
             .setOperationType(NetworkOperationType.CHARGE)
             .setRegistration(RegistrationType.OPTIONAL)
             .setRecurrence(RegistrationType.OPTIONAL);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.OPTIONAL);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_OPTIONAL);
@@ -73,7 +73,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.CHARGE)
             .setRegistration(RegistrationType.OPTIONAL_PRESELECTED)
             .setRecurrence(RegistrationType.OPTIONAL_PRESELECTED);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.OPTIONAL_PRESELECTED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_OPTIONAL);
@@ -89,7 +89,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.CHARGE)
             .setRegistration(RegistrationType.FORCED)
             .setRecurrence(RegistrationType.FORCED);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -105,7 +105,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.CHARGE)
             .setRegistration(RegistrationType.FORCED_DISPLAYED)
             .setRecurrence(RegistrationType.FORCED_DISPLAYED);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.FORCED_DISPLAYED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -121,7 +121,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.CHARGE)
             .setRegistration(RegistrationType.NONE)
             .setRecurrence(RegistrationType.NONE);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.NONE);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -137,7 +137,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.UPDATE)
             .setRegistration(RegistrationType.OPTIONAL)
             .setRecurrence(RegistrationType.OPTIONAL);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -146,14 +146,14 @@ public class RegisterCheckboxBuilderTest {
         assertEquals(settings.getMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
     }
-    
+
     @Test
     public void buildCheckboxSettings_UPDATE_OPTIONAL_PRESELECTED() {
         RegisterCheckboxBuilder builder = new RegisterCheckboxBuilder()
             .setOperationType(NetworkOperationType.UPDATE)
             .setRegistration(RegistrationType.OPTIONAL_PRESELECTED)
             .setRecurrence(RegistrationType.OPTIONAL_PRESELECTED);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -169,7 +169,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.UPDATE)
             .setRegistration(RegistrationType.FORCED)
             .setRecurrence(RegistrationType.FORCED);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -185,7 +185,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.UPDATE)
             .setRegistration(RegistrationType.FORCED_DISPLAYED)
             .setRecurrence(RegistrationType.FORCED_DISPLAYED);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
@@ -201,7 +201,7 @@ public class RegisterCheckboxBuilderTest {
             .setOperationType(NetworkOperationType.UPDATE)
             .setRegistration(RegistrationType.NONE)
             .setRecurrence(RegistrationType.NONE);
-        
+
         CheckboxSettings settings = builder.buildRegistrationCheckboxSettings();
         assertEquals(settings.getMode(), CheckboxMode.NONE);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);

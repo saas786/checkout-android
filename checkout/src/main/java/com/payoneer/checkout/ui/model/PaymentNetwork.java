@@ -29,8 +29,9 @@ public final class PaymentNetwork {
     private final CheckboxSettings registrationSettings;
     private final CheckboxSettings recurrenceSettings;
 
-    
-    public PaymentNetwork(ApplicableNetwork network, String buttonKey, CheckboxSettings registrationSettings, CheckboxSettings recurrenceSettings) {
+
+    public PaymentNetwork(ApplicableNetwork network, String buttonKey, CheckboxSettings registrationSettings,
+        CheckboxSettings recurrenceSettings) {
         this.network = network;
         this.buttonKey = buttonKey;
         this.registrationSettings = registrationSettings;

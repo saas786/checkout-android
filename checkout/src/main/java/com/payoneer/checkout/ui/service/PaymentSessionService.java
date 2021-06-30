@@ -50,13 +50,13 @@ import com.payoneer.checkout.network.LocalizationConnection;
 import com.payoneer.checkout.resource.PaymentGroup;
 import com.payoneer.checkout.resource.ResourceLoader;
 import com.payoneer.checkout.ui.model.AccountCard;
+import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.PaymentSection;
 import com.payoneer.checkout.ui.model.PaymentSession;
 import com.payoneer.checkout.ui.model.PresetCard;
-import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.validation.Validator;
 
 import android.content.Context;
@@ -314,7 +314,7 @@ public final class PaymentSessionService {
         }
         return NetworkServiceLookup.supports(network.getCode(), network.getMethod());
     }
-    
+
     private PaymentNetwork createPaymentNetwork(ListResult listResult, ApplicableNetwork network) {
         String buttonKey = LocalizationKey.operationButtonKey(network.getOperationType());
 

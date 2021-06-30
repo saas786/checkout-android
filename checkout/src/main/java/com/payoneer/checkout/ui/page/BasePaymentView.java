@@ -40,7 +40,7 @@ interface BasePaymentView {
      * @param listener to be notified of dialog events
      */
     void showPendingAccountDialog(PaymentDialogListener listener);
-    
+
     /**
      * Show the delete account dialog to the user, notify the listener of events in this dialog.
      *

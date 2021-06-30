@@ -13,7 +13,6 @@ import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.model.CheckboxMode;
-import com.payoneer.checkout.ui.model.CheckboxSettings;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,7 @@ public class CheckboxWidget extends FormWidget {
         operation.putBooleanValue(name, switchView.isChecked());
     }
 
-    /** 
+    /**
      * Bind this CheckboxWidget to the mode and label.
      * For now the required and required preselected are not handled client-side and will result
      * in a server-side error if the user did not select it.

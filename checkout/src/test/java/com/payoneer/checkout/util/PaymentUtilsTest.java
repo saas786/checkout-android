@@ -67,7 +67,7 @@ public class PaymentUtilsTest {
         assertEquals(map, PaymentUtils.emptyMapIfNull(map));
         assertNotNull(PaymentUtils.emptyMapIfNull(null));
     }
-    
+
     @Test
     public void toInt() {
         assertEquals(PaymentUtils.toInt(null), 0);

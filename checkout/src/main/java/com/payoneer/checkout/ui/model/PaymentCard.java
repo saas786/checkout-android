@@ -24,7 +24,7 @@ public abstract class PaymentCard {
 
     private final boolean checkable;
     private boolean hideInputForm;
-    
+
     /**
      * Construct a PaymentCard, when a card is checkable and marked as checked
      * a highlighted border is drawn around the card.
@@ -102,7 +102,7 @@ public abstract class PaymentCard {
     }
 
     /**
-     * Is the input form hidden from the user or not. 
+     * Is the input form hidden from the user or not.
      *
      * @return true when the input form should be hidden, false otherwise
      */
@@ -119,7 +119,7 @@ public abstract class PaymentCard {
     public void setHideInputForm(boolean hideInputForm) {
         this.hideInputForm = hideInputForm;
     }
-    
+
     /**
      * Does this PaymentCard has an empty form
      *

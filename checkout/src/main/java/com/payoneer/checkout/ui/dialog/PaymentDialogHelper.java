@@ -92,7 +92,7 @@ public class PaymentDialogHelper {
         String message = Localization.translate(ACCOUNTS_PENDING_TEXT);
         return createMessageDialog(title, message, "dialog_pending", listener);
     }
-    
+
     public static PaymentDialogFragment createConnectionErrorDialog(PaymentDialogFragment.PaymentDialogListener listener) {
         PaymentDialogFragment dialog = new PaymentDialogFragment();
         dialog.setListener(listener);

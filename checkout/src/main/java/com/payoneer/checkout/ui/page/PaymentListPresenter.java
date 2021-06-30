@@ -58,7 +58,6 @@ import com.payoneer.checkout.util.PaymentUtils;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * The PaymentListPresenter implementing the presenter part of the MVP
@@ -232,8 +231,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         setState(STARTED);
         if (UPDATE.equals(session.getListOperationType())) {
             handleUpdatePaymentResult(resultCode, result);
-        } 
-        else {
+        } else {
             handleProcessPaymentResult(resultCode, result);
         }
     }
@@ -285,7 +283,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 closeWithErrorCode(result);
         }
     }
-    
+
     private void handleProcessPaymentResult(int resultCode, PaymentResult result) {
         switch (resultCode) {
             case RESULT_CODE_PROCEED:
@@ -339,7 +337,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             }
         });
     }
-    
+
     private void handleRedirectRequest(RedirectRequest redirectRequest) {
         setState(PROCESS);
         OperationResult result = RedirectService.getRedirectResult();
@@ -519,30 +517,30 @@ final class PaymentListPresenter extends BasePaymentPresenter
     private void showPendingAndReloadSession() {
         view.showPendingAccountDialog(createLoadSessionDialogListener());
     }
-    
+
     private void showErrorAndReloadSession(Interaction interaction) {
         view.showInteractionDialog(interaction, createLoadSessionDialogListener());
     }
 
     private PaymentDialogListener createLoadSessionDialogListener() {
         return new PaymentDialogFragment.PaymentDialogListener() {
-                @Override
-                public void onPositiveButtonClicked() {
-                    loadPaymentSession();
-                }
-                
-                @Override
-                public void onNegativeButtonClicked() {
-                    loadPaymentSession();
-                }
+            @Override
+            public void onPositiveButtonClicked() {
+                loadPaymentSession();
+            }
 
-                @Override
-                public void onDismissed() {
-                    loadPaymentSession();
-                }
-            };
+            @Override
+            public void onNegativeButtonClicked() {
+                loadPaymentSession();
+            }
+
+            @Override
+            public void onDismissed() {
+                loadPaymentSession();
+            }
+        };
     }
-    
+
     private void showErrorAndPaymentSession(Interaction interaction) {
         view.showInteractionDialog(interaction, null);
         showPaymentSession();

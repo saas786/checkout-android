@@ -235,7 +235,7 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
 
     void expand(boolean expand) {
         if (paymentCard.getHideInputForm()) {
-            formLayout.setVisibility(View.GONE);            
+            formLayout.setVisibility(View.GONE);
             return;
         }
         formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
@@ -277,10 +277,10 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bindCheckboxWidget(String name, CheckboxSettings settings) {
-        CheckboxWidget widget = (CheckboxWidget)getFormWidget(name);
+        CheckboxWidget widget = (CheckboxWidget) getFormWidget(name);
         widget.onBind(settings.getMode(), settings.getLabel());
     }
-    
+
     void bindElementWidget(FormWidget widget, PaymentCard card) {
         InputElement element = card.getInputElement(widget.getName());
         String code = card.getNetworkCode();
