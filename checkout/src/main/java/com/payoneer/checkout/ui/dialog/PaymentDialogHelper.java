@@ -11,6 +11,8 @@ package com.payoneer.checkout.ui.dialog;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_DISPLAYLABEL;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TITLE;
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_PENDING_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_PENDING_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_CANCEL;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_DELETE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_OK;
@@ -85,6 +87,12 @@ public class PaymentDialogHelper {
         return createMessageDialog(title, message, "dialog_interaction", listener);
     }
 
+    public static PaymentDialogFragment createPendingAccountDialog(PaymentDialogFragment.PaymentDialogListener listener) {
+        String title = Localization.translate(ACCOUNTS_PENDING_TITLE);
+        String message = Localization.translate(ACCOUNTS_PENDING_TEXT);
+        return createMessageDialog(title, message, "dialog_pending", listener);
+    }
+    
     public static PaymentDialogFragment createConnectionErrorDialog(PaymentDialogFragment.PaymentDialogListener listener) {
         PaymentDialogFragment dialog = new PaymentDialogFragment();
         dialog.setListener(listener);

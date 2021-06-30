@@ -35,6 +35,13 @@ interface BasePaymentView {
     void showConnectionErrorDialog(PaymentDialogListener listener);
 
     /**
+     * Show the pending account dialog to the user, notify the listener of events in this dialog.
+     *
+     * @param listener to be notified of dialog events
+     */
+    void showPendingAccountDialog(PaymentDialogListener listener);
+    
+    /**
      * Show the delete account dialog to the user, notify the listener of events in this dialog.
      *
      * @param listener to be notified of dialog events

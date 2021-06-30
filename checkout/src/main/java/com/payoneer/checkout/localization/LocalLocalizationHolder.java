@@ -8,6 +8,8 @@
 
 package com.payoneer.checkout.localization;
 
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_PENDING_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_PENDING_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_CANCEL;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_OK;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_RETRY;
@@ -49,5 +51,9 @@ public final class LocalLocalizationHolder extends MapLocalizationHolder {
 
         map.put(LIST_HEADER_ACCOUNTS_UPDATE, context.getString(R.string.list_header_accounts_update));
         map.put(LIST_HEADER_NETWORKS_UPDATE, context.getString(R.string.list_header_networks_update));
+
+        map.put(ACCOUNTS_PENDING_TITLE, context.getString(R.string.accounts_pending_title));
+        map.put(ACCOUNTS_PENDING_TEXT, context.getString(R.string.accounts_pending_text));
+
     }
 }

@@ -56,12 +56,11 @@ import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.PaymentSection;
 import com.payoneer.checkout.ui.model.PaymentSession;
 import com.payoneer.checkout.ui.model.PresetCard;
-import com.payoneer.checkout.ui.widget.CheckboxSettings;
+import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.validation.Validator;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * The PaymentSessionService providing asynchronous loading of the PaymentSession.

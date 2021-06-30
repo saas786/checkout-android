@@ -17,7 +17,6 @@ import java.util.Map;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.ApplicableNetwork;
 import com.payoneer.checkout.model.InputElement;
-import com.payoneer.checkout.ui.widget.CheckboxSettings;
 import com.payoneer.checkout.util.PaymentUtils;
 
 /**

@@ -52,7 +52,9 @@ public final class LocalizationKey {
     public final static String ACCOUNTS_DELETE_TITLE = "accounts.delete.title";
     public final static String ACCOUNTS_DELETE_TEXT = "accounts.delete.text";
     public final static String ACCOUNTS_DELETE_DISPLAYLABEL = "${account.displayLabel}";
-
+    public final static String ACCOUNTS_PENDING_TITLE = "accounts.pending.title";
+    public final static String ACCOUNTS_PENDING_TEXT = "accounts.pending.text";
+    
     public final static String LABEL_TITLE = "title";
     public final static String LABEL_TEXT = "text";
 

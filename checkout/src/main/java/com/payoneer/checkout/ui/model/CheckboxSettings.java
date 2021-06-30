@@ -6,31 +6,33 @@
  * See the LICENSE file for more information.
  */
 
-package com.payoneer.checkout.ui.widget;
+package com.payoneer.checkout.ui.model;
+
+import com.payoneer.checkout.localization.Localization;
 
 /**
  * Class for storing the CheckBoxSettings
  */
 public final class CheckboxSettings {
-    private final String checkboxMode;
+    private final String mode;
     private final String labelKey;
 
     /** 
      * Construct a new CheckBoxSettings
      * 
-     * @param checkboxMode the mode of the checkbox
+     * @param mode the mode of the checkbox
      * @param labelKey localization key for the checkbox label
      */
-    public CheckboxSettings(String checkboxMode, String labelKey) {
-        this.checkboxMode = checkboxMode;
+    public CheckboxSettings(String mode, String labelKey) {
+        this.mode = mode;
         this.labelKey = labelKey;
     }
 
-    public String getCheckboxMode() {
-        return checkboxMode;
+    public String getMode() {
+        return mode;
     }
 
-    public String getLabelKey() {
-        return labelKey;
+    public String getLabel() {
+        return Localization.translate(labelKey);
     }
 }

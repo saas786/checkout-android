@@ -13,6 +13,7 @@ import static com.payoneer.checkout.core.PaymentInputType.ALLOW_RECURRENCE;
 import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 
 import com.payoneer.checkout.R;
+import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.SmartSwitch;
@@ -70,8 +71,8 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
             setTestId("group");
         }
         PaymentNetwork network = networkCard.getVisibleNetwork();
-        bindRegistrationWidget(network);
-        bindRecurrenceWidget(network);
+        bindCheckboxWidget(AUTO_REGISTRATION, network.getRegistrationSettings());
+        bindCheckboxWidget(ALLOW_RECURRENCE, network.getRecurrenceSettings());
     }
 
     private void bindNetworkLogos(NetworkCard card) {
@@ -94,15 +95,5 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
     private void addRegisterWidgets() {
         addWidget(new CheckboxWidget(AUTO_REGISTRATION));
         addWidget(new CheckboxWidget(ALLOW_RECURRENCE));
-    }
-
-    private void bindRegistrationWidget(PaymentNetwork network) {
-        CheckboxWidget widget = (CheckboxWidget) getFormWidget(AUTO_REGISTRATION);
-        widget.onBind(network.getRegistrationSettings());
-    }
-
-    private void bindRecurrenceWidget(PaymentNetwork network) {
-        CheckboxWidget widget = (CheckboxWidget) getFormWidget(ALLOW_RECURRENCE);
-        widget.onBind(network.getRecurrenceSettings());
     }
 }

@@ -6,6 +6,9 @@
     <string name="error_default_title">Oops!</string>
     <string name="error_default_text">An error occurred while handling your payment. Please try again.</string>
 
+    <string name="accounts_pending_title">Payment method pending</string>
+    <string name="accounts_pending_text">Please refresh or check back later for updates.</string>
+
     <string name="button_cancel_label">Cancel</string>
     <string name="button_retry_label">Retry</string>
     <string name="button_ok_label">OK</string>

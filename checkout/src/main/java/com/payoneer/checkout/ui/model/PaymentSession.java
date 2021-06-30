@@ -57,6 +57,10 @@ public final class PaymentSession {
         return url != null ? url.toString() : null;
     }
 
+    public String getListOperationType() {
+        return listResult.getOperationType();
+    }
+    
     public URL getListLink(String name) {
         Map<String, URL> links = listResult.getLinks();
         return links != null ? links.get(name) : null;

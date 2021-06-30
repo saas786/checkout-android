@@ -16,10 +16,9 @@ import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
 
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.model.RegistrationType;
-import com.payoneer.checkout.ui.widget.CheckboxSettings;
+import com.payoneer.checkout.ui.model.CheckboxSettings;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Class for building the Checkbox settings for both 
