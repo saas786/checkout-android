@@ -22,7 +22,7 @@ import android.widget.TextView;
 /**
  * Widget for showing the CheckBox input element
  */
-public class CheckboxWidget2 extends FormWidget {
+public class CheckboxWidget extends FormWidget {
 
     private SwitchMaterial switchView;
     private TextView labelView;
@@ -32,7 +32,7 @@ public class CheckboxWidget2 extends FormWidget {
      *
      * @param name name identifying this widget
      */
-    public CheckboxWidget2(String name) {
+    public CheckboxWidget(String name) {
         super(name);
     }
 
