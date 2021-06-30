@@ -26,7 +26,7 @@ import com.payoneer.checkout.model.InputElementType;
 import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.widget.ButtonWidget;
-import com.payoneer.checkout.ui.widget.CheckboxWidget;
+import com.payoneer.checkout.ui.widget.CheckboxWidget2;
 import com.payoneer.checkout.ui.widget.DateWidget;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.ui.widget.SelectWidget;
@@ -277,7 +277,7 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bindCheckboxWidget(String name, CheckboxSettings settings) {
-        CheckboxWidget widget = (CheckboxWidget)getFormWidget(name);
+        CheckboxWidget2 widget = (CheckboxWidget2)getFormWidget(name);
         widget.onBind(settings.getMode(), settings.getLabel());
     }
     

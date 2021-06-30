@@ -13,11 +13,10 @@ import static com.payoneer.checkout.core.PaymentInputType.ALLOW_RECURRENCE;
 import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.SmartSwitch;
-import com.payoneer.checkout.ui.widget.CheckboxWidget;
+import com.payoneer.checkout.ui.widget.CheckboxWidget2;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -93,7 +92,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
     }
 
     private void addRegisterWidgets() {
-        addWidget(new CheckboxWidget(AUTO_REGISTRATION));
-        addWidget(new CheckboxWidget(ALLOW_RECURRENCE));
+        addWidget(new CheckboxWidget2(AUTO_REGISTRATION));
+        addWidget(new CheckboxWidget2(ALLOW_RECURRENCE));
     }
 }
