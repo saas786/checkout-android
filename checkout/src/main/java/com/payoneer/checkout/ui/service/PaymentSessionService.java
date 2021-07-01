@@ -50,13 +50,13 @@ import com.payoneer.checkout.network.LocalizationConnection;
 import com.payoneer.checkout.resource.PaymentGroup;
 import com.payoneer.checkout.resource.ResourceLoader;
 import com.payoneer.checkout.ui.model.AccountCard;
-import com.payoneer.checkout.ui.model.CheckboxSettings;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.PaymentSection;
 import com.payoneer.checkout.ui.model.PaymentSession;
 import com.payoneer.checkout.ui.model.PresetCard;
+import com.payoneer.checkout.ui.model.RegistrationOption;
 import com.payoneer.checkout.validation.Validator;
 
 import android.content.Context;
@@ -318,13 +318,13 @@ public final class PaymentSessionService {
     private PaymentNetwork createPaymentNetwork(ListResult listResult, ApplicableNetwork network) {
         String buttonKey = LocalizationKey.operationButtonKey(network.getOperationType());
 
-        RegisterCheckboxBuilder builder = new RegisterCheckboxBuilder()
+        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
             .setOperationType(listResult.getOperationType())
-            .setRegistration(network.getRegistration())
-            .setRecurrence(network.getRecurrence());
+            .setAutoRegistration(network.getRegistration())
+            .setAllowRecurrence(network.getRecurrence());
 
-        CheckboxSettings registration = builder.buildRegistrationCheckboxSettings();
-        CheckboxSettings recurrence = builder.buildRecurrenceCheckboxSettings();
+        RegistrationOption registration = builder.buildAutoRegistrationOption();
+        RegistrationOption recurrence = builder.buildAllowRecurrenceOption();
         return new PaymentNetwork(network, buttonKey, registration, recurrence);
     }
 

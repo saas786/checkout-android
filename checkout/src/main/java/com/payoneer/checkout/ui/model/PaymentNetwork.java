@@ -26,16 +26,16 @@ public final class PaymentNetwork {
 
     private final ApplicableNetwork network;
     private final String buttonKey;
-    private final CheckboxSettings registrationSettings;
-    private final CheckboxSettings recurrenceSettings;
+    private final RegistrationOption autoRegistration;
+    private final RegistrationOption allowRecurrence;
 
 
-    public PaymentNetwork(ApplicableNetwork network, String buttonKey, CheckboxSettings registrationSettings,
-        CheckboxSettings recurrenceSettings) {
+    public PaymentNetwork(ApplicableNetwork network, String buttonKey, RegistrationOption autoRegistration,
+        RegistrationOption allowRecurrence) {
         this.network = network;
         this.buttonKey = buttonKey;
-        this.registrationSettings = registrationSettings;
-        this.recurrenceSettings = recurrenceSettings;
+        this.autoRegistration = autoRegistration;
+        this.allowRecurrence = allowRecurrence;
     }
 
     public void putLanguageLink(Map<String, URL> links) {
@@ -73,12 +73,12 @@ public final class PaymentNetwork {
         return Localization.translate(getNetworkCode(), buttonKey);
     }
 
-    public CheckboxSettings getRecurrenceSettings() {
-        return recurrenceSettings;
+    public RegistrationOption getAllowRecurrence() {
+        return allowRecurrence;
     }
 
-    public CheckboxSettings getRegistrationSettings() {
-        return registrationSettings;
+    public RegistrationOption getAutoRegistration() {
+        return autoRegistration;
     }
 
     public boolean isPreselected() {

@@ -11,25 +11,25 @@ package com.payoneer.checkout.ui.model;
 import com.payoneer.checkout.localization.Localization;
 
 /**
- * Class for storing the CheckBoxSettings
+ * Class for storing the RegistrationOption for autoRegistration and allowRecurrence options
  */
-public final class CheckboxSettings {
-    private final String mode;
+public final class RegistrationOption {
+    private final String checkboxMode;
     private final String labelKey;
 
     /**
-     * Construct a new CheckBoxSettings
+     * Construct a new RegistrationOption
      *
-     * @param mode the mode of the checkbox
+     * @param checkboxMode the mode of the checkbox
      * @param labelKey localization key for the checkbox label
      */
-    public CheckboxSettings(String mode, String labelKey) {
-        this.mode = mode;
+    public RegistrationOption(String checkboxMode, String labelKey) {
+        this.checkboxMode = checkboxMode;
         this.labelKey = labelKey;
     }
 
-    public String getMode() {
-        return mode;
+    public String getCheckboxMode() {
+        return checkboxMode;
     }
 
     public String getLabelKey() {
