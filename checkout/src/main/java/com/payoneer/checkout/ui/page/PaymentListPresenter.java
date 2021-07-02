@@ -254,7 +254,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         String reason = interaction.getReason();
         switch (interaction.getReason()) {
             case PENDING:
-                showPendingAndReloadSession();
+                showPendingMessageAndReloadSession();
                 break;
             case OK:
                 loadPaymentSession();
@@ -514,7 +514,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         sessionService.loadPaymentSession(listUrl, view.getActivity());
     }
 
-    private void showPendingAndReloadSession() {
+    private void showPendingMessageAndReloadSession() {
         view.showPendingAccountDialog(createLoadSessionDialogListener());
     }
 
