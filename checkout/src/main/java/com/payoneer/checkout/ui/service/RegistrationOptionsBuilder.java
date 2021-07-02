@@ -36,7 +36,7 @@ public final class RegistrationOptionsBuilder {
      * @return the newly build RegistrationOption for autoRegistration
      */
     public RegistrationOption buildAutoRegistrationOption() {
-        if (TextUtils.isEmpty(operationType) || TextUtils.isEmpty(allowRecurrence)) {
+        if (TextUtils.isEmpty(operationType) || TextUtils.isEmpty(autoRegistration)) {
             throw new IllegalStateException("operationType or autoRegistration may not be null or empty");
         }
         if (UPDATE.equals(operationType)) {
