@@ -173,7 +173,7 @@ public final class BasicNetworkService extends NetworkService {
     private boolean requiresRedirect(OperationResult operationResult) {
         Redirect redirect = operationResult.getRedirect();
         String type = redirect != null ? redirect.getType() : null;
-        return PROVIDER.equals(redirect.getType()) || HANDLER3DS2.equals(type);
+        return PROVIDER.equals(type) || HANDLER3DS2.equals(type);
     }
 
     private String getErrorInteractionCode(String operationType) {
