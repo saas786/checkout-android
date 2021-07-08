@@ -19,8 +19,11 @@ import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInPaymentCard;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInWidget;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isCardWithTestId;
+import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInPaymentCard;
 
 import java.util.Map;
 
@@ -33,6 +36,7 @@ import com.payoneer.checkout.ui.page.PaymentListActivity;
 import android.view.View;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 public final class PaymentListHelper {
 
@@ -43,9 +47,22 @@ public final class PaymentListHelper {
 
         IdlingRegistry.getInstance().register(loadIdlingResource);
         onView(withId(R.id.recyclerview_paymentlist)).check(matches(isDisplayed()));
-        IdlingRegistry.getInstance().unregister(loadIdlingResource);
 
+        listActivity.resetLoadIdlingResource();
+        IdlingRegistry.getInstance().unregister(loadIdlingResource);
         return listActivity;
+    }
+
+    public static void waitForPaymentListDialog() {
+        intended(hasComponent(PaymentListActivity.class.getName()));
+        PaymentListActivity listActivity = (PaymentListActivity) ActivityHelper.getCurrentActivity();
+        IdlingResource dialogIdlingResource = listActivity.getDialogIdlingResource();
+
+        IdlingRegistry.getInstance().register(dialogIdlingResource);
+        onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(isDisplayed()));
+
+        listActivity.resetDialogIdlingResource();
+        IdlingRegistry.getInstance().unregister(dialogIdlingResource);
     }
 
     public static void openPaymentListCard(int cardIndex, String cardTestId) {
@@ -66,5 +83,19 @@ public final class PaymentListHelper {
     public static void clickPaymentListCardButton(int cardIndex) {
         intended(hasComponent(PaymentListActivity.class.getName()));
         onView(withId(R.id.recyclerview_paymentlist)).perform(actionOnViewInWidget(cardIndex, click(), "buttonWidget", R.id.button));
+    }
+
+    public static void clickPaymentListCardIcon(int cardIndex) {
+        intended(hasComponent(PaymentListActivity.class.getName()));
+        onView(withId(R.id.recyclerview_paymentlist)).perform(actionOnViewInPaymentCard(cardIndex, click(), R.id.viewswitcher_icon));
+    }
+
+    public static void matchesPaymentCardTitle(int cardIndex, String title) {
+        Matcher<View> list = withId(R.id.recyclerview_paymentlist);
+        onView(list).check(matches(isViewInPaymentCard(cardIndex, withText(title), R.id.text_title)));
+    }
+
+    public static void matchesPaymentDialogTitle(String title) {
+        onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(withText(title)));
     }
 }
