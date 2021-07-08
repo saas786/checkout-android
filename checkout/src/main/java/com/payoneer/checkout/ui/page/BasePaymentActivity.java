@@ -41,7 +41,8 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     /** For testing only */
     SimpleIdlingResource closeIdlingResource;
     SimpleIdlingResource dialogIdlingResource;
-    boolean closed;
+    boolean closeIdlingState;
+    boolean dialogIdlingState;
 
     /**
      * {@inheritDoc}
@@ -58,7 +59,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     @Override
     public void onResume() {
         super.onResume();
-        closed = false;
+        setCloseIdlingState(false);
     }
 
     /**
@@ -161,7 +162,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         setOverridePendingTransition();
 
         // for automated testing
-        setCloseIdleState();
+        setCloseIdlingState(true);
     }
 
     /**
@@ -173,9 +174,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         dialog.show(getSupportFragmentManager());
 
         // For automated testing
-        if (dialogIdlingResource != null) {
-            dialogIdlingResource.setIdleState(true);
-        }
+        setDialogIdlingState(true);
     }
 
     /**
@@ -223,8 +222,17 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         if (dialogIdlingResource == null) {
             dialogIdlingResource = new SimpleIdlingResource(getClass().getSimpleName() + "-dialogIdlingResource");
         }
-        dialogIdlingResource.reset();
+        setIdlingResourceState(dialogIdlingResource, dialogIdlingState);
         return dialogIdlingResource;
+    }
+
+    /**
+     * Only called from test, reset the close idling resource
+     */
+    @VisibleForTesting
+    public void resetDialogIdlingResource() {
+        dialogIdlingState = false;
+        setIdlingResourceState(dialogIdlingResource, false);
     }
 
     /**
@@ -235,21 +243,43 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         if (closeIdlingResource == null) {
             closeIdlingResource = new SimpleIdlingResource(getClass().getSimpleName() + "-closeIdlingResource");
         }
-        if (closed) {
-            closeIdlingResource.setIdleState(true);
-        } else {
-            closeIdlingResource.reset();
-        }
+        setIdlingResourceState(closeIdlingResource, closeIdlingState);
         return closeIdlingResource;
     }
 
     /**
-     * Set the close idle state for the closeIdlingResource
+     * For testing only, set the dialog idling state, indicating that a dialog is shown
+     *
+     * @param state true when active, false otherwise
      */
-    void setCloseIdleState() {
-        closed = true;
-        if (closeIdlingResource != null) {
-            closeIdlingResource.setIdleState(true);
+    void setDialogIdlingState(boolean dialogIdlingState) {
+        this.dialogIdlingState = dialogIdlingState;
+        setIdlingResourceState(dialogIdlingResource, dialogIdlingState);
+    }
+
+    /**
+     * For testing only, set the dialog idling state, indicating that a dialog is shown
+     *
+     * @param closeIdlingState true when active, false otherwise
+     */
+    void setCloseIdlingState(boolean closeIdlingState) {
+        this.closeIdlingState = closeIdlingState;
+        setIdlingResourceState(closeIdlingResource, closeIdlingState);
+    }
+
+    /**
+     * For testing only, set the idling resource state
+     *
+     * @param state true when active, false otherwise
+     */
+    void setIdlingResourceState(SimpleIdlingResource idlingResource, boolean state) {
+        if (idlingResource == null) {
+            return;
+        }
+        if (state) {
+            idlingResource.setIdleState(state);
+        } else {
+            idlingResource.reset();
         }
     }
 }

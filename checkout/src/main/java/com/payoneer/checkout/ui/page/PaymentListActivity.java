@@ -36,7 +36,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     private PaymentList paymentList;
 
     // For automated testing
-    private boolean loadCompleted;
+    private boolean loadIdlingState;
     private SimpleIdlingResource loadIdlingResource;
 
     /**
@@ -99,7 +99,6 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     @Override
     public void onResume() {
         super.onResume();
-        loadCompleted = false;
         presenter.onStart();
     }
 
@@ -113,6 +112,14 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
             return true;
         }
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showProgress(boolean visible) {
+        super.showProgress(visible);
     }
 
     /**
@@ -141,11 +148,8 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         setToolbar(Localization.translate(LIST_TITLE));
         paymentList.showPaymentSession(session);
 
-        // For automated UI testing
-        this.loadCompleted = true;
-        if (loadIdlingResource != null) {
-            loadIdlingResource.setIdleState(loadCompleted);
-        }
+        // for automated testing
+        setLoadIdlingState(true);
     }
 
     /**
@@ -158,7 +162,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         overridePendingTransition(ChargePaymentActivity.getStartTransition(), R.anim.no_animation);
 
         // for automated testing
-        setCloseIdleState();
+        setCloseIdlingState(true);
     }
 
     /**
@@ -169,12 +173,17 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         if (loadIdlingResource == null) {
             loadIdlingResource = new SimpleIdlingResource(getClass().getSimpleName() + "-loadIdlingResource");
         }
-        if (loadCompleted) {
-            loadIdlingResource.setIdleState(loadCompleted);
-        } else {
-            loadIdlingResource.reset();
-        }
+        setIdlingResourceState(loadIdlingResource, loadIdlingState);
         return loadIdlingResource;
+    }
+
+    /**
+     * Only called from test, reset the load idling resource
+     */
+    @VisibleForTesting
+    public void resetLoadIdlingResource() {
+        loadIdlingState = false;
+        setIdlingResourceState(loadIdlingResource, false);
     }
 
     /**
@@ -199,5 +208,16 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     private void setToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
+    }
+
+    /**
+     * For testing only, set the load idling state to true, indicating that the
+     * payment session has been loaded
+     *
+     * @param loadIdlingState indicating the state of the idling resource
+     */
+    void setLoadIdlingState(boolean loadIdlingState) {
+        this.loadIdlingState = loadIdlingState;
+        setIdlingResourceState(loadIdlingResource, loadIdlingState);
     }
 }
