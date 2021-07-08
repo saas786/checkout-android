@@ -11,7 +11,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInCard;
+import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInPaymentCard;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 
 import com.payoneer.checkout.exampleshop.checkout.CheckoutActivity;
 import com.payoneer.checkout.exampleshop.settings.SettingsActivity;
+import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 
 import android.view.View;
@@ -41,7 +42,7 @@ public final class PresetAccountTests extends AbstractTest {
         int presetCardIndex = 1;
         int networkCardIndex = 3;
 
-        CheckoutActivity checkoutActivity = openCheckoutActivity(true);
+        CheckoutActivity checkoutActivity = openCheckoutActivity(NetworkOperationType.PRESET);
         IdlingResource checkoutResultHandledIdlingResource = checkoutActivity.getResultHandledIdlingResource();
         clickCheckoutButton();
 
@@ -58,6 +59,6 @@ public final class PresetAccountTests extends AbstractTest {
 
         PaymentListHelper.waitForPaymentListLoaded(2);
         Matcher<View> list = withId(R.id.recyclerview_paymentlist);
-        onView(list).check(matches(isViewInCard(presetCardIndex, withText("PayPal"), R.id.text_title)));
+        onView(list).check(matches(isViewInPaymentCard(presetCardIndex, withText("PayPal"), R.id.text_title)));
     }
 }
