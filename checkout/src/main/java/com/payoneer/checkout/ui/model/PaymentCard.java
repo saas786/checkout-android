@@ -129,6 +129,13 @@ public abstract class PaymentCard {
         return false;
     }
 
+    /** 
+     * Reset this payment card, clean up any cache or temporary values.
+     * For example, temporary selection data stored in SmartSwitch. 
+     */
+    public void reset() {
+    }
+    
     /**
      * Check if this card contains a link with the provided name. If the card contains multiple networks then
      * all networks must be checked if at least one of them contains the link.

@@ -70,6 +70,15 @@ public final class PaymentSection {
     }
 
     /**
+     * Reset all payment cards in this section 
+     */
+    public void reset() {
+        for (PaymentCard card : cards) {
+            card.reset();
+        }
+    }
+    
+    /**
      * Put all language links from the section in the provided map.
      * The key of the map is the network code.
      *

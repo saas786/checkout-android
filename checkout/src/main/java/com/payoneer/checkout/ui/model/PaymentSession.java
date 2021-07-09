@@ -66,6 +66,12 @@ public final class PaymentSession {
         return links != null ? links.get(name) : null;
     }
 
+    public void reset() {
+        for (PaymentSection section : paymentSections) {
+            section.reset();
+        }
+    }
+    
     public boolean isEmpty() {
         return paymentSections.size() == 0;
     }

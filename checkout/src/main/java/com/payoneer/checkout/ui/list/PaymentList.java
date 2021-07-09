@@ -62,12 +62,15 @@ public final class PaymentList {
         }
     }
 
-    public void close() {
+    public void onStop() {
         hideKeyboard();
     }
 
     public void clear() {
-        session = null;
+        if (session != null) {
+            session.reset();
+            session = null;
+        }
         itemList.clear();
         adapter.notifyDataSetChanged();
     }
@@ -77,6 +80,7 @@ public final class PaymentList {
             setVisible(true);
             return;
         }
+        clear();
         this.session = session;
         setPaymentSessionItems(session);
 
@@ -189,7 +193,6 @@ public final class PaymentList {
     }
 
     private void setPaymentSessionItems(PaymentSession paymentSession) {
-        itemList.clear();
         for (PaymentSection section : session.getPaymentSections()) {
             addPaymentSectionItems(section);
         }
