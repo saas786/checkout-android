@@ -38,8 +38,8 @@ public class CheckboxWidget extends FormWidget {
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_checkbox);
-        labelView = widgetView.findViewById(R.id.label_value);
-        switchView = widgetView.findViewById(R.id.checkbox_value);
+        labelView = widgetView.findViewById(R.id.label_checkbox);
+        switchView = widgetView.findViewById(R.id.switch_checkbox);
         return widgetView;
     }
 
@@ -50,8 +50,8 @@ public class CheckboxWidget extends FormWidget {
 
     /**
      * Bind this CheckboxWidget to the mode and label.
-     * For now the required and required preselected are not handled client-side and will result
-     * in a server-side error if the user did not select it.
+     * For now the required and required preselected are handled the same as the optional modes.
+     * This is because there is no requireMsg yet defined for checkboxes in the localization files.
      *
      * @param mode checkbox mode
      * @param label shown to the user

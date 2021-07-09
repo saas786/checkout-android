@@ -22,7 +22,7 @@ import android.text.TextUtils;
 
 /**
  * Class for building the RegistrationOptions for both
- * recurrence and registration
+ * allowRecurrence and autoRegistration options.
  */
 public final class RegistrationOptionsBuilder {
 
