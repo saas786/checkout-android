@@ -47,13 +47,10 @@ public final class RegistrationOptionsBuilder {
 
     private RegistrationOption buildUpdateAutoRegistrationOption() {
         switch (autoRegistration) {
-            case RegistrationType.OPTIONAL:
-            case RegistrationType.OPTIONAL_PRESELECTED:
-            case RegistrationType.FORCED:
-            case RegistrationType.FORCED_DISPLAYED:
-                return new RegistrationOption(CheckboxMode.FORCED, AUTO_REGISTRATION_FORCED);
-            default:
+            case RegistrationType.NONE:
                 return new RegistrationOption(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);
+            default:
+                return new RegistrationOption(CheckboxMode.FORCED, AUTO_REGISTRATION_FORCED);
         }
     }
 
@@ -104,13 +101,10 @@ public final class RegistrationOptionsBuilder {
 
     private RegistrationOption buildUpdateAllowRecurrenceOption() {
         switch (allowRecurrence) {
-            case RegistrationType.OPTIONAL:
-            case RegistrationType.OPTIONAL_PRESELECTED:
-            case RegistrationType.FORCED:
-            case RegistrationType.FORCED_DISPLAYED:
-                return new RegistrationOption(CheckboxMode.FORCED, ALLOW_RECURRENCE_FORCED);
-            default:
+            case RegistrationType.NONE:
                 return new RegistrationOption(CheckboxMode.NONE, ALLOW_RECURRENCE_FORCED);
+            default:
+                return new RegistrationOption(CheckboxMode.FORCED, ALLOW_RECURRENCE_FORCED);
         }
     }
 
