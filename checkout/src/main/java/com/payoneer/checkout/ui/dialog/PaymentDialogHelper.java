@@ -11,8 +11,6 @@ package com.payoneer.checkout.ui.dialog;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_DISPLAYLABEL;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TITLE;
-import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_PENDING_TEXT;
-import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_PENDING_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_CANCEL;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_DELETE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_OK;
@@ -30,8 +28,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.core.PaymentNetworkCodes;
+import com.payoneer.checkout.localization.InteractionMessage;
 import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.model.Interaction;
 
 import android.view.View;
 
@@ -80,17 +78,11 @@ public class PaymentDialogHelper {
         return createMessageDialog(title, message, "dialog_defaulterror", listener);
     }
 
-    public static PaymentDialogFragment createInteractionDialog(Interaction interaction,
+    public static PaymentDialogFragment createInteractionDialog(InteractionMessage interactionMessage,
         PaymentDialogFragment.PaymentDialogListener listener) {
-        String title = Localization.translateInteraction(interaction, LABEL_TITLE);
-        String message = Localization.translateInteraction(interaction, LABEL_TEXT);
+        String title = Localization.translateInteractionMessage(interactionMessage, LABEL_TITLE);
+        String message = Localization.translateInteractionMessage(interactionMessage, LABEL_TEXT);
         return createMessageDialog(title, message, "dialog_interaction", listener);
-    }
-
-    public static PaymentDialogFragment createPendingAccountDialog(PaymentDialogFragment.PaymentDialogListener listener) {
-        String title = Localization.translate(ACCOUNTS_PENDING_TITLE);
-        String message = Localization.translate(ACCOUNTS_PENDING_TEXT);
-        return createMessageDialog(title, message, "dialog_pending", listener);
     }
 
     public static PaymentDialogFragment createConnectionErrorDialog(PaymentDialogFragment.PaymentDialogListener listener) {

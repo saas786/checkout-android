@@ -30,6 +30,7 @@ import java.util.Objects;
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.form.DeleteAccount;
 import com.payoneer.checkout.form.Operation;
+import com.payoneer.checkout.localization.InteractionMessage;
 import com.payoneer.checkout.model.ErrorInfo;
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.ListResult;
@@ -41,7 +42,6 @@ import com.payoneer.checkout.redirect.RedirectService;
 import com.payoneer.checkout.ui.PaymentActivityResult;
 import com.payoneer.checkout.ui.PaymentResult;
 import com.payoneer.checkout.ui.PaymentUI;
-import com.payoneer.checkout.ui.dialog.PaymentDialogFragment;
 import com.payoneer.checkout.ui.dialog.PaymentDialogFragment.PaymentDialogListener;
 import com.payoneer.checkout.ui.list.PaymentListListener;
 import com.payoneer.checkout.ui.model.AccountCard;
@@ -73,7 +73,6 @@ final class PaymentListPresenter extends BasePaymentPresenter
     private DeleteAccount deleteAccount;
 
     private PaymentSession session;
-    private Interaction reloadInteraction;
     private PaymentActivityResult activityResult;
     private NetworkService networkService;
     private RedirectRequest redirectRequest;
@@ -253,7 +252,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         Interaction interaction = result.getInteraction();
         switch (interaction.getReason()) {
             case PENDING:
-                showPendingMessageAndResetPaymentSession();
+                showErrorAndResetPaymentSession(interaction);
                 break;
             case OK:
                 loadPaymentSession();
@@ -349,10 +348,6 @@ final class PaymentListPresenter extends BasePaymentPresenter
             return;
         }
         this.session = session;
-        if (reloadInteraction != null) {
-            view.showInteractionDialog(reloadInteraction, null);
-            reloadInteraction = null;
-        }
         showPaymentSession();
     }
 
@@ -513,18 +508,18 @@ final class PaymentListPresenter extends BasePaymentPresenter
         sessionService.loadPaymentSession(listUrl, view.getActivity());
     }
 
-    private void showPendingMessageAndResetPaymentSession() {
-        view.showPendingAccountDialog(null);
+    private void showErrorAndResetPaymentSession(Interaction interaction) {
+        showInteractionDialog(interaction, null);
         listView.clearPaymentList();
         listView.showPaymentSession(session);
     }
 
     private void showErrorAndReloadPaymentSession(Interaction interaction) {
         PaymentDialogListener listener = new PaymentDialogListener() {
-                @Override
-                public void onPositiveButtonClicked() {
-                    loadPaymentSession();
-                }
+            @Override
+            public void onPositiveButtonClicked() {
+                loadPaymentSession();
+            }
 
                 @Override
                 public void onNegativeButtonClicked() {
@@ -536,16 +531,22 @@ final class PaymentListPresenter extends BasePaymentPresenter
                     loadPaymentSession();
                 }
             };
-        view.showInteractionDialog(interaction, listener);
+        showInteractionDialog(interaction, listener);
     }
 
     private void showErrorAndPaymentSession(Interaction interaction) {
-        listView.showInteractionDialog(interaction, null);
+        showInteractionDialog(interaction, null);
         listView.showPaymentSession(session);
     }
 
     private void showPaymentSession() {
         listView.showPaymentSession(session);
+    }
+
+    private void showInteractionDialog(Interaction interaction, PaymentDialogListener listener) {
+        String operationType = session != null ? session.getListOperationType() : null;
+        InteractionMessage message = new InteractionMessage(interaction, operationType);
+        view.showInteractionDialog(message, listener);
     }
 }
 

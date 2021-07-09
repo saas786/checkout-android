@@ -9,8 +9,8 @@
 package com.payoneer.checkout.ui.page;
 
 import com.payoneer.checkout.R;
+import com.payoneer.checkout.localization.InteractionMessage;
 import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.ui.PaymentActivityResult;
 import com.payoneer.checkout.ui.PaymentResult;
 import com.payoneer.checkout.ui.PaymentTheme;
@@ -102,20 +102,11 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
      * {@inheritDoc}
      */
     @Override
-    public void showPendingAccountDialog(PaymentDialogListener listener) {
-        PaymentDialogFragment dialog = PaymentDialogHelper.createPendingAccountDialog(listener);
-        showPaymentDialog(dialog);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showInteractionDialog(Interaction interaction, PaymentDialogListener listener) {
+    public void showInteractionDialog(InteractionMessage interactionMessage, PaymentDialogListener listener) {
         progressView.setVisible(false);
         PaymentDialogFragment dialog;
-        if (Localization.hasInteraction(interaction)) {
-            dialog = PaymentDialogHelper.createInteractionDialog(interaction, listener);
+        if (Localization.hasInteractionMessage(interactionMessage)) {
+            dialog = PaymentDialogHelper.createInteractionDialog(interactionMessage, listener);
         } else {
             dialog = PaymentDialogHelper.createDefaultErrorDialog(listener);
         }
