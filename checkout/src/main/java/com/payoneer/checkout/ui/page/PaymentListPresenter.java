@@ -124,22 +124,22 @@ final class PaymentListPresenter extends BasePaymentPresenter
             return;
         }
         PaymentDialogListener listener = new PaymentDialogListener() {
-                @Override
-                public void onPositiveButtonClicked() {
-                    loadPaymentSession();
-                }
+            @Override
+            public void onPositiveButtonClicked() {
+                loadPaymentSession();
+            }
 
-                @Override
-                public void onNegativeButtonClicked() {
-                }
+            @Override
+            public void onNegativeButtonClicked() {
+            }
 
-                @Override
-                public void onDismissed() {
-                }
-            };
+            @Override
+            public void onDismissed() {
+            }
+        };
         view.showRefreshAccountDialog(listener);
     }
-    
+
     void setPaymentActivityResult(PaymentActivityResult activityResult) {
         this.activityResult = activityResult;
     }
@@ -155,7 +155,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         }
         processPaymentCard(paymentCard, widgets);
     }
-    
+
     @Override
     public void onDeleteClicked(PaymentCard paymentCard) {
         if (!checkState(STARTED)) {
@@ -541,21 +541,21 @@ final class PaymentListPresenter extends BasePaymentPresenter
 
     private void showErrorAndReloadPaymentSession(Interaction interaction) {
         PaymentDialogListener listener = new PaymentDialogListener() {
-                @Override
-                public void onPositiveButtonClicked() {
-                    loadPaymentSession();
-                }
+            @Override
+            public void onPositiveButtonClicked() {
+                loadPaymentSession();
+            }
 
-                @Override
-                public void onNegativeButtonClicked() {
-                    loadPaymentSession();
-                }
+            @Override
+            public void onNegativeButtonClicked() {
+                loadPaymentSession();
+            }
 
-                @Override
-                public void onDismissed() {
-                    loadPaymentSession();
-                }
-            };
+            @Override
+            public void onDismissed() {
+                loadPaymentSession();
+            }
+        };
         showInteractionDialog(interaction, listener);
     }
 

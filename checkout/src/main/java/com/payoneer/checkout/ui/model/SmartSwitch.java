@@ -43,7 +43,7 @@ public final class SmartSwitch {
         smartBuffer.clear();
         smartSelected.clear();
     }
-    
+
     /**
      * Get the first smart selected PaymentNetwork, may return null if none are selected.
      *

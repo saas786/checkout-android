@@ -114,7 +114,6 @@ public class PaymentDialogHelper {
     }
 
 
-    
     public static PaymentDialogFragment createDeleteAccountDialog(PaymentDialogFragment.PaymentDialogListener listener,
         String accountLabel) {
         PaymentDialogFragment dialog = new PaymentDialogFragment();

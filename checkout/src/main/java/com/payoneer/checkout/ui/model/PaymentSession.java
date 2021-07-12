@@ -29,7 +29,7 @@ public final class PaymentSession {
     private final ListResult listResult;
     private final List<PaymentSection> paymentSections;
     private final boolean swipeRefresh;
-        
+
     /**
      * Construct a new PaymentSession object
      *
@@ -54,7 +54,7 @@ public final class PaymentSession {
     public boolean swipeRefresh() {
         return swipeRefresh;
     }
-    
+
     public URL getListLanguageLink() {
         return getListLink(LINK_LANGUAGE);
     }
@@ -78,7 +78,7 @@ public final class PaymentSession {
             section.reset();
         }
     }
-    
+
     public boolean isEmpty() {
         return paymentSections.size() == 0;
     }

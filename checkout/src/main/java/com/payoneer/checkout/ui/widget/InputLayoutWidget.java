@@ -92,7 +92,7 @@ public abstract class InputLayoutWidget extends FormWidget {
     public boolean hasUserInputData() {
         return !(TextUtils.isEmpty(textInput.getText()));
     }
-    
+
     @Override
     public boolean setLastImeOptionsWidget() {
         textInput.setImeOptions(EditorInfo.IME_ACTION_DONE);

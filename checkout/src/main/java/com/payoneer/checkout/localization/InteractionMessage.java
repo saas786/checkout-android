@@ -20,9 +20,9 @@ public final class InteractionMessage {
     private final Interaction interaction;
     private final String operationType;
 
-    /** 
+    /**
      * Construct a new InteractionMessage
-     * 
+     *
      * @param interaction containing the code and reason of the interaction
      * @param operationType for specific localization of interactions per flow
      */

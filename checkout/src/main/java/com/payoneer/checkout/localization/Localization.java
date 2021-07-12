@@ -103,8 +103,8 @@ public final class Localization {
     }
 
     /**
-     * Helper method to check if a translation exist for the Interaction message. 
-     * If the operationType is null in the message then fallback to the normal interaction 
+     * Helper method to check if a translation exist for the Interaction message.
+     * If the operationType is null in the message then fallback to the normal interaction
      * localizations without the operationType.
      *
      * @param interactionMessage containing the interaction message to check if a translation exists

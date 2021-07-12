@@ -11,7 +11,7 @@
 
     <string name="messages_unsaved_title">Unsaved changes</string>
     <string name="messages_unsaved_text">Are you sure you want to refresh? Your unsaved changes will be lost.</string>
-    
+
     <string name="button_cancel_label">Cancel</string>
     <string name="button_retry_label">Retry</string>
     <string name="button_ok_label">OK</string>

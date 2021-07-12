@@ -175,12 +175,6 @@ public final class PaymentSessionService {
     }
 
     private PaymentSession asyncLoadPaymentSession(String listUrl, Context context) throws PaymentException {
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-
-        }
         ListResult listResult = listConnection.getListResult(listUrl);
 
         String integrationType = listResult.getIntegrationType();
