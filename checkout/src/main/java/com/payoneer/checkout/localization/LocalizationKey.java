@@ -24,6 +24,7 @@ public final class LocalizationKey {
     public final static String BUTTON_CANCEL = "button.cancel.label";
     public final static String BUTTON_DELETE = "button.delete.label";
     public final static String BUTTON_RETRY = "button.retry.label";
+    public final static String BUTTON_REFRESH = "button.refresh.label";
     public final static String BUTTON_UPDATE_ACCOUNT = "button.operation.UPDATE.account.label";
 
     public final static String LIST_TITLE = "paymentpage.title";
@@ -53,6 +54,9 @@ public final class LocalizationKey {
     public final static String ACCOUNTS_DELETE_TEXT = "accounts.delete.text";
     public final static String ACCOUNTS_DELETE_DISPLAYLABEL = "${account.displayLabel}";
 
+    public final static String MESSAGES_UNSAVED_TITLE = "messages.unsaved.title";
+    public final static String MESSAGES_UNSAVED_TEXT = "messages.unsaved.text";
+    
     public final static String INTERACTION_UPDATE_PROCEED_PENDING_TITLE = "interaction.UPDATE.PROCEED.PENDING.title";
     public final static String INTERACTION_UPDATE_PROCEED_PENDING_TEXT = "interaction.UPDATE.PROCEED.PENDING.text";
 

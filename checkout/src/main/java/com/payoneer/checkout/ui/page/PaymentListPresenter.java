@@ -115,6 +115,31 @@ final class PaymentListPresenter extends BasePaymentPresenter
         }
     }
 
+    public void onRefresh(boolean hasUserInputData) {
+        if (!checkState(STARTED)) {
+            return;
+        }
+        if (!hasUserInputData) {
+            loadPaymentSession();
+            return;
+        }
+        PaymentDialogListener listener = new PaymentDialogListener() {
+                @Override
+                public void onPositiveButtonClicked() {
+                    loadPaymentSession();
+                }
+
+                @Override
+                public void onNegativeButtonClicked() {
+                }
+
+                @Override
+                public void onDismissed() {
+                }
+            };
+        view.showRefreshAccountDialog(listener);
+    }
+    
     void setPaymentActivityResult(PaymentActivityResult activityResult) {
         this.activityResult = activityResult;
     }
@@ -130,7 +155,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         }
         processPaymentCard(paymentCard, widgets);
     }
-
+    
     @Override
     public void onDeleteClicked(PaymentCard paymentCard) {
         if (!checkState(STARTED)) {
@@ -516,10 +541,10 @@ final class PaymentListPresenter extends BasePaymentPresenter
 
     private void showErrorAndReloadPaymentSession(Interaction interaction) {
         PaymentDialogListener listener = new PaymentDialogListener() {
-            @Override
-            public void onPositiveButtonClicked() {
-                loadPaymentSession();
-            }
+                @Override
+                public void onPositiveButtonClicked() {
+                    loadPaymentSession();
+                }
 
                 @Override
                 public void onNegativeButtonClicked() {

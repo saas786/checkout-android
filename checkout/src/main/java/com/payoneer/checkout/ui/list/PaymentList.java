@@ -75,6 +75,19 @@ public final class PaymentList {
         adapter.notifyDataSetChanged();
     }
 
+    public boolean hasUserInputData() {
+        for (int e = itemList.getItemCount() ; e > 0 ; ) {
+            RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(--e);
+            if (holder == null || (!(holder instanceof PaymentCardViewHolder))) {
+                continue;
+            }
+            if (((PaymentCardViewHolder)holder).hasUserInputData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void showPaymentSession(PaymentSession session) {
         if (this.session == session) {
             setVisible(true);

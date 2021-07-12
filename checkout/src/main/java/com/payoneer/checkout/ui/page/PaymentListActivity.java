@@ -21,10 +21,12 @@ import com.payoneer.checkout.ui.page.idlingresource.SimpleIdlingResource;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.test.espresso.IdlingResource;
 
 /**
@@ -34,7 +36,8 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
 
     private PaymentListPresenter presenter;
     private PaymentList paymentList;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
+    
     // For automated testing
     private boolean loadCompleted;
     private SimpleIdlingResource loadIdlingResource;
@@ -70,6 +73,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         presenter = new PaymentListPresenter(this);
         paymentList = new PaymentList(this, presenter, findViewById(R.id.recyclerview_paymentlist));
 
+        initSwipeRefreshlayout();
         initToolbar();
     }
 
@@ -91,6 +95,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         super.onPause();
         paymentList.onStop();
         presenter.onStop();
+        resetSwipeRefreshLayout();
     }
 
     /**
@@ -121,6 +126,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        swipeRefreshLayout.setRefreshing(false);
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
     }
 
@@ -130,6 +136,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     @Override
     public void clearPaymentList() {
         paymentList.clear();
+        resetSwipeRefreshLayout();
     }
 
     /**
@@ -140,7 +147,8 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         progressView.setVisible(false);
         setToolbar(Localization.translate(LIST_TITLE));
         paymentList.showPaymentSession(session);
-
+        swipeRefreshLayout.setEnabled(session.swipeRefresh());
+        
         // For automated UI testing
         this.loadCompleted = true;
         if (loadIdlingResource != null) {
@@ -177,6 +185,16 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         return loadIdlingResource;
     }
 
+    private void initSwipeRefreshlayout() {
+        swipeRefreshLayout = findViewById(R.id.layout_swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                public void onRefresh() {
+                    presenter.onRefresh(paymentList.hasUserInputData());
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+    }
+    
     /**
      * Initialize the toolbar in this PaymentList
      */
@@ -199,5 +217,10 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     private void setToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
+    }
+
+    private void resetSwipeRefreshLayout() {
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(false);
     }
 }

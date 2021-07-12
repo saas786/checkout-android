@@ -88,26 +88,22 @@ public abstract class InputLayoutWidget extends FormWidget {
         this.helperText = helperText;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public boolean hasUserInputData() {
+        return !(TextUtils.isEmpty(textInput.getText()));
+    }
+    
     @Override
     public boolean setLastImeOptionsWidget() {
         textInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean requestFocus() {
         return textInput.requestFocus();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void clearFocus() {
         if (textInput.hasFocus()) {
@@ -115,9 +111,6 @@ public abstract class InputLayoutWidget extends FormWidget {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setValidation() {
 
@@ -128,18 +121,12 @@ public abstract class InputLayoutWidget extends FormWidget {
         validate();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean validate() {
         ValidationResult result = presenter.validate(name, getValue(), null);
         return setValidationResult(result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putValue(Operation operation) throws PaymentException {
         String val = getValue();

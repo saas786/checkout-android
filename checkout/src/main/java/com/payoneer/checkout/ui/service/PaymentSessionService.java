@@ -175,6 +175,12 @@ public final class PaymentSessionService {
     }
 
     private PaymentSession asyncLoadPaymentSession(String listUrl, Context context) throws PaymentException {
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+
+        }
         ListResult listResult = listConnection.getListResult(listUrl);
 
         String integrationType = listResult.getIntegrationType();
@@ -198,12 +204,12 @@ public final class PaymentSessionService {
         if (section != null) {
             sections.add(section);
         }
-        PaymentSession session = new PaymentSession(listResult, sections);
+        boolean refresh = UPDATE.equals(operationType);
+        PaymentSession session = new PaymentSession(listResult, sections, refresh);
 
         loadValidator(context);
         loadLocalizations(context, session);
-
-        return new PaymentSession(listResult, sections);
+        return session;
     }
 
     private PaymentSection createPresetSection(ListResult listResult) {
