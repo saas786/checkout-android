@@ -33,6 +33,7 @@ import com.payoneer.checkout.ui.service.OperationService;
 import com.payoneer.checkout.util.PaymentResultHelper;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * BasicNetworkService implementing the handling of basic payment methods like Visa, Mastercard and Sepa.
@@ -112,6 +113,8 @@ public final class BasicNetworkService extends NetworkService {
             resultCode = RESULT_CODE_ERROR;
             paymentResult = PaymentResultHelper.fromErrorMessage(interactionCode, message);
         }
+        Log.i("checkout", "onRedirectResult: " + paymentResult);
+
         if (request.getRequestCode() == PROCESSPAYMENT_REQUEST_CODE) {
             listener.onProcessPaymentResult(resultCode, paymentResult);
         } else {
@@ -121,10 +124,11 @@ public final class BasicNetworkService extends NetworkService {
 
     private void handleProcessPaymentSuccess(OperationResult operationResult) {
         Interaction interaction = operationResult.getInteraction();
-        PaymentResult result = new PaymentResult(operationResult);
-
+        PaymentResult paymentResult = new PaymentResult(operationResult);
+        Log.i("checkout", "handleProcessPaymentSuccess: " + paymentResult);
+        
         if (!PROCEED.equals(interaction.getCode())) {
-            listener.onProcessPaymentResult(RESULT_CODE_ERROR, result);
+            listener.onProcessPaymentResult(RESULT_CODE_ERROR, paymentResult);
             return;
         }
         if (requiresRedirect(operationResult)) {
@@ -136,21 +140,24 @@ public final class BasicNetworkService extends NetworkService {
             }
             return;
         }
-        listener.onProcessPaymentResult(RESULT_CODE_PROCEED, result);
+        listener.onProcessPaymentResult(RESULT_CODE_PROCEED, paymentResult);
     }
 
     private void handleProcessPaymentError(Throwable cause) {
         String code = getErrorInteractionCode(operationType);
         PaymentResult paymentResult = PaymentResultHelper.fromThrowable(code, cause);
+
+        Log.i("checkout", "handleProcessPaymentError: " + paymentResult);
         listener.onProcessPaymentResult(RESULT_CODE_ERROR, paymentResult);
     }
 
     private void handleDeleteAccountSuccess(OperationResult operationResult) {
         Interaction interaction = operationResult.getInteraction();
-        PaymentResult result = new PaymentResult(operationResult);
-
+        PaymentResult paymentResult = new PaymentResult(operationResult);
+        Log.i("checkout", "handleDeleteAccountSuccess: " + paymentResult);
+        
         if (!PROCEED.equals(interaction.getCode())) {
-            listener.onDeleteAccountResult(RESULT_CODE_ERROR, result);
+            listener.onDeleteAccountResult(RESULT_CODE_ERROR, paymentResult);
             return;
         }
         if (requiresRedirect(operationResult)) {
@@ -162,11 +169,12 @@ public final class BasicNetworkService extends NetworkService {
             }
             return;
         }
-        listener.onDeleteAccountResult(RESULT_CODE_PROCEED, result);
+        listener.onDeleteAccountResult(RESULT_CODE_PROCEED, paymentResult);
     }
 
     private void handleDeleteAccountError(Throwable cause) {
         PaymentResult paymentResult = PaymentResultHelper.fromThrowable(ABORT, cause);
+        Log.i("checkout", "handleDeleteAccountError: " + paymentResult);
         listener.onDeleteAccountResult(RESULT_CODE_ERROR, paymentResult);
     }
 
