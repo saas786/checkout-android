@@ -297,7 +297,7 @@ public final class PaymentSessionService {
         for (ApplicableNetwork network : an) {
             String code = network.getCode();
             if (supportsApplicableNetwork(listResult, network)) {
-                items.put(code, createPaymentNetwork(listResult, network));
+                items.put(code, createPaymentNetwork(network));
             }
         }
         return items;
@@ -315,11 +315,12 @@ public final class PaymentSessionService {
         return NetworkServiceLookup.supports(network.getCode(), network.getMethod());
     }
 
-    private PaymentNetwork createPaymentNetwork(ListResult listResult, ApplicableNetwork network) {
-        String buttonKey = LocalizationKey.operationButtonKey(network.getOperationType());
+    private PaymentNetwork createPaymentNetwork(ApplicableNetwork network) {
+        String operationType = network.getOperationType();
+        String buttonKey = LocalizationKey.operationButtonKey(operationType);
 
         RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(listResult.getOperationType())
+            .setOperationType(operationType)
             .setAutoRegistration(network.getRegistration())
             .setAllowRecurrence(network.getRecurrence());
 

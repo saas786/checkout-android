@@ -39,6 +39,11 @@ public final class SmartSwitch {
         }
     }
 
+    public void reset() {
+        smartBuffer.clear();
+        smartSelected.clear();
+    }
+    
     /**
      * Get the first smart selected PaymentNetwork, may return null if none are selected.
      *

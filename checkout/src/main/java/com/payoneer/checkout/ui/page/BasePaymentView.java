@@ -8,7 +8,7 @@
 
 package com.payoneer.checkout.ui.page;
 
-import com.payoneer.checkout.model.Interaction;
+import com.payoneer.checkout.localization.InteractionMessage;
 import com.payoneer.checkout.ui.PaymentActivityResult;
 import com.payoneer.checkout.ui.PaymentResult;
 import com.payoneer.checkout.ui.dialog.PaymentDialogFragment.PaymentDialogListener;
@@ -35,13 +35,6 @@ interface BasePaymentView {
     void showConnectionErrorDialog(PaymentDialogListener listener);
 
     /**
-     * Show the pending account dialog to the user, notify the listener of events in this dialog.
-     *
-     * @param listener to be notified of dialog events
-     */
-    void showPendingAccountDialog(PaymentDialogListener listener);
-
-    /**
      * Show the delete account dialog to the user, notify the listener of events in this dialog.
      *
      * @param listener to be notified of dialog events
@@ -53,9 +46,10 @@ interface BasePaymentView {
      * Show the interaction text to the user, notify the listener of events in this dialog.
      * When there is no localization for the interaction then the default error will be shown to the user.
      *
+     * @param interactionMessage used to show the proper localization message to the user
      * @param listener to be notified of dialog events
      */
-    void showInteractionDialog(Interaction interaction, PaymentDialogListener listener);
+    void showInteractionDialog(InteractionMessage interactionMessage, PaymentDialogListener listener);
 
     /**
      * Show a warning message to the user
