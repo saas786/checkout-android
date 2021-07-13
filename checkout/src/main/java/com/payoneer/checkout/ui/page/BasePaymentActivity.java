@@ -218,7 +218,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     }
 
     /**
-     * Only called from test, reset the close idling resource
+     * Only called from test, reset the dialog IdlingResource
      */
     @VisibleForTesting
     public void resetDialogIdlingResource() {
@@ -249,7 +249,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     }
 
     /**
-     * For testing only, set the dialog idling state, indicating that a dialog is shown
+     * For testing only, set the close idling state, indicating that the page is closed
      *
      * @param closeIdlingState true when active, false otherwise
      */

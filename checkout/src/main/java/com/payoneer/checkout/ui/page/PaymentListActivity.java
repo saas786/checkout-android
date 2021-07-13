@@ -118,14 +118,6 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
      * {@inheritDoc}
      */
     @Override
-    public void showProgress(boolean visible) {
-        super.showProgress(visible);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
