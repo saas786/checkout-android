@@ -53,6 +53,9 @@ public final class LocalizationKey {
     public final static String ACCOUNTS_DELETE_TEXT = "accounts.delete.text";
     public final static String ACCOUNTS_DELETE_DISPLAYLABEL = "${account.displayLabel}";
 
+    public final static String INTERACTION_UPDATE_PROCEED_PENDING_TITLE = "interaction.UPDATE.PROCEED.PENDING.title";
+    public final static String INTERACTION_UPDATE_PROCEED_PENDING_TEXT = "interaction.UPDATE.PROCEED.PENDING.text";
+
     public final static String LABEL_TITLE = "title";
     public final static String LABEL_TEXT = "text";
 
@@ -82,5 +85,9 @@ public final class LocalizationKey {
 
     public static String interactionKey(Interaction interaction, String labelType) {
         return "interaction." + interaction.getCode() + "." + interaction.getReason() + "." + labelType;
+    }
+
+    public static String interactionKey(Interaction interaction, String operationType, String labelType) {
+        return "interaction." + operationType + "." + interaction.getCode() + "." + interaction.getReason() + "." + labelType;
     }
 }

@@ -12,9 +12,7 @@ import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_ERROR;
 import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_PROCEED;
 
 import com.payoneer.checkout.core.PaymentException;
-import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.ui.PaymentResult;
-import com.payoneer.checkout.ui.dialog.PaymentDialogFragment;
 import com.payoneer.checkout.ui.service.NetworkService;
 import com.payoneer.checkout.ui.service.NetworkServiceLookup;
 import com.payoneer.checkout.util.PaymentResultHelper;
@@ -63,28 +61,6 @@ abstract class BasePaymentPresenter {
     void closeWithErrorCode(PaymentResult result) {
         view.setPaymentResult(RESULT_CODE_ERROR, result);
         view.close();
-    }
-
-    void showErrorAndCloseWithErrorCode(PaymentResult result) {
-        view.setPaymentResult(RESULT_CODE_ERROR, result);
-        Interaction interaction = result.getInteraction();
-        PaymentDialogFragment.PaymentDialogListener listener = new PaymentDialogFragment.PaymentDialogListener() {
-            @Override
-            public void onPositiveButtonClicked() {
-                view.close();
-            }
-
-            @Override
-            public void onNegativeButtonClicked() {
-                view.close();
-            }
-
-            @Override
-            public void onDismissed() {
-                view.close();
-            }
-        };
-        view.showInteractionDialog(interaction, listener);
     }
 
     NetworkService loadNetworkService(String code, String paymentMethod) throws PaymentException {

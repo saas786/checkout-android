@@ -89,7 +89,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     @Override
     public void onPause() {
         super.onPause();
-        paymentList.close();
+        paymentList.onStop();
         presenter.onStop();
     }
 

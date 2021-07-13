@@ -26,10 +26,16 @@ public final class PaymentNetwork {
 
     private final ApplicableNetwork network;
     private final String buttonKey;
+    private final RegistrationOption autoRegistration;
+    private final RegistrationOption allowRecurrence;
 
-    public PaymentNetwork(ApplicableNetwork network, String buttonKey) {
+
+    public PaymentNetwork(ApplicableNetwork network, String buttonKey, RegistrationOption autoRegistration,
+        RegistrationOption allowRecurrence) {
         this.network = network;
         this.buttonKey = buttonKey;
+        this.autoRegistration = autoRegistration;
+        this.allowRecurrence = allowRecurrence;
     }
 
     public void putLanguageLink(Map<String, URL> links) {
@@ -67,12 +73,12 @@ public final class PaymentNetwork {
         return Localization.translate(getNetworkCode(), buttonKey);
     }
 
-    public String getRecurrence() {
-        return network.getRecurrence();
+    public RegistrationOption getAllowRecurrence() {
+        return allowRecurrence;
     }
 
-    public String getRegistration() {
-        return network.getRegistration();
+    public RegistrationOption getAutoRegistration() {
+        return autoRegistration;
     }
 
     public boolean isPreselected() {

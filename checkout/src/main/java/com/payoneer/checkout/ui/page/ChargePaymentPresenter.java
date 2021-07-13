@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.form.Operation;
+import com.payoneer.checkout.localization.InteractionMessage;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.ErrorInfo;
 import com.payoneer.checkout.model.Interaction;
@@ -25,6 +26,7 @@ import com.payoneer.checkout.redirect.RedirectRequest;
 import com.payoneer.checkout.redirect.RedirectService;
 import com.payoneer.checkout.ui.PaymentResult;
 import com.payoneer.checkout.ui.PaymentUI;
+import com.payoneer.checkout.ui.dialog.PaymentDialogFragment;
 import com.payoneer.checkout.ui.dialog.PaymentDialogFragment.PaymentDialogListener;
 import com.payoneer.checkout.ui.model.PaymentSession;
 import com.payoneer.checkout.ui.service.NetworkService;
@@ -223,6 +225,31 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     private void processPayment(Operation operation) {
         setState(PROCESS);
         networkService.processPayment(operation);
+    }
+
+    private void showErrorAndCloseWithErrorCode(PaymentResult result) {
+        Interaction interaction = result.getInteraction();
+        String operationType = session != null ? session.getListOperationType() : null;
+        InteractionMessage message = new InteractionMessage(interaction, operationType);
+
+        view.setPaymentResult(RESULT_CODE_ERROR, result);
+        PaymentDialogFragment.PaymentDialogListener listener = new PaymentDialogFragment.PaymentDialogListener() {
+            @Override
+            public void onPositiveButtonClicked() {
+                view.close();
+            }
+
+            @Override
+            public void onNegativeButtonClicked() {
+                view.close();
+            }
+
+            @Override
+            public void onDismissed() {
+                view.close();
+            }
+        };
+        view.showInteractionDialog(message, listener);
     }
 
     private void loadPaymentSession() {

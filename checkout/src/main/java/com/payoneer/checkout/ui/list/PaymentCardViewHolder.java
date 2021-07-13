@@ -25,7 +25,6 @@ import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.InputElementType;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.widget.ButtonWidget;
-import com.payoneer.checkout.ui.widget.CheckBoxWidget;
 import com.payoneer.checkout.ui.widget.DateWidget;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.ui.widget.SelectWidget;
@@ -156,9 +155,6 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
             case InputElementType.SELECT:
                 widget = new SelectWidget(name);
                 break;
-            case InputElementType.CHECKBOX:
-                widget = new CheckBoxWidget(name);
-                break;
             default:
                 widget = new TextInputWidget(name);
                 break;
@@ -237,7 +233,7 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
 
     void expand(boolean expand) {
         if (paymentCard.getHideInputForm()) {
-            formLayout.setVisibility(View.GONE);            
+            formLayout.setVisibility(View.GONE);
             return;
         }
         formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);

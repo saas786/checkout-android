@@ -15,8 +15,9 @@ import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
+import com.payoneer.checkout.ui.model.RegistrationOption;
 import com.payoneer.checkout.ui.model.SmartSwitch;
-import com.payoneer.checkout.ui.widget.RegisterWidget;
+import com.payoneer.checkout.ui.widget.CheckboxWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -39,7 +40,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         this.titleView = parent.findViewById(R.id.text_title);
 
         addElementWidgets(networkCard);
-        addRegisterWidgets();
+        addRegistrationWidgets();
         addButtonWidget();
         layoutWidgets();
 
@@ -70,8 +71,13 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
             setTestId("group");
         }
         PaymentNetwork network = networkCard.getVisibleNetwork();
-        bindRegistrationWidget(network);
-        bindRecurrenceWidget(network);
+        bindRegistrationWidget(AUTO_REGISTRATION, network.getAutoRegistration());
+        bindRegistrationWidget(ALLOW_RECURRENCE, network.getAllowRecurrence());
+    }
+
+    void bindRegistrationWidget(String name, RegistrationOption option) {
+        CheckboxWidget widget = (CheckboxWidget) getFormWidget(name);
+        widget.onBind(option.getCheckboxMode(), option.getLabel());
     }
 
     private void bindNetworkLogos(NetworkCard card) {
@@ -91,18 +97,8 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         PaymentUtils.setTestId(itemView, "card", testId);
     }
 
-    private void addRegisterWidgets() {
-        addWidget(new RegisterWidget(AUTO_REGISTRATION));
-        addWidget(new RegisterWidget(ALLOW_RECURRENCE));
-    }
-
-    private void bindRegistrationWidget(PaymentNetwork network) {
-        RegisterWidget widget = (RegisterWidget) getFormWidget(AUTO_REGISTRATION);
-        widget.onBind(network.getRegistration());
-    }
-
-    private void bindRecurrenceWidget(PaymentNetwork network) {
-        RegisterWidget widget = (RegisterWidget) getFormWidget(ALLOW_RECURRENCE);
-        widget.onBind(network.getRecurrence());
+    private void addRegistrationWidgets() {
+        addWidget(new CheckboxWidget(AUTO_REGISTRATION));
+        addWidget(new CheckboxWidget(ALLOW_RECURRENCE));
     }
 }
