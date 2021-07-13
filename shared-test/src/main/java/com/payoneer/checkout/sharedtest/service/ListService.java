@@ -41,6 +41,8 @@ public final class ListService {
     /**
      * Helper method to create list with the provided settings
      *
+     * @param baseUrl url pointing to the Payment API Backend
+     * @param authHeader containing the authentication header value
      * @param settings used to create the list
      * @return the self url of the newly created list
      */
