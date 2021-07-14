@@ -32,6 +32,7 @@ import org.hamcrest.Matcher;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
+import com.payoneer.checkout.ui.page.idlingresource.PaymentIdlingResources;
 
 import android.view.View;
 import androidx.test.espresso.IdlingRegistry;
@@ -43,12 +44,13 @@ public final class PaymentListHelper {
     public static PaymentListActivity waitForPaymentListLoaded(int count) {
         intended(hasComponent(PaymentListActivity.class.getName()), times(count));
         PaymentListActivity listActivity = (PaymentListActivity) ActivityHelper.getCurrentActivity();
-        IdlingResource loadIdlingResource = listActivity.getLoadIdlingResource();
+        PaymentIdlingResources idlingResources = listActivity.getPaymentIdlingResources();
+        IdlingResource loadIdlingResource = idlingResources.getLoadIdlingResource();
 
         IdlingRegistry.getInstance().register(loadIdlingResource);
         onView(withId(R.id.recyclerview_paymentlist)).check(matches(isDisplayed()));
 
-        listActivity.resetLoadIdlingResource();
+        idlingResources.resetLoadIdlingResource();
         IdlingRegistry.getInstance().unregister(loadIdlingResource);
         return listActivity;
     }
@@ -56,12 +58,13 @@ public final class PaymentListHelper {
     public static void waitForPaymentListDialog() {
         intended(hasComponent(PaymentListActivity.class.getName()));
         PaymentListActivity listActivity = (PaymentListActivity) ActivityHelper.getCurrentActivity();
-        IdlingResource dialogIdlingResource = listActivity.getDialogIdlingResource();
+        PaymentIdlingResources idlingResources = listActivity.getPaymentIdlingResources();
+        IdlingResource dialogIdlingResource = idlingResources.getDialogIdlingResource();
 
         IdlingRegistry.getInstance().register(dialogIdlingResource);
         onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(isDisplayed()));
 
-        listActivity.resetDialogIdlingResource();
+        idlingResources.resetDialogIdlingResource();
         IdlingRegistry.getInstance().unregister(dialogIdlingResource);
     }
 

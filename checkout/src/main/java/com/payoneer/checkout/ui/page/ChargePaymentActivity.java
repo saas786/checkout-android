@@ -148,11 +148,10 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
      */
     @Override
     public void onBackPressed() {
-        if (presenter.onBackPressed()) {
-            return;
+        if (!presenter.onBackPressed()) {
+            super.onBackPressed();
+            setOverridePendingTransition();
         }
-        super.onBackPressed();
-        setOverridePendingTransition();
     }
 
     /**

@@ -17,6 +17,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
 import com.payoneer.checkout.ui.page.ChargePaymentActivity;
+import com.payoneer.checkout.ui.page.idlingresource.PaymentIdlingResources;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
@@ -27,12 +28,13 @@ public final class ChargePaymentHelper {
     public static void waitForChargePaymentDialog() {
         intended(hasComponent(ChargePaymentActivity.class.getName()));
         ChargePaymentActivity chargeActivity = (ChargePaymentActivity) ActivityHelper.getCurrentActivity();
-        IdlingResource dialogIdlingResource = chargeActivity.getDialogIdlingResource();
+        PaymentIdlingResources idlingResources = chargeActivity.getPaymentIdlingResources();
+        IdlingResource dialogIdlingResource = idlingResources.getDialogIdlingResource();
 
         IdlingRegistry.getInstance().register(dialogIdlingResource);
         onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(isDisplayed()));
 
-        chargeActivity.resetDialogIdlingResource();
+        idlingResources.resetDialogIdlingResource();
         IdlingRegistry.getInstance().unregister(dialogIdlingResource);
     }
 }
