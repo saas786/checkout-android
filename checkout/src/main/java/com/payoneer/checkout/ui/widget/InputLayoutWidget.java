@@ -18,7 +18,9 @@ import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.ui.widget.input.EditTextInputMode;
 import com.payoneer.checkout.validation.ValidationResult;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,18 @@ public abstract class InputLayoutWidget extends FormWidget {
                     default:
                         return false;
                 }
+            }
+        });
+
+        textInput.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onTextInputChanged();
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -144,6 +158,10 @@ public abstract class InputLayoutWidget extends FormWidget {
                 handleOnEndIconClicked();
             }
         });
+    }
+
+    void onTextInputChanged() {
+        presenter.onTextInputChanged(name, getValue());
     }
 
     void removeEndIcon() {

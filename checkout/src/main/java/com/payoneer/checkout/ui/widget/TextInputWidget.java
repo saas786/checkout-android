@@ -69,27 +69,21 @@ public final class TextInputWidget extends InputLayoutWidget {
         setHelperText(Localization.translateAccountPlaceholder(code, name));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     void handleOnFocusChange(boolean hasFocus) {
         super.handleOnFocusChange(hasFocus);
         setClearIcon(getValue(), hasFocus);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     void handleOnEndIconClicked() {
         textInput.getText().clear();
     }
 
-    private void onTextInputChanged() {
-        String value = getValue();
-        presenter.onTextInputChanged(name, value);
-        setClearIcon(value, textInput.hasFocus());
+    @Override
+    void onTextInputChanged() {
+        super.onTextInputChanged();
+        setClearIcon(getValue(), textInput.hasFocus());
     }
 
     private void setClearIcon(String value, boolean hasFocus) {

@@ -79,6 +79,15 @@ public final class PaymentSession {
         }
     }
 
+    public boolean hasUserInputData() {
+        for (PaymentSection section : paymentSections) {
+            if (section.hasUserInputData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isEmpty() {
         return paymentSections.size() == 0;
     }

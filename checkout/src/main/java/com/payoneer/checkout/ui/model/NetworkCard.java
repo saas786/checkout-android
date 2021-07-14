@@ -103,11 +103,14 @@ public final class NetworkCard extends PaymentCard {
 
     @Override
     public void reset() {
+        super.reset();
         smartSwitch.reset();
     }
 
     @Override
     public boolean onTextInputChanged(String type, String text) {
+        setUserInputData(type, text);
+
         // Smartswitch works for 2 or more PaymentNetworks but only for debit/credit cards
         // and if the input field is a "number"
         if ((getPaymentNetworkCount() >= 2) && (PaymentUtils.isCardPaymentMethod(getPaymentMethod())) &&

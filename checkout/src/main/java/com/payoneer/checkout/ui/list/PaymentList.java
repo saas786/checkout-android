@@ -76,16 +76,7 @@ public final class PaymentList {
     }
 
     public boolean hasUserInputData() {
-        for (int e = itemList.getItemCount(); e > 0; ) {
-            RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(--e);
-            if (holder == null || (!(holder instanceof PaymentCardViewHolder))) {
-                continue;
-            }
-            if (((PaymentCardViewHolder) holder).hasUserInputData()) {
-                return true;
-            }
-        }
-        return false;
+        return session != null ? session.hasUserInputData() : false;
     }
 
     public void showPaymentSession(PaymentSession session) {
@@ -206,7 +197,7 @@ public final class PaymentList {
     }
 
     private void setPaymentSessionItems(PaymentSession paymentSession) {
-        for (PaymentSection section : session.getPaymentSections()) {
+        for (PaymentSection section : paymentSession.getPaymentSections()) {
             addPaymentSectionItems(section);
         }
     }
