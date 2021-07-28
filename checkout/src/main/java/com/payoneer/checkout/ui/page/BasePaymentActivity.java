@@ -79,6 +79,15 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     }
 
     @Override
+    public void showRefreshAccountDialog(PaymentDialogListener listener) {
+        PaymentDialogFragment dialog = PaymentDialogHelper.createRefreshAccountDialog(listener);
+        showPaymentDialog(dialog);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void showInteractionDialog(InteractionMessage interactionMessage, PaymentDialogListener listener) {
         progressView.setVisible(false);
         PaymentDialogFragment dialog;

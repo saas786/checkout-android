@@ -115,6 +115,31 @@ final class PaymentListPresenter extends BasePaymentPresenter
         }
     }
 
+    public void onRefresh(boolean hasUserInputData) {
+        if (!checkState(STARTED)) {
+            return;
+        }
+        if (!hasUserInputData) {
+            loadPaymentSession();
+            return;
+        }
+        PaymentDialogListener listener = new PaymentDialogListener() {
+            @Override
+            public void onPositiveButtonClicked() {
+                loadPaymentSession();
+            }
+
+            @Override
+            public void onNegativeButtonClicked() {
+            }
+
+            @Override
+            public void onDismissed() {
+            }
+        };
+        view.showRefreshAccountDialog(listener);
+    }
+
     void setPaymentActivityResult(PaymentActivityResult activityResult) {
         this.activityResult = activityResult;
     }
@@ -521,16 +546,16 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 loadPaymentSession();
             }
 
-                @Override
-                public void onNegativeButtonClicked() {
-                    loadPaymentSession();
-                }
+            @Override
+            public void onNegativeButtonClicked() {
+                loadPaymentSession();
+            }
 
-                @Override
-                public void onDismissed() {
-                    loadPaymentSession();
-                }
-            };
+            @Override
+            public void onDismissed() {
+                loadPaymentSession();
+            }
+        };
         showInteractionDialog(interaction, listener);
     }
 

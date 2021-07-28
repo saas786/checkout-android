@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.test.espresso.IdlingResource;
 
 /**
  * The PaymentListActivity showing available payment methods in a list.
@@ -31,6 +33,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
 
     private PaymentListPresenter presenter;
     private PaymentList paymentList;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /**
      * Create the start intent for this PaymentListActivity.
@@ -63,6 +66,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         presenter = new PaymentListPresenter(this);
         paymentList = new PaymentList(this, presenter, findViewById(R.id.recyclerview_paymentlist));
 
+        initSwipeRefreshlayout();
         initToolbar();
     }
 
@@ -78,6 +82,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         super.onPause();
         paymentList.onStop();
         presenter.onStop();
+        resetSwipeRefreshLayout();
     }
 
     @Override
@@ -98,12 +103,14 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        swipeRefreshLayout.setRefreshing(false);
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
     }
 
     @Override
     public void clearPaymentList() {
         paymentList.clear();
+        resetSwipeRefreshLayout();
     }
 
     @Override
@@ -111,6 +118,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         progressView.setVisible(false);
         setToolbar(Localization.translate(LIST_TITLE));
         paymentList.showPaymentSession(session);
+        swipeRefreshLayout.setEnabled(session.swipeRefresh());
         idlingResources.setLoadIdlingState(true);
     }
 
@@ -120,6 +128,16 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         startActivityForResult(intent, requestCode);
         overridePendingTransition(ChargePaymentActivity.getStartTransition(), R.anim.no_animation);
         idlingResources.setCloseIdlingState(true);
+    }
+
+    private void initSwipeRefreshlayout() {
+        swipeRefreshLayout = findViewById(R.id.layout_swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            public void onRefresh() {
+                presenter.onRefresh(paymentList.hasUserInputData());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void initToolbar() {
@@ -136,5 +154,10 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
     private void setToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
+    }
+
+    private void resetSwipeRefreshLayout() {
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(false);
     }
 }

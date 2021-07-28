@@ -12,10 +12,13 @@ import static com.payoneer.checkout.ui.model.PaymentSession.LINK_LOGO;
 import static com.payoneer.checkout.ui.model.PaymentSession.LINK_OPERATION;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.model.InputElement;
+
+import android.text.TextUtils;
 
 /**
  * Base class for all payment cards like the AccountCard, PresetCard and NetworkCard
@@ -24,6 +27,7 @@ public abstract class PaymentCard {
 
     private final boolean checkable;
     private boolean hideInputForm;
+    final List<String> userInputTypes;
 
     /**
      * Construct a PaymentCard, when a card is checkable and marked as checked
@@ -33,6 +37,7 @@ public abstract class PaymentCard {
      */
     public PaymentCard(boolean checkable) {
         this.checkable = checkable;
+        this.userInputTypes = new ArrayList<>();
     }
 
     /**
@@ -129,13 +134,41 @@ public abstract class PaymentCard {
         return false;
     }
 
-    /** 
+    /**
+     * Check if the user has typed any data in the payment cards.
+     * This is used to determine if e.g. the payment list can be refreshed without
+     * loosing data the user typed.
+     *
+     * @return true when this PaymentCard contains user data, false otherwise
+     */
+    public boolean hasUserInputData() {
+        return userInputTypes.size() != 0;
+    }
+
+    /**
      * Reset this payment card, clean up any cache or temporary values.
-     * For example, temporary selection data stored in SmartSwitch. 
+     * For example, temporary selection data stored in SmartSwitch.
      */
     public void reset() {
+        userInputTypes.clear();
     }
-    
+
+    /**
+     * Set the user input data. Add the type to the userInputTypes list if the text is not empty,
+     * remove it otherwise. If the list has elements it implies that the user has entered text in this
+     * PaymentCard.
+     *
+     * @param type of the input data field
+     * @param text containing the user input data
+     */
+    void setUserInputData(String type, String text) {
+        if (TextUtils.isEmpty(text)) {
+            userInputTypes.remove(type);
+        } else if (!userInputTypes.contains(type)) {
+            userInputTypes.add(type);
+        }
+    }
+
     /**
      * Check if this card contains a link with the provided name. If the card contains multiple networks then
      * all networks must be checked if at least one of them contains the link.
