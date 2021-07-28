@@ -84,6 +84,15 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         return paymentCard;
     }
 
+    boolean hasUserInputData() {
+        for (FormWidget widget : widgets.values()) {
+            if (widget.hasUserInputData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     Map<String, FormWidget> getFormWidgets() {
         return widgets;
     }

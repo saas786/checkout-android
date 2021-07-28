@@ -28,16 +28,19 @@ public final class PaymentSession {
 
     private final ListResult listResult;
     private final List<PaymentSection> paymentSections;
+    private final boolean swipeRefresh;
 
     /**
      * Construct a new PaymentSession object
      *
      * @param listResult Object holding the current list session data
      * @param paymentSections the list of sections containing PaymentCards
+     * @param swipeRefresh can this PaymentSession be refreshed by the user
      */
-    public PaymentSession(ListResult listResult, List<PaymentSection> paymentSections) {
+    public PaymentSession(ListResult listResult, List<PaymentSection> paymentSections, boolean swipeRefresh) {
         this.listResult = listResult;
         this.paymentSections = paymentSections;
+        this.swipeRefresh = swipeRefresh;
     }
 
     public ListResult getListResult() {
@@ -46,6 +49,10 @@ public final class PaymentSession {
 
     public List<PaymentSection> getPaymentSections() {
         return paymentSections;
+    }
+
+    public boolean swipeRefresh() {
+        return swipeRefresh;
     }
 
     public URL getListLanguageLink() {
@@ -71,7 +78,16 @@ public final class PaymentSession {
             section.reset();
         }
     }
-    
+
+    public boolean hasUserInputData() {
+        for (PaymentSection section : paymentSections) {
+            if (section.hasUserInputData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isEmpty() {
         return paymentSections.size() == 0;
     }

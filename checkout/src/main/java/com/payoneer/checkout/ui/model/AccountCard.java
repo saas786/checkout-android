@@ -99,13 +99,14 @@ public final class AccountCard extends PaymentCard {
     }
 
     @Override
-    public boolean onTextInputChanged(String type, String text) {
-        return false;
+    public boolean containsLink(final String name, final URL url) {
+        return PaymentUtils.equalsAsString(getLink(name), url);
     }
 
     @Override
-    public boolean containsLink(final String name, final URL url) {
-        return PaymentUtils.equalsAsString(getLink(name), url);
+    public boolean onTextInputChanged(String type, String text) {
+        setUserInputData(type, text);
+        return false;
     }
 
     public boolean isDeletable() {

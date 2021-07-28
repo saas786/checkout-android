@@ -75,6 +75,10 @@ public final class PaymentList {
         adapter.notifyDataSetChanged();
     }
 
+    public boolean hasUserInputData() {
+        return session != null ? session.hasUserInputData() : false;
+    }
+
     public void showPaymentSession(PaymentSession session) {
         if (this.session == session) {
             setVisible(true);
@@ -193,7 +197,7 @@ public final class PaymentList {
     }
 
     private void setPaymentSessionItems(PaymentSession paymentSession) {
-        for (PaymentSection section : session.getPaymentSections()) {
+        for (PaymentSection section : paymentSession.getPaymentSections()) {
             addPaymentSectionItems(section);
         }
     }

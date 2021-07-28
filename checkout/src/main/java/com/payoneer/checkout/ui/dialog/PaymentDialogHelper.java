@@ -14,6 +14,7 @@ import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_CANCEL;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_DELETE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_OK;
+import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_REFRESH;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_RETRY;
 import static com.payoneer.checkout.localization.LocalizationKey.ERROR_CONNECTION_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.ERROR_CONNECTION_TITLE;
@@ -21,6 +22,8 @@ import static com.payoneer.checkout.localization.LocalizationKey.ERROR_DEFAULT_T
 import static com.payoneer.checkout.localization.LocalizationKey.ERROR_DEFAULT_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TITLE;
+import static com.payoneer.checkout.localization.LocalizationKey.MESSAGES_UNSAVED_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.MESSAGES_UNSAVED_TITLE;
 
 import java.util.Objects;
 
@@ -95,6 +98,21 @@ public class PaymentDialogHelper {
         dialog.setTag("dialog_connectionerror");
         return dialog;
     }
+
+    public static PaymentDialogFragment createRefreshAccountDialog(PaymentDialogFragment.PaymentDialogListener listener) {
+        PaymentDialogFragment dialog = new PaymentDialogFragment();
+        dialog.setListener(listener);
+        dialog.setTitle(Localization.translate(MESSAGES_UNSAVED_TITLE));
+
+        String message = Localization.translate(MESSAGES_UNSAVED_TEXT);
+        dialog.setMessage(message);
+
+        dialog.setNegativeButton(Localization.translate(BUTTON_CANCEL));
+        dialog.setPositiveButton(Localization.translate(BUTTON_REFRESH));
+        dialog.setTag("dialog_refresh");
+        return dialog;
+    }
+
 
     public static PaymentDialogFragment createDeleteAccountDialog(PaymentDialogFragment.PaymentDialogListener listener,
         String accountLabel) {

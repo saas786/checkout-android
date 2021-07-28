@@ -70,14 +70,28 @@ public final class PaymentSection {
     }
 
     /**
-     * Reset all payment cards in this section 
+     * Check if this section contains a PaymentCard that has user input data.
+     *
+     * @return true when it contains data, false otherwise
+     */
+    public boolean hasUserInputData() {
+        for (PaymentCard card : cards) {
+            if (card.hasUserInputData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Reset all payment cards in this section
      */
     public void reset() {
         for (PaymentCard card : cards) {
             card.reset();
         }
     }
-    
+
     /**
      * Put all language links from the section in the provided map.
      * The key of the map is the network code.
