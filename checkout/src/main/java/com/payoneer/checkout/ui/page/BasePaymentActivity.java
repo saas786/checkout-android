@@ -18,7 +18,7 @@ import com.payoneer.checkout.ui.PaymentUI;
 import com.payoneer.checkout.ui.dialog.PaymentDialogFragment;
 import com.payoneer.checkout.ui.dialog.PaymentDialogFragment.PaymentDialogListener;
 import com.payoneer.checkout.ui.dialog.PaymentDialogHelper;
-import com.payoneer.checkout.ui.page.idlingresource.SimpleIdlingResource;
+import com.payoneer.checkout.ui.page.idlingresource.PaymentIdlingResources;
 import com.payoneer.checkout.util.PaymentResultHelper;
 
 import android.app.Activity;
@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.test.espresso.IdlingResource;
 
 /**
  * The base activity for payment activities.
@@ -38,40 +37,27 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
 
     ProgressView progressView;
 
-    /** For testing only */
-    SimpleIdlingResource closeIdlingResource;
-    SimpleIdlingResource dialogIdlingResource;
-    boolean closed;
+    // Automated testing
+    PaymentIdlingResources idlingResources;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(PaymentUI.getInstance().getOrientation());
+        idlingResources = new PaymentIdlingResources(getClass().getSimpleName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onResume() {
         super.onResume();
-        closed = false;
+        idlingResources.setCloseIdlingState(false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void showProgress(boolean visible) {
         progressView.setVisible(visible);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void showWarningMessage(String message) {
         if (!TextUtils.isEmpty(message)) {
@@ -79,9 +65,6 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void showConnectionErrorDialog(PaymentDialogListener listener) {
         progressView.setVisible(false);
@@ -89,18 +72,12 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         showPaymentDialog(dialog);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void showDeleteAccountDialog(PaymentDialogListener listener, String displayLabel) {
         PaymentDialogFragment dialog = PaymentDialogHelper.createDeleteAccountDialog(listener, displayLabel);
         showPaymentDialog(dialog);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void showRefreshAccountDialog(PaymentDialogListener listener) {
         PaymentDialogFragment dialog = PaymentDialogHelper.createRefreshAccountDialog(listener);
@@ -122,62 +99,47 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         showPaymentDialog(dialog);
     }
 
+    @Override
     public void showHintDialog(String networkCode, String type, PaymentDialogListener listener) {
         PaymentDialogFragment dialog = PaymentDialogHelper.createHintDialog(networkCode, type, listener);
         showPaymentDialog(dialog);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Activity getActivity() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setPaymentResult(int resultCode, PaymentResult result) {
         setResultIntent(resultCode, result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void passOnActivityResult(PaymentActivityResult paymentActivityResult) {
         setResultIntent(paymentActivityResult.getResultCode(), paymentActivityResult.getPaymentResult());
         supportFinishAfterTransition();
+        idlingResources.setCloseIdlingState(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        idlingResources.setCloseIdlingState(true);
+    }
+    
     @Override
     public void close() {
         supportFinishAfterTransition();
         setOverridePendingTransition();
-
-        // for automated testing
-        setCloseIdleState();
+        idlingResources.setCloseIdlingState(true);
     }
 
-    /**
-     * Show a dialog fragment to the user
-     *
-     * @param dialog to be shown
-     */
-    public void showPaymentDialog(PaymentDialogFragment dialog) {
+    void showPaymentDialog(PaymentDialogFragment dialog) {
         dialog.show(getSupportFragmentManager());
-
-        // For automated testing
-        if (dialogIdlingResource != null) {
-            dialogIdlingResource.setIdleState(true);
-        }
+        idlingResources.setDialogIdlingState(true);
     }
-
+    
     /**
      * Get the current PaymentTheme from the PaymentUI.
      *
@@ -216,40 +178,12 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     }
 
     /**
-     * Only called from test, creates and returns a new dialog IdlingResource
+     * Only called from UI tests, returns the PaymentIdlingResources instance
+     *
+     * @return PaymentIdlingResources containing the IdlingResources used in this Activity
      */
     @VisibleForTesting
-    public IdlingResource getDialogIdlingResource() {
-        if (dialogIdlingResource == null) {
-            dialogIdlingResource = new SimpleIdlingResource(getClass().getSimpleName() + "-dialogIdlingResource");
-        }
-        dialogIdlingResource.reset();
-        return dialogIdlingResource;
-    }
-
-    /**
-     * Only called from test, creates and returns a new close IdlingResource
-     */
-    @VisibleForTesting
-    public IdlingResource getCloseIdlingResource() {
-        if (closeIdlingResource == null) {
-            closeIdlingResource = new SimpleIdlingResource(getClass().getSimpleName() + "-closeIdlingResource");
-        }
-        if (closed) {
-            closeIdlingResource.setIdleState(true);
-        } else {
-            closeIdlingResource.reset();
-        }
-        return closeIdlingResource;
-    }
-
-    /**
-     * Set the close idle state for the closeIdlingResource
-     */
-    void setCloseIdleState() {
-        closed = true;
-        if (closeIdlingResource != null) {
-            closeIdlingResource.setIdleState(true);
-        }
+    public PaymentIdlingResources getPaymentIdlingResources() {
+        return idlingResources;
     }
 }

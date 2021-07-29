@@ -51,7 +51,6 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     final ViewGroup formLayout;
     final Map<String, FormWidget> widgets;
     final ImageView cardLogoView;
-    final IconView iconView;
     final PaymentCard paymentCard;
     final CardEventHandler cardHandler;
     final ListAdapter adapter;
@@ -65,7 +64,6 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         this.formLayout = parent.findViewById(R.id.layout_form);
         this.widgets = new LinkedHashMap<>();
         this.cardLogoView = parent.findViewById(R.id.image_logo);
-        this.iconView = new IconView(parent);
 
         View view = parent.findViewById(R.id.layout_header);
         view.setOnClickListener(new View.OnClickListener() {

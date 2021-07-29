@@ -9,6 +9,7 @@
 package com.payoneer.checkout.ui.list;
 
 import com.payoneer.checkout.R;
+import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.View;
 import android.widget.ViewSwitcher;
@@ -26,6 +27,7 @@ class IconView {
      */
     IconView(View parent) {
         switcher = parent.findViewById(R.id.viewswitcher_icon);
+        PaymentUtils.setTestId(switcher, "card", "iconview");
     }
 
     void setListener(final IconClickListener listener) {

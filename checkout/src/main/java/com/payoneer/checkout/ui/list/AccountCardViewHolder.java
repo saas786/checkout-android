@@ -61,7 +61,7 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
     void onBind() {
         super.onBind();
 
-        PaymentUtils.setTestId(itemView, "card", "savedaccount");
+        PaymentUtils.setTestId(itemView, "card", "account");
         AccountCard card = (AccountCard) paymentCard;
         cardView.setCheckable(card.isCheckable());
 

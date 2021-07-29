@@ -14,8 +14,10 @@ import org.junit.runner.RunWith;
 
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.InteractionReason;
+import com.payoneer.checkout.sharedtest.checkout.MagicNumbers;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
+import com.payoneer.checkout.sharedtest.service.ListSettings;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -30,7 +32,7 @@ public final class VisaDirectTests extends AbstractTest {
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
-    public void testVisa_directCharge_success() {
+    public void testVisa_directCharge_PROCEED_OK() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         enterListUrl(createListUrl());
         clickActionButton();
@@ -43,6 +45,26 @@ public final class VisaDirectTests extends AbstractTest {
 
         register(resultIdlingResource);
         matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
+        unregister(resultIdlingResource);
+    }
+
+    @Test
+    public void testVisa_directCharge_PROCEED_PENDING() {
+        IdlingResource resultIdlingResource = getResultIdlingResource();
+
+        ListSettings settings = createDefaultListSettings();
+        settings.setAmount(MagicNumbers.CHARGE_PROCEED_PENDING);
+        enterListUrl(createListUrl(settings));
+        clickActionButton();
+
+        int groupCardIndex = 1;
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
+        PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
+
+        register(resultIdlingResource);
+        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.PENDING);
         unregister(resultIdlingResource);
     }
 }
