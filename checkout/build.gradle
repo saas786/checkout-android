@@ -46,6 +46,8 @@ android {
                 outputFileName = "PayoneerCheckout_${variant.name}_${defaultConfig.versionName}.aar"
             }
         }
+        applicationVariants {
+        }
     }
 }
 

@@ -17,6 +17,8 @@ android {
         release {
             minifyEnabled false
         }
+        applicationVariants {
+        }
     }
     compileOptions {
         sourceCompatibility rootProject.javaCompatVersion
