@@ -21,6 +21,7 @@ import com.payoneer.checkout.ui.dialog.PaymentDialogHelper;
 import com.payoneer.checkout.ui.page.idlingresource.PaymentIdlingResources;
 import com.payoneer.checkout.util.PaymentResultHelper;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     // Automated testing
     PaymentIdlingResources idlingResources;
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,8 +138,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     }
 
     void showPaymentDialog(PaymentDialogFragment dialog) {
-        dialog.show(getSupportFragmentManager());
-        idlingResources.setDialogIdlingState(true);
+        dialog.showDialog(getSupportFragmentManager(), idlingResources);
     }
     
     /**
@@ -182,7 +183,6 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
      *
      * @return PaymentIdlingResources containing the IdlingResources used in this Activity
      */
-    @VisibleForTesting
     public PaymentIdlingResources getPaymentIdlingResources() {
         return idlingResources;
     }
