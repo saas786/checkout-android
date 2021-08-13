@@ -8,13 +8,18 @@
 
 package com.payoneer.checkout.util;
 
+import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.model.AccountMask;
@@ -60,6 +65,16 @@ public final class PaymentUtils {
     }
 
     /**
+     * Check if the paymentMethod is a card payment method.
+     *
+     * @param paymentMethod to be checked if it is a card payment
+     * @return true when card payment, false otherwise
+     */
+    public static boolean isCardPaymentMethod(String paymentMethod) {
+        return DEBIT_CARD.equals(paymentMethod) || CREDIT_CARD.equals(paymentMethod);
+    }
+
+    /**
      * Compare String values of two Objects by obtaining the String values using the toString method.
      *
      * @param obj1 the first object
@@ -81,6 +96,18 @@ public final class PaymentUtils {
      */
     public static int toInt(Integer value) {
         return value == null ? 0 : value;
+    }
+
+    /**
+     * Get the label for this AccountMask, if the paymentMethod is a card then return the
+     * number from the mask. Else return the DisplayLabel from this mask.
+     *
+     * @param accountMask containing the label information
+     * @param paymentMethod to which this accountMask belongs to
+     * @return the label for this AccountMask
+     */
+    public static String getAccountMaskLabel(AccountMask accountMask, String paymentMethod) {
+        return isCardPaymentMethod(paymentMethod) ? accountMask.getNumber() : accountMask.getDisplayLabel();
     }
 
     /**
@@ -181,6 +208,26 @@ public final class PaymentUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Return an empty list when the provided list is null.
+     *
+     * @param list to be checked if null
+     * @return the list if not null, else return an empty list
+     */
+    public static <T> List<T> emptyListIfNull(List<T> list) {
+        return list == null ? Collections.emptyList() : list;
+    }
+
+    /**
+     * Return an empty map when the provided map is null.
+     *
+     * @param map to be checked if null
+     * @return the map if not null, else return an empty map
+     */
+    public static <K, V> Map<K, V> emptyMapIfNull(Map<K, V> map) {
+        return map == null ? Collections.emptyMap() : map;
     }
 
     /**

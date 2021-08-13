@@ -10,6 +10,7 @@ package com.payoneer.checkout.ui.dialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.payoneer.checkout.R;
+import com.payoneer.checkout.ui.page.idlingresource.PaymentIdlingResources;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -36,6 +37,9 @@ public class PaymentDialogFragment extends DialogFragment {
     private int imageResId;
     private PaymentDialogListener listener;
 
+    // For automated UI testing
+    private PaymentIdlingResources idlingResources;
+    
     /**
      * Set the title in this payment dialog
      *
@@ -103,8 +107,10 @@ public class PaymentDialogFragment extends DialogFragment {
      * Show this payment dialog fragment using the manager
      *
      * @param manager to be used to show this dialog
+     * @param idlingResources to notify when this dialog is made visible
      */
-    public void show(FragmentManager manager) {
+    public void showDialog(FragmentManager manager, PaymentIdlingResources idlingResources) {
+        this.idlingResources = idlingResources;
         show(manager, tag);
     }
 
@@ -115,9 +121,15 @@ public class PaymentDialogFragment extends DialogFragment {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (idlingResources != null) {
+            idlingResources.setDialogIdlingState(true);
+        }
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

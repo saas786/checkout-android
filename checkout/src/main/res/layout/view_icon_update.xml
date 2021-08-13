@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/viewswitcher_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:inAnimation="@anim/fade_in"
+    android:visibility="gone"
+    android:outAnimation="@anim/fade_out">
+
+    <ImageView
+        android:id="@+id/image_icon0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tint="@color/pm_gray_light"
+        android:src="@drawable/ic_edit"
+        android:contentDescription="@string/pmpage_contentdescription" />
+
+    <ImageView
+        android:id="@+id/image_icon1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tint="?attr/colorPrimary"
+        android:src="@drawable/ic_delete"
+        android:contentDescription="@string/pmpage_contentdescription" />
+
+</ViewSwitcher>

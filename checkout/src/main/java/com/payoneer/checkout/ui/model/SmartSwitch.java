@@ -39,6 +39,11 @@ public final class SmartSwitch {
         }
     }
 
+    public void reset() {
+        smartBuffer.clear();
+        smartSelected.clear();
+    }
+
     /**
      * Get the first smart selected PaymentNetwork, may return null if none are selected.
      *
@@ -68,7 +73,7 @@ public final class SmartSwitch {
 
         if (text != null) {
             for (PaymentNetwork network : networks) {
-                Pattern pattern = smartMapping.get(network.getCode());
+                Pattern pattern = smartMapping.get(network.getNetworkCode());
 
                 if (pattern != null && pattern.matcher(text).matches()) {
                     smartBuffer.add(network);

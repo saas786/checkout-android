@@ -50,7 +50,7 @@ public final class VerificationCodeWidget extends InputLayoutWidget {
      * @param element to bind this widget to
      */
     public void onBind(String code, InputElement element) {
-        int maxLength = presenter.getMaxLength(code, name);
+        int maxLength = presenter.getMaxInputLength(code, name);
         setTextInputMode(EditTextInputModeFactory.createMode(maxLength, element));
         setValidation();
         setLabel(Localization.translate(code, LocalizationKey.VERIFICATIONCODE_GENERIC_PLACEHOLDER));

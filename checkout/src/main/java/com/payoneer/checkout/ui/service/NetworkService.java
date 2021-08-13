@@ -8,10 +8,10 @@
 
 package com.payoneer.checkout.ui.service;
 
+import com.payoneer.checkout.form.DeleteAccount;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.model.OperationResult;
-
-import android.app.Activity;
+import com.payoneer.checkout.redirect.RedirectRequest;
 
 /**
  * Interface for network services, a NetworkService is responsible for activating and
@@ -19,7 +19,7 @@ import android.app.Activity;
  */
 public abstract class NetworkService {
 
-    protected NetworkServicePresenter presenter;
+    protected NetworkServiceListener listener;
 
     /**
      * Stop this NetworkService
@@ -28,38 +28,36 @@ public abstract class NetworkService {
     }
 
     /**
-     * Set the presenter in this NetworkService
+     * Set the listener in this NetworkService
      *
-     * @param presenter the presenter to be set
+     * @param listener the listener to be set
      */
-    public void setPresenter(NetworkServicePresenter presenter) {
-        this.presenter = presenter;
+    public void setListener(NetworkServiceListener listener) {
+        this.listener = listener;
     }
 
     /**
-     * Process the payment through this NetworkService. The result is either returned through the onActivityResult call in the
-     * provided Activity or through the NetworkServicePresenter.
+     * Process the payment through this NetworkService.
      *
-     * @param activity handles the payment that should be processed
-     * @param requestCode should be returned to the presenter when the payment is processed
      * @param operation that should be processed
      */
-    public void processPayment(Activity activity, int requestCode, Operation operation) {
+    public void processPayment(Operation operation) {
     }
 
     /**
-     * Notify the network service that the payment has been redirected and an OperationResult has been received.
+     * Delete the AccountRegistration through this NetworkService.
      *
-     * @param result containing the result of the operation
+     * @param account to be deleted from this network
      */
-    public void onRedirectSuccess(OperationResult result) {
+    public void deleteAccount(DeleteAccount account) {
     }
 
     /**
-     * Notify the network service that the redirect has failed to receive an OperationResult.
-     * The network service should handle this situation and make sure the NetworkServicePresenter is notified with the
-     * appropriate PaymentResult.
+     * Notify the network service that the payment has been redirected
+     *
+     * @param request the original redirect request that triggered this result
+     * @param result optional redirect result
      */
-    public void onRedirectError() {
+    public void onRedirectResult(RedirectRequest request, OperationResult result) {
     }
 }

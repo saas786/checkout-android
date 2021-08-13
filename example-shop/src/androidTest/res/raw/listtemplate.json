@@ -1,7 +1,7 @@
 {
     "transactionId": "1",
     "integration": "MOBILE_NATIVE",
-    "presetFirst": "false",
+    "operationType": "CHARGE",
     "country": "DE",
     "customer": {
         "number": "1",

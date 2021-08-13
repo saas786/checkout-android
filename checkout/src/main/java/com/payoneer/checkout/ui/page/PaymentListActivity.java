@@ -10,25 +10,20 @@ package com.payoneer.checkout.ui.page;
 
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_TITLE;
 
-import java.util.Map;
-
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.ui.PaymentActivityResult;
 import com.payoneer.checkout.ui.list.PaymentList;
-import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.model.PaymentSession;
-import com.payoneer.checkout.ui.page.idlingresource.SimpleIdlingResource;
-import com.payoneer.checkout.ui.widget.FormWidget;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.test.espresso.IdlingResource;
 
 /**
@@ -38,10 +33,7 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
 
     private PaymentListPresenter presenter;
     private PaymentList paymentList;
-
-    // For automated testing
-    private boolean loadCompleted;
-    private SimpleIdlingResource loadIdlingResource;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /**
      * Create the start intent for this PaymentListActivity.
@@ -62,9 +54,6 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         return R.anim.no_animation;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,15 +63,83 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         }
         setContentView(R.layout.activity_paymentlist);
         progressView = new ProgressView(findViewById(R.id.layout_progress));
+        presenter = new PaymentListPresenter(this);
+        paymentList = new PaymentList(this, presenter, findViewById(R.id.recyclerview_paymentlist));
 
-        initPaymentList();
+        initSwipeRefreshlayout();
         initToolbar();
-        this.presenter = new PaymentListPresenter(this);
     }
 
-    /**
-     * Initialize the toolbar in this PaymentList
-     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        PaymentActivityResult result = PaymentActivityResult.fromActivityResult(requestCode, resultCode, data);
+        presenter.setPaymentActivityResult(result);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        paymentList.onStop();
+        presenter.onStop();
+        resetSwipeRefreshLayout();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onStart();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            close();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        swipeRefreshLayout.setRefreshing(false);
+        overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
+    }
+
+    @Override
+    public void clearPaymentList() {
+        paymentList.clear();
+        resetSwipeRefreshLayout();
+    }
+
+    @Override
+    public void showPaymentSession(PaymentSession session) {
+        progressView.setVisible(false);
+        setToolbar(Localization.translate(LIST_TITLE));
+        paymentList.showPaymentSession(session);
+        swipeRefreshLayout.setEnabled(session.swipeRefresh());
+        idlingResources.setLoadIdlingState(true);
+    }
+
+    @Override
+    public void showChargePaymentScreen(int requestCode, Operation operation) {
+        Intent intent = ChargePaymentActivity.createStartIntent(this, operation);
+        startActivityForResult(intent, requestCode);
+        overridePendingTransition(ChargePaymentActivity.getStartTransition(), R.anim.no_animation);
+        idlingResources.setCloseIdlingState(true);
+    }
+
+    private void initSwipeRefreshlayout() {
+        swipeRefreshLayout = findViewById(R.id.layout_swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            public void onRefresh() {
+                presenter.onRefresh(paymentList.hasUserInputData());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -94,131 +151,13 @@ public final class PaymentListActivity extends BasePaymentActivity implements Pa
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    /**
-     * Set the action bar with a title and optional back arrow.
-     *
-     * @param title of the action bar
-     */
     private void setToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-        paymentList.onStop();
-        presenter.onStop();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadCompleted = false;
-        presenter.onStart();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            close();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.no_animation, R.anim.no_animation);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        PaymentActivityResult result = PaymentActivityResult.fromActivityResult(requestCode, resultCode, data);
-        presenter.setPaymentActivityResult(result);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void clearList() {
-        if (!active) {
-            return;
-        }
-        paymentList.clear();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showPaymentSession(PaymentSession session) {
-        if (!active) {
-            return;
-        }
-        progressView.setVisible(false);
-        setToolbar(Localization.translate(LIST_TITLE));
-        paymentList.showPaymentSession(session);
-
-        // For automated UI testing
-        this.loadCompleted = true;
-        if (loadIdlingResource != null) {
-            loadIdlingResource.setIdleState(loadCompleted);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showChargePaymentScreen(int requestCode, Operation operation) {
-        Intent intent = ChargePaymentActivity.createStartIntent(this, operation);
-        startActivityForResult(intent, requestCode);
-        overridePendingTransition(ChargePaymentActivity.getStartTransition(), R.anim.no_animation);
-
-        // for automated testing
-        setCloseIdleState();
-    }
-
-    public void onActionClicked(PaymentCard item, Map<String, FormWidget> widgets) {
-        presenter.onActionClicked(item, widgets);
-    }
-
-    private void initPaymentList() {
-        this.paymentList = new PaymentList(this, findViewById(R.id.recyclerview_paymentlist));
-    }
-
-    /**
-     * Only called from test, creates and returns a new IdlingResource
-     */
-    @VisibleForTesting
-    public IdlingResource getLoadIdlingResource() {
-        if (loadIdlingResource == null) {
-            loadIdlingResource = new SimpleIdlingResource(getClass().getSimpleName() + "-loadIdlingResource");
-        }
-        if (loadCompleted) {
-            loadIdlingResource.setIdleState(loadCompleted);
-        } else {
-            loadIdlingResource.reset();
-        }
-        return loadIdlingResource;
+    private void resetSwipeRefreshLayout() {
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setEnabled(false);
     }
 }

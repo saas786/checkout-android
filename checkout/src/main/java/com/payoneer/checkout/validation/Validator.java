@@ -40,6 +40,7 @@ public class Validator {
     public final static int MAX_EXPIRY_YEAR = 50;
 
     private final Map<String, ValidationGroup> validations;
+    private static Validator instance;
 
     /**
      * Construct a new Validator with the provided validations
@@ -51,6 +52,24 @@ public class Validator {
             throw new IllegalArgumentException("Validations may not be null");
         }
         this.validations = validations;
+    }
+
+    /**
+     * Get the currently set Validator instance
+     *
+     * @return the current instance or null if not previously set
+     */
+    public static Validator getInstance() {
+        return instance;
+    }
+
+    /**
+     * Set the current Validator instance
+     *
+     * @param newInstance to be set as the current instance
+     */
+    public static void setInstance(Validator newInstance) {
+        instance = newInstance;
     }
 
     /**
@@ -69,7 +88,7 @@ public class Validator {
         return group != null ? group.getValidationRegex(type) : null;
     }
 
-    public int getMaxLength(String code, String type) {
+    public int getMaxInputLength(String code, String type) {
 
         if (code == null || type == null) {
             return MAXLENGTH_DEFAULT;

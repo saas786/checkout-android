@@ -28,8 +28,8 @@ public final class HeaderViewHolder extends RecyclerView.ViewHolder {
         this.title = parent.findViewById(R.id.text_title);
     }
 
-    static ViewHolder createInstance(ListAdapter adapter) {
-        View view = View.inflate(adapter.getContext(), R.layout.list_item_header, null);
+    static ViewHolder createInstance(View parent) {
+        View view = View.inflate(parent.getContext(), R.layout.list_item_header, null);
         return new HeaderViewHolder(view);
     }
 

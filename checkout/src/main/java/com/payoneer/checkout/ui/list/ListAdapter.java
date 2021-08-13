@@ -8,18 +8,11 @@
 
 package com.payoneer.checkout.ui.list;
 
-import java.util.List;
-
-import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.ui.model.AccountCard;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.model.PresetCard;
-import com.payoneer.checkout.validation.ValidationResult;
-import com.payoneer.checkout.validation.Validator;
 
-import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,22 +22,18 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  * The ListAdapter handling the items in this RecyclerView list
  */
 final class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final PaymentCardListener cardListener;
+    private final PaymentItemList itemList;
 
-    private final List<ListItem> items;
-    private final PaymentList list;
-
-    ListAdapter(PaymentList list, List<ListItem> items) {
-        this.list = list;
-        this.items = items;
+    ListAdapter(PaymentCardListener cardListener, PaymentItemList itemList) {
+        this.cardListener = cardListener;
+        this.itemList = itemList;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public @NonNull
     ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ListItem item = getItemWithViewType(viewType);
+        ListItem item = itemList.getItemWithViewType(viewType);
         PaymentCard card = item != null ? item.getPaymentCard() : null;
 
         if (card instanceof NetworkCard) {
@@ -54,141 +43,39 @@ final class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (card instanceof PresetCard) {
             return PresetCardViewHolder.createInstance(this, (PresetCard) card, parent);
         } else {
-            return HeaderViewHolder.createInstance(this);
+            return HeaderViewHolder.createInstance(parent);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ListItem item = items.get(position);
+        ListItem item = itemList.getItem(position);
 
         if (item.hasPaymentCard()) {
             PaymentCardViewHolder ph = (PaymentCardViewHolder) holder;
-            ph.onBind(item.getPaymentCard());
-            ph.expand(list.getSelected() == position);
+            ph.onBind();
+            ph.expand(itemList.getSelectedIndex() == position);
         } else {
             ((HeaderViewHolder) holder).onBind((HeaderItem) item);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getItemCount() {
-        return items.size();
+        return itemList.getItemCount();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).viewType;
+        return itemList.getItemViewType(position);
     }
 
-    void onItemClicked(int position) {
-
-        if (isInvalidPosition(position)) {
-            return;
-        }
-        list.onItemClicked(position);
+    PaymentCardListener getCardListener() {
+        return cardListener;
     }
 
-    void hideKeyboard(int position) {
-        if (isInvalidPosition(position)) {
-            return;
-        }
-        list.hideKeyboard();
+    boolean validPosition(int position) {
+        return itemList.validIndex(position);
     }
 
-    void showKeyboard(int position, View view) {
-        if (isInvalidPosition(position)) {
-            return;
-        }
-        list.showKeyboard(view);
-    }
-
-    void onActionClicked(int position) {
-        if (isInvalidPosition(position)) {
-            return;
-        }
-        list.onActionClicked(position);
-    }
-
-    void onHintClicked(int position, String type) {
-        if (isInvalidPosition(position)) {
-            return;
-        }
-        list.onHintClicked(position, type);
-    }
-
-    Context getContext() {
-        return list.getContext();
-    }
-
-    void onTextInputChanged(int position, String type, String text) {
-        if (isInvalidPosition(position)) {
-            return;
-        }
-        ListItem item = items.get(position);
-
-        if (item.hasPaymentCard()) {
-            PaymentCard card = item.getPaymentCard();
-
-            if (card.onTextInputChanged(type, text)) {
-                notifyItemChanged(position);
-            }
-        }
-    }
-
-    boolean isHidden(String code, String type) {
-        Validator validator = list.getPaymentSession().getValidator();
-        return validator.isHidden(code, type);
-    }
-
-    int getMaxLength(int position, String code, String type) {
-        if (isInvalidPosition(position)) {
-            return -1;
-        }
-        Validator validator = list.getPaymentSession().getValidator();
-        return validator.getMaxLength(code, type);
-    }
-
-    ValidationResult validate(int position, String type, String value1, String value2) {
-        if (isInvalidPosition(position)) {
-            return null;
-        }
-        ListItem item = items.get(position);
-
-        if (!item.hasPaymentCard()) {
-            return null;
-        }
-        PaymentCard card = item.getPaymentCard();
-        Validator validator = list.getPaymentSession().getValidator();
-        ValidationResult result = validator.validate(card.getPaymentMethod(), card.getCode(), type, value1, value2);
-
-        if (!result.isError()) {
-            return result;
-        }
-        result.setMessage(Localization.translateError(card.getCode(), result.getError()));
-        return result;
-    }
-
-    private ListItem getItemWithViewType(int viewType) {
-
-        for (ListItem item : items) {
-            if (item.viewType == viewType) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    private boolean isInvalidPosition(int position) {
-        return (position < 0) || (position >= items.size());
-    }
 }

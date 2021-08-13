@@ -39,25 +39,23 @@ public final class ListService {
     }
 
     /**
-     * Create a new instance of the ListService
+     * Helper method to create list with the provided settings
      *
-     * @param baseUrl to which this ListService should connect to
-     * @param authHeader authentication token
-     * @return the newly created ListService
+     * @param baseUrl url pointing to the Payment API Backend
+     * @param authHeader containing the authentication header value
+     * @param settings used to create the list
+     * @return the self url of the newly created list
      */
-    public static ListService createInstance(Context context, String baseUrl, String authHeader) {
-        return new ListService(context, baseUrl, authHeader);
+    public static String createListWithSettings(String baseUrl, String authHeader, ListSettings settings) throws ListServiceException {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        ListService service = new ListService(context, baseUrl, authHeader);
+        return service.createListUrl(baseUrl, authHeader, settings);
     }
 
-    /**
-     * Create a new listUrl given the ListConfig
-     *
-     * @param request configuration describing which listUrl should be created
-     * @return the newly created listUrl
-     */
-    public String createListUrl(ListRequest request) throws ListServiceException {
+    private String createListUrl(String baseUrl, String authHeader, ListSettings settings) throws ListServiceException {
         try {
-            ListResult result = conn.createPaymentSession(url, auth, request.getRequestBody());
+            String listBody = createListRequestBody(settings);
+            ListResult result = conn.createPaymentSession(baseUrl, authHeader, listBody);
             Map<String, URL> links = result.getLinks();
             URL selfUrl = links != null ? links.get("self") : null;
 
@@ -65,42 +63,38 @@ public final class ListService {
                 throw new ListServiceException("Error creating payment session, missing self url");
             }
             return selfUrl.toString();
-        } catch (PaymentException e) {
+        } catch (PaymentException | JSONException | IOException e) {
             throw new ListServiceException("Error creating payment session", e);
         }
     }
 
-    /**
-     * Create a new ListConfig given the json configuration file.
-     *
-     * @param jsonResId resource ID pointing to the json config file
-     * @return the JSONObject containing the template request body
-     */
-    public JSONObject loadJSONTemplate(int jsonResId) throws JSONException, IOException {
+    private String createListRequestBody(ListSettings settings) throws JSONException, IOException {
+        JSONObject json = loadJSONTemplate(settings.getListResId());
+        String value = settings.getLanguage();
+        if (value != null) {
+            JSONObject language = json.getJSONObject("style");
+            language.put("language", value);
+        }
+        value = settings.getAmount();
+        if (value != null) {
+            JSONObject payment = json.getJSONObject("payment");
+            payment.put("amount", value);
+        }
+        value = settings.getAppId();
+        if (value != null) {
+            JSONObject callback = json.getJSONObject("callback");
+            callback.put("appId", value);
+        }
+        value = settings.getOperationType();
+        if (value != null) {
+            json.put("operationType", value);
+        }
+        return json.toString();
+    }
+
+    private JSONObject loadJSONTemplate(int jsonResId) throws JSONException, IOException {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         String fileContent = PaymentUtils.readRawResource(context.getResources(), jsonResId);
         return new JSONObject(fileContent);
-    }
-
-    /**
-     * Helper method for creating a listUrl given the json resource id and presetFirst flag
-     *
-     * @param jsonResId resource ID pointing to the json config file
-     * @param presetFirst should the ListConfig be initialized with the presetFirst true or false
-     * @param baseUrl pointing to the API for creating new lists
-     * @param authHeader content of the authentication header
-     * @return the newly created listUrl
-     */
-    public static String createListUrl(int jsonResId, boolean presetFirst, String baseUrl, String authHeader) throws ListServiceException {
-        try {
-            Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-            ListService service = ListService.createInstance(context, baseUrl, authHeader);
-            ListRequest request = ListRequest.of(service.loadJSONTemplate(jsonResId))
-                .presetFirst(presetFirst)
-                .appId(context.getPackageName()).build();
-            return service.createListUrl(request);
-        } catch (JSONException | IOException e) {
-            throw new ListServiceException(e);
-        }
     }
 }

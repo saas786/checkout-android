@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import com.payoneer.checkout.exampleshop.checkout.CheckoutActivity;
 import com.payoneer.checkout.exampleshop.settings.SettingsActivity;
 import com.payoneer.checkout.exampleshop.summary.SummaryActivity;
+import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.view.UiDeviceHelper;
 
@@ -32,7 +33,7 @@ public final class PayPalRedirectTests extends AbstractTest {
     @Test
     public void testPayPalRedirect_directCharge_customerAccept() {
         int networkCardIndex = 3;
-        CheckoutActivity checkoutActivity = openCheckoutActivity(false);
+        CheckoutActivity checkoutActivity = openCheckoutActivity(NetworkOperationType.CHARGE);
         IdlingResource resultHandledIdlingResource = checkoutActivity.getResultHandledIdlingResource();
         clickCheckoutButton();
 
@@ -48,7 +49,7 @@ public final class PayPalRedirectTests extends AbstractTest {
     @Test
     public void testPayPalRedirect_presetFlow_customerAccept() {
         int networkCardIndex = 3;
-        CheckoutActivity checkoutActivity = openCheckoutActivity(true);
+        CheckoutActivity checkoutActivity = openCheckoutActivity(NetworkOperationType.PRESET);
         IdlingResource checkoutPaymentResultIdlingResource = checkoutActivity.getResultHandledIdlingResource();
         clickCheckoutButton();
 

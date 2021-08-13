@@ -20,6 +20,7 @@ import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.View;
+import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.matcher.BoundedMatcher;
 
@@ -62,7 +63,7 @@ public final class PaymentMatchers {
      * @param viewResId resource ID of the view
      * @return newly created View Matcher
      */
-    public static Matcher<View> isViewInCard(int position, Matcher<View> viewMatcher, int viewResId) {
+    public static Matcher<View> isViewInPaymentCard(int position, Matcher<View> viewMatcher, int viewResId) {
         checkNotNull(viewMatcher);
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override

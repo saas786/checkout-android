@@ -14,12 +14,12 @@ import com.payoneer.checkout.ui.model.PaymentSession;
 /**
  * The PaymentListView is the interface is the View part of the MVP, this is implemented by the PaymentListActivity
  */
-interface PaymentListView extends PaymentView {
+interface PaymentListView extends BasePaymentView {
 
     /**
      * Clear the payment list
      */
-    void clearList();
+    void clearPaymentList();
 
     /**
      * Show the Charge payment screen for the provided operation

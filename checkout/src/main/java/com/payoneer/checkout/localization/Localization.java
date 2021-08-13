@@ -9,6 +9,7 @@
 package com.payoneer.checkout.localization;
 
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
 
 import java.util.Map;
 
@@ -77,26 +78,41 @@ public final class Localization {
     }
 
     /**
-     * Helper method to obtain the translation for the interaction.
+     * Helper method to obtain the translation for the interaction message.
+     * If the optional operationType in the message is null then fallback to the
+     * regular localization for the interaction.
      *
-     * @param interaction to be translated
+     * @param interactionMessage interaction message to be translated
      * @param labelType type of the interaction label that is required, either LABEL_TEXT or LABEL_TITLE
      * @return translation of the interaction or null if not found
      */
-    public static String translateInteraction(Interaction interaction, String labelType) {
+    public static String translateInteractionMessage(InteractionMessage interactionMessage, String labelType) {
         Localization loc = getInstance();
-        return loc != null ? loc.getSharedTranslation(LocalizationKey.interactionKey(interaction, labelType)) : null;
+        if (loc == null) {
+            return null;
+        }
+        Interaction interaction = interactionMessage.getInteraction();
+        if (interactionMessage.hasOperationType()) {
+            String operationType = interactionMessage.getOperationType();
+            String text = loc.getSharedTranslation(LocalizationKey.interactionKey(interaction, operationType, labelType));
+            if (!TextUtils.isEmpty(text)) {
+                return text;
+            }
+        }
+        return loc.getSharedTranslation(LocalizationKey.interactionKey(interaction, labelType));
     }
 
     /**
-     * Helper method to check if a translation exist for the Interaction.
+     * Helper method to check if a translation exist for the Interaction message.
+     * If the operationType is null in the message then fallback to the normal interaction
+     * localizations without the operationType.
      *
-     * @param interaction to check if a translation exists
+     * @param interactionMessage containing the interaction message to check if a translation exists
      * @return true if it has a translation for the interaction, false otherwise
      */
-    public static boolean hasInteraction(Interaction interaction) {
-        String val = translateInteraction(interaction, LABEL_TEXT);
-        return !TextUtils.isEmpty(val);
+    public static boolean hasInteractionMessage(InteractionMessage interactionMessage) {
+        String text = translateInteractionMessage(interactionMessage, LABEL_TEXT);
+        return !TextUtils.isEmpty(text);
     }
 
     /**
@@ -107,8 +123,8 @@ public final class Localization {
      * @return true if it has a translation for the account hint, false otherwise
      */
     public static boolean hasAccountHint(String networkCode, String account) {
-        String val = translateAccountHint(networkCode, account, LABEL_TEXT);
-        return !TextUtils.isEmpty(val);
+        String text = translateAccountHint(networkCode, account, LABEL_TEXT);
+        return !TextUtils.isEmpty(text);
     }
 
     /**
@@ -166,6 +182,16 @@ public final class Localization {
      */
     public static String translateAccountHint(String networkCode, String account, String labelType) {
         return translate(networkCode, LocalizationKey.accountHintKey(account, labelType));
+    }
+
+    /**
+     * Helper method to obtain the translation of the network label given the networkCode
+     *
+     * @param networkCode to translate it into a label
+     * @return the translated network label
+     */
+    public static String translateNetworkLabel(String networkCode) {
+        return translate(networkCode, NETWORK_LABEL);
     }
 
     /**
