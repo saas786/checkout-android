@@ -19,6 +19,7 @@ import com.payoneer.checkout.ui.list.PaymentCardViewHolder;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -153,6 +154,23 @@ public final class PaymentMatchers {
                     inputHint = hintSequence.toString();
                 }
                 return expectedHint.equals(inputHint);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        };
+    }
+
+    public static Matcher<View> hasTextInputLayoutValue(final String expectedValue) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof TextInputLayout)) {
+                    return false;
+                }
+                String value = ((TextInputLayout) view).getEditText().getText().toString();
+                return expectedValue.equals(value);
             }
 
             @Override

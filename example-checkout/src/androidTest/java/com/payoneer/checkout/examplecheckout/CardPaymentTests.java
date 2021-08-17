@@ -10,6 +10,8 @@ package com.payoneer.checkout.examplecheckout;
 
 import static com.payoneer.checkout.sharedtest.checkout.MagicNumbers.CHARGE_PROCEED_OK;
 
+import java.util.Map;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +78,28 @@ public final class CardPaymentTests extends AbstractTest {
     }
 
     @Test
+    public void testVisaCard_RETRY() {
+        ListSettings settings = createDefaultListSettings();
+        settings.setAmount(MagicNumbers.CHARGE_RETRY);
+        enterListUrl(createListUrl(settings));
+        clickActionButton();
+
+        int groupCardIndex = 1;
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
+
+        PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
+        PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
+
+        ChargePaymentHelper.waitForChargePaymentDialog();
+        PaymentDialogHelper.clickPaymentDialogButton("OK");
+
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.matchesInputTextInWidget(groupCardIndex, "number", "4111 1111 1111 1111");
+    }
+
+    @Test
     public void testVisaCard_TRY_OTHER_NETWORK() {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.CHARGE_TRY_OTHER_NETWORK);
@@ -106,6 +130,7 @@ public final class CardPaymentTests extends AbstractTest {
         clickActionButton();
 
         int groupCardIndex = 1;
+
         PaymentListHelper.waitForPaymentListLoaded(1);
         PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
