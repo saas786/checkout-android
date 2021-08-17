@@ -12,7 +12,10 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
@@ -32,7 +35,9 @@ public final class ChargePaymentHelper {
         IdlingResource dialogIdlingResource = idlingResources.getDialogIdlingResource();
 
         IdlingRegistry.getInstance().register(dialogIdlingResource);
-        onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.alertTitle)).
+            inRoot(withDecorView(not(is(chargeActivity.getWindow().getDecorView())))).
+            check(matches(isDisplayed()));
 
         idlingResources.resetDialogIdlingResource();
         IdlingRegistry.getInstance().unregister(dialogIdlingResource);

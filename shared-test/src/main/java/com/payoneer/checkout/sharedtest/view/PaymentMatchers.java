@@ -20,7 +20,7 @@ import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.matcher.BoundedMatcher;
 
@@ -119,6 +119,23 @@ public final class PaymentMatchers {
                     return false;
                 }
                 return viewMatcher.matches(formView);
+            }
+        };
+    }
+
+    public static Matcher<View> linearLayoutWithChildCount(final int childCount) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof LinearLayout)) {
+                    return false;
+                }
+                int count = ((LinearLayout) view).getChildCount();
+                return count == childCount;
+            }
+
+            @Override
+            public void describeTo(Description description) {
             }
         };
     }

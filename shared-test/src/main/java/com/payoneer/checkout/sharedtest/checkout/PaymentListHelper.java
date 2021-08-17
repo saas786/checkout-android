@@ -17,13 +17,19 @@ import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtP
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInPaymentCard;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInWidget;
+import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.hasTextInputLayoutError;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isCardWithTestId;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInPaymentCard;
+import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInWidget;
+import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.linearLayoutWithChildCount;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import java.util.Map;
 
@@ -62,7 +68,9 @@ public final class PaymentListHelper {
         IdlingResource dialogIdlingResource = idlingResources.getDialogIdlingResource();
 
         IdlingRegistry.getInstance().register(dialogIdlingResource);
-        onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.alertTitle)).
+            inRoot(withDecorView(not(is(listActivity.getWindow().getDecorView())))).
+            check(matches(isDisplayed()));
 
         idlingResources.resetDialogIdlingResource();
         IdlingRegistry.getInstance().unregister(dialogIdlingResource);
@@ -100,5 +108,16 @@ public final class PaymentListHelper {
 
     public static void matchesPaymentDialogTitle(String title) {
         onView(ViewMatchers.withId(R.id.alertTitle)).check(matches(withText(title)));
+    }
+
+    public static void matchesCardGroupCount(int cardIndex, int count) {
+        Matcher<View> list = withId(R.id.recyclerview_paymentlist);
+        onView(list).check(matches(isViewInPaymentCard(cardIndex, linearLayoutWithChildCount(count), R.id.layout_logos)));
+    }
+
+    public static void matchesErrorTextInWidget(int cardIndex, String widgetName, String errorText) {
+        intended(hasComponent(PaymentListActivity.class.getName()));
+        Matcher<View> list = withId(R.id.recyclerview_paymentlist);
+        onView(list).check(matches(isViewInWidget(cardIndex, hasTextInputLayoutError(errorText), widgetName, R.id.textinputlayout)));
     }
 }

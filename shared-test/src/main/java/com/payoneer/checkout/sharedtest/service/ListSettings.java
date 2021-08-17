@@ -8,6 +8,8 @@
 
 package com.payoneer.checkout.sharedtest.service;
 
+import java.math.BigDecimal;
+
 /**
  * Class holding the settings to create a list request
  */
@@ -15,7 +17,7 @@ public final class ListSettings {
 
     private final int listResId;
     private String language;
-    private String amount;
+    private BigDecimal amount;
     private String appId;
     private String operationType;
 
@@ -27,12 +29,12 @@ public final class ListSettings {
         return listResId;
     }
 
-    public ListSettings setAmount(String amount) {
+    public ListSettings setAmount(BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
