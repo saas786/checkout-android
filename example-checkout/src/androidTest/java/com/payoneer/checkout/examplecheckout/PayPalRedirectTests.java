@@ -46,7 +46,9 @@ public final class PayPalRedirectTests extends AbstractTest {
         PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
-        clickDecisionPageButton("com.android.chrome:id/close_button");
+        clickCustomerDecisionPageButton("com.android.chrome:id/close_button");
+        UiDeviceHelper.waitUiObjectHasPackage("com.payoneer.checkout.examplecheckout");
+
         register(resultIdlingResource);
         matchResultInteraction(InteractionCode.VERIFY, InteractionReason.CLIENTSIDE_ERROR);
         unregister(resultIdlingResource);
@@ -63,7 +65,9 @@ public final class PayPalRedirectTests extends AbstractTest {
         PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
-        clickDecisionPageButton("customer-accept");
+        clickCustomerDecisionPageButton("customer-accept");
+        waitForAppRelaunch();
+
         register(resultIdlingResource);
         matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
         unregister(resultIdlingResource);
@@ -79,16 +83,11 @@ public final class PayPalRedirectTests extends AbstractTest {
         PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
-        clickDecisionPageButton("customer-abort");
+        clickCustomerDecisionPageButton("customer-abort");
+        waitForAppRelaunch();
 
         ChargePaymentHelper.waitForChargePaymentDialog();
         PaymentDialogHelper.clickPaymentDialogButton("OK");
         intended(hasComponent(PaymentListActivity.class.getName()));
-    }
-
-    private void clickDecisionPageButton(String buttonId) {
-        UiDeviceHelper.checkUiObjectContainsText("customer decision page");
-        UiDeviceHelper.clickUiObjectByResourceName(buttonId);
-        UiDeviceHelper.waitUiObjectHasPackage("com.payoneer.checkout.examplecheckout");
     }
 }

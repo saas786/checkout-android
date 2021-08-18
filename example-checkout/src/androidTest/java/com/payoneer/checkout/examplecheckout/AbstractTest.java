@@ -24,6 +24,7 @@ import org.junit.Before;
 import com.payoneer.checkout.sharedtest.service.ListService;
 import com.payoneer.checkout.sharedtest.service.ListSettings;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
+import com.payoneer.checkout.sharedtest.view.UiDeviceHelper;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
 
 import android.content.Context;
@@ -86,5 +87,19 @@ class AbstractTest {
 
     void unregister(IdlingResource resource) {
         IdlingRegistry.getInstance().unregister(resource);
+    }
+
+    void clickDeviceCollectionPagePageButton(String buttonId) {
+        UiDeviceHelper.checkUiObjectContainsText("simulation of Device Data Collection (DDC) page");
+        UiDeviceHelper.clickUiObjectByResourceName(buttonId);
+    }
+
+    void clickCustomerDecisionPageButton(String buttonId) {
+        UiDeviceHelper.checkUiObjectContainsText("customer decision page");
+        UiDeviceHelper.clickUiObjectByResourceName(buttonId);
+    }
+
+    void waitForAppRelaunch() {
+        UiDeviceHelper.waitUiObjectHasPackage("com.payoneer.checkout.examplecheckout");
     }
 }

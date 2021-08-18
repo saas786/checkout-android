@@ -23,4 +23,6 @@ public class MagicNumbers {
     public final static BigDecimal CHARGE_TRY_OTHER_ACCOUNT = BigDecimal.valueOf(1.21);
 
     public final static BigDecimal UPDATE_PROCEED_PENDING = BigDecimal.valueOf(7.51);
+    public final static BigDecimal THREE3DS2 = BigDecimal.valueOf(1.23);
+
 }
