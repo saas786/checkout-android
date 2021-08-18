@@ -153,7 +153,7 @@ public final class PaymentMatchers {
                 if (hintSequence != null) {
                     inputHint = hintSequence.toString();
                 }
-                return expectedHint.equals(inputHint);
+                return inputHint.equals(expectedHint);
             }
 
             @Override
@@ -170,7 +170,7 @@ public final class PaymentMatchers {
                     return false;
                 }
                 String value = ((TextInputLayout) view).getEditText().getText().toString();
-                return expectedValue.equals(value);
+                return value.equals(expectedValue);
             }
 
             @Override
@@ -191,7 +191,7 @@ public final class PaymentMatchers {
                 if (errorSequence != null) {
                     inputError = errorSequence.toString();
                 }
-                return expectedError.equals(inputError);
+                return inputError.equals(expectedError);
             }
 
             @Override
