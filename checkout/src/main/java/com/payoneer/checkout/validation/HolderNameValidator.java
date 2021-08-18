@@ -15,10 +15,10 @@ public final class HolderNameValidator {
 	private static final int MIN_LENGTH = 3;
 
     /** 
-     * Validate if the provided holderName value is valid
+     * Validate if the provided holderName is valid
      * 
-     * @param holderName value to the validated
-     * @return true when valid, false otherwise 
+     * @param holderName to the validated
+     * @return true when holderName is valid, false otherwise 
      */
     public static boolean isValidHolderName(String holderName) {
         if (holderName == null || holderName.length() < MIN_LENGTH) {
