@@ -34,7 +34,7 @@ public final class Three3DS2Tests extends AbstractTest {
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
-    public void testFrictionlessFlow_PROCEED_OK() {
+    public void test3DS2FrictionlessFlow_success() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.THREE3DS2);
@@ -56,7 +56,7 @@ public final class Three3DS2Tests extends AbstractTest {
     }
 
     @Test
-    public void testChallengeAccept_PROCEED_PENDING() {
+    public void test3DS2Challenge_customerAccept() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.THREE3DS2);
@@ -79,7 +79,7 @@ public final class Three3DS2Tests extends AbstractTest {
     }
 
     @Test
-    public void testChallengeAbort() {
+    public void test3DS2Challenge_customerAbort() {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.THREE3DS2);
         enterListUrl(createListUrl(settings));
