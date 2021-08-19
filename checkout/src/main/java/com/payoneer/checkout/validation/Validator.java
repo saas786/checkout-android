@@ -28,7 +28,6 @@ public class Validator {
     public final static String REGEX_BIC = "([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)";
     public final static String REGEX_ACCOUNT_NUMBER = "^[0-9]+$";
     public final static String REGEX_VERIFICATION_CODE = "^[0-9]*$";
-    public final static String REGEX_HOLDER_NAME = "^.{3,}$";
     public final static String REGEX_BANK_CODE = "^.+$";
 
     public final static int MAXLENGTH_DEFAULT = 128;
@@ -36,7 +35,6 @@ public class Validator {
     public final static int MAXLENGTH_VERIFICATION_CODE = 4;
     public final static int MAXLENGTH_IBAN = 34;
     public final static int MAXLENGTH_BIC = 11;
-
     public final static int MAX_EXPIRY_YEAR = 50;
 
     private final Map<String, ValidationGroup> validations;
@@ -158,7 +156,7 @@ public class Validator {
             case PaymentInputType.VERIFICATION_CODE:
                 return validateVerificationCode(value1, regex);
             case PaymentInputType.HOLDER_NAME:
-                return validateHolderName(value1, regex);
+                return validateHolderName(value1);
             case PaymentInputType.BANK_CODE:
                 return validateBankCode(value1, regex);
             case PaymentInputType.EXPIRY_DATE:
@@ -220,16 +218,15 @@ public class Validator {
         return new ValidationResult(null);
     }
 
-    private ValidationResult validateHolderName(String holderName, String regex) {
-        regex = regex != null ? regex : REGEX_HOLDER_NAME;
+    private ValidationResult validateHolderName(String holderName) {
+        String error = null;
 
-        if (!holderName.matches(regex)) {
-            if (TextUtils.isEmpty(holderName)) {
-                return new ValidationResult(ValidationResult.MISSING_HOLDER_NAME);
-            }
-            return new ValidationResult(ValidationResult.INVALID_HOLDER_NAME);
+        if (TextUtils.isEmpty(holderName)) {
+            error = ValidationResult.MISSING_HOLDER_NAME;
+        } else if (!HolderNameValidator.isValidHolderName(holderName)) {
+            error = ValidationResult.INVALID_HOLDER_NAME;
         }
-        return new ValidationResult(null);
+        return new ValidationResult(error);
     }
 
     private ValidationResult validateExpiryDate(String month, String year) {
