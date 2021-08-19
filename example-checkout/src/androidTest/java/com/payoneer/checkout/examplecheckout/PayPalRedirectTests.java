@@ -47,7 +47,7 @@ public final class PayPalRedirectTests extends AbstractTest {
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
         clickCustomerDecisionPageButton("com.android.chrome:id/close_button");
-        UiDeviceHelper.waitUiObjectHasPackage("com.payoneer.checkout.examplecheckout");
+        waitForAppRelaunch();
 
         register(resultIdlingResource);
         matchResultInteraction(InteractionCode.VERIFY, InteractionReason.CLIENTSIDE_ERROR);
