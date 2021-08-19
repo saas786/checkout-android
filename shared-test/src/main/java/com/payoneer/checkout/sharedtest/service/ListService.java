@@ -9,6 +9,7 @@
 package com.payoneer.checkout.sharedtest.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Map;
 
@@ -75,10 +76,10 @@ public final class ListService {
             JSONObject language = json.getJSONObject("style");
             language.put("language", value);
         }
-        value = settings.getAmount();
-        if (value != null) {
+        BigDecimal amount = settings.getAmount();
+        if (amount != null) {
             JSONObject payment = json.getJSONObject("payment");
-            payment.put("amount", value);
+            payment.put("amount", amount);
         }
         value = settings.getAppId();
         if (value != null) {
