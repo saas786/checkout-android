@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -129,7 +128,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
         super.onBackPressed();
         idlingResources.setCloseIdlingState(true);
     }
-    
+
     @Override
     public void close() {
         supportFinishAfterTransition();
@@ -140,7 +139,7 @@ abstract class BasePaymentActivity extends AppCompatActivity implements BasePaym
     void showPaymentDialog(PaymentDialogFragment dialog) {
         dialog.showDialog(getSupportFragmentManager(), idlingResources);
     }
-    
+
     /**
      * Get the current PaymentTheme from the PaymentUI.
      *

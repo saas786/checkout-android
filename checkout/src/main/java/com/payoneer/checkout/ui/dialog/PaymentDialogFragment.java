@@ -39,7 +39,7 @@ public class PaymentDialogFragment extends DialogFragment {
 
     // For automated UI testing
     private PaymentIdlingResources idlingResources;
-    
+
     /**
      * Set the title in this payment dialog
      *

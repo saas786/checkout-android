@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.test.espresso.IdlingResource;
 
 /**
  * The PaymentListActivity showing available payment methods in a list.

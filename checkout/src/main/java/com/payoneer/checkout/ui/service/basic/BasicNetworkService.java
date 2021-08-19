@@ -126,7 +126,7 @@ public final class BasicNetworkService extends NetworkService {
         Interaction interaction = operationResult.getInteraction();
         PaymentResult paymentResult = new PaymentResult(operationResult);
         Log.i("checkout", "handleProcessPaymentSuccess: " + paymentResult);
-        
+
         if (!PROCEED.equals(interaction.getCode())) {
             listener.onProcessPaymentResult(RESULT_CODE_ERROR, paymentResult);
             return;
@@ -155,7 +155,7 @@ public final class BasicNetworkService extends NetworkService {
         Interaction interaction = operationResult.getInteraction();
         PaymentResult paymentResult = new PaymentResult(operationResult);
         Log.i("checkout", "handleDeleteAccountSuccess: " + paymentResult);
-        
+
         if (!PROCEED.equals(interaction.getCode())) {
             listener.onDeleteAccountResult(RESULT_CODE_ERROR, paymentResult);
             return;

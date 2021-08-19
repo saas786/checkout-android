@@ -8,20 +8,14 @@
 
 package com.payoneer.checkout.examplecheckout;
 
-import static com.payoneer.checkout.sharedtest.checkout.MagicNumbers.CHARGE_PROCEED_OK;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.InteractionReason;
-import com.payoneer.checkout.sharedtest.checkout.ChargePaymentHelper;
-import com.payoneer.checkout.sharedtest.checkout.MagicNumbers;
-import com.payoneer.checkout.sharedtest.checkout.PaymentDialogHelper;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
-import com.payoneer.checkout.sharedtest.service.ListSettings;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;

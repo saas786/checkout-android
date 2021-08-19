@@ -8,9 +8,6 @@
 
 package com.payoneer.checkout.examplecheckout;
 
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +20,6 @@ import com.payoneer.checkout.sharedtest.checkout.PaymentDialogHelper;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
 import com.payoneer.checkout.sharedtest.service.ListSettings;
-import com.payoneer.checkout.sharedtest.view.UiDeviceHelper;
-import com.payoneer.checkout.ui.page.PaymentListActivity;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.ext.junit.runners.AndroidJUnit4;

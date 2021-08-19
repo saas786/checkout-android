@@ -76,7 +76,7 @@ public final class PaymentList {
     }
 
     public boolean hasUserInputData() {
-        return session != null ? session.hasUserInputData() : false;
+        return session != null && session.hasUserInputData();
     }
 
     public void showPaymentSession(PaymentSession session) {
