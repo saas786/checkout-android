@@ -8,13 +8,17 @@
 
 package com.payoneer.checkout.examplecheckout;
 
+import static com.payoneer.checkout.sharedtest.checkout.MagicNumbers.CHARGE_PROCEED_OK;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.InteractionReason;
+import com.payoneer.checkout.sharedtest.checkout.ChargePaymentHelper;
 import com.payoneer.checkout.sharedtest.checkout.MagicNumbers;
+import com.payoneer.checkout.sharedtest.checkout.PaymentDialogHelper;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
 import com.payoneer.checkout.sharedtest.service.ListSettings;
@@ -26,45 +30,26 @@ import androidx.test.rule.ActivityTestRule;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public final class VisaDirectTests extends AbstractTest {
+public final class SepaPaymentTests extends AbstractTest {
 
     @Rule
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
-    public void testVisa_directCharge_PROCEED_OK() {
+    public void testSepa_PROCEED_SCHEDULED() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         enterListUrl(createListUrl());
         clickActionButton();
 
-        int groupCardIndex = 1;
+        int cardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
-        PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
-        PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
+        PaymentListHelper.openPaymentListCard(cardIndex, "card_network");
+        PaymentListHelper.fillPaymentListCard(cardIndex, TestDataProvider.sepaTestData());
+        PaymentListHelper.clickPaymentListCardButton(cardIndex);
 
         register(resultIdlingResource);
-        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
-        unregister(resultIdlingResource);
-    }
-
-    @Test
-    public void testVisa_directCharge_PROCEED_PENDING() {
-        IdlingResource resultIdlingResource = getResultIdlingResource();
-
-        ListSettings settings = createDefaultListSettings();
-        settings.setAmount(MagicNumbers.CHARGE_PROCEED_PENDING);
-        enterListUrl(createListUrl(settings));
-        clickActionButton();
-
-        int groupCardIndex = 1;
-        PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
-        PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
-        PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
-
-        register(resultIdlingResource);
-        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.PENDING);
+        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.SCHEDULED);
         unregister(resultIdlingResource);
     }
 }
+
