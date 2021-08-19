@@ -25,25 +25,25 @@ public final class PaymentIdlingResources {
 
     private final String className;
 
-    /** 
+    /**
      * Construct a new PaymentIdlingResources class with the provided className.
      * The className is used to uniquely name the IdlingResources.
-     * 
+     *
      * @param className name of the class that is using this PaymentIdlingResources
      */
     public PaymentIdlingResources(final String className) {
         this.className = className;
     }
 
-    /** 
+    /**
      * Gets the DialogIdlingResource, this IdlingResource can be used to wait for the condition
      * that a PaymentDialog is shown to the user.
-     * 
+     *
      * @return IdlingResource for the show dialog condition
      */
     public IdlingResource getDialogIdlingResource() {
         if (dialogIdlingResource == null) {
-            dialogIdlingResource = new SimpleIdlingResource(className + "-dialogIdlingResource");        
+            dialogIdlingResource = new SimpleIdlingResource(className + "-dialogIdlingResource");
         }
         setIdlingResourceState(dialogIdlingResource, dialogIdlingState);
         return dialogIdlingResource;
@@ -53,16 +53,16 @@ public final class PaymentIdlingResources {
         this.dialogIdlingState = dialogIdlingState;
         setIdlingResourceState(dialogIdlingResource, dialogIdlingState);
     }
-    
+
     public void resetDialogIdlingResource() {
         dialogIdlingState = false;
         setIdlingResourceState(dialogIdlingResource, false);
     }
 
-    /** 
+    /**
      * Gets the CloseIdlingResource, this IdlingResource can be used to wait for the condition that the page
      * is closed.
-     * 
+     *
      * @return IdlingResource for waiting that the page is closed
      */
     public IdlingResource getCloseIdlingResource() {
@@ -83,10 +83,10 @@ public final class PaymentIdlingResources {
         setIdlingResourceState(closeIdlingResource, false);
     }
 
-    /** 
+    /**
      * Gets the LoadIdlingResource, this IdlingResource can be used to wait for the condition that the page
      * has loaded the PaymentSession and is showing it in the page.
-     * 
+     *
      * @return IdlingResource for waiting until the PaymentSession is loaded and shown
      */
     public IdlingResource getLoadIdlingResource() {
@@ -106,7 +106,7 @@ public final class PaymentIdlingResources {
         loadIdlingState = false;
         setIdlingResourceState(loadIdlingResource, false);
     }
-    
+
     private void setIdlingResourceState(final SimpleIdlingResource idlingResource, final boolean state) {
         if (idlingResource != null) {
             if (state) {
