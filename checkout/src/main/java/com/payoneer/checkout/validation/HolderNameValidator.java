@@ -33,14 +33,14 @@ public final class HolderNameValidator {
 	 * A card-number-like string is a sequence of digits, possibly separated by an arbitrary number of
 	 * whitespaces, dashes and/or dots, that contains at least 11 digits, e.g.:
      *
-     * The performance of this check degrades linearly with the increase of the input size.
-     * Therefore this validation rule should ideally be checked last 
-     * or a limit must be set on the holderName input length.
-	 *
 	 * 12345678901
 	 * 1234 5678 9012 3456
 	 * 1234-5678-9012-3456
 	 * 1234.5678.9012.3456
+     *
+     * The performance of this check degrades linearly with the increase of the input size.
+     * Therefore this validation rule should ideally be checked last or a limit must be set on the 
+     * holderName input length.
 	 */
 	public static class CardNumberMatcher {
 
