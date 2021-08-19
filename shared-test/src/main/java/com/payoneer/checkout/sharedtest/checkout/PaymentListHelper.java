@@ -24,6 +24,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInPaymentCard;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInWidget;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.hasTextInputLayoutError;
+import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.hasTextInputLayoutValue;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isCardWithTestId;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInPaymentCard;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isViewInWidget;
@@ -119,5 +120,11 @@ public final class PaymentListHelper {
         intended(hasComponent(PaymentListActivity.class.getName()));
         Matcher<View> list = withId(R.id.recyclerview_paymentlist);
         onView(list).check(matches(isViewInWidget(cardIndex, hasTextInputLayoutError(errorText), widgetName, R.id.textinputlayout)));
+    }
+
+    public static void matchesInputTextInWidget(int cardIndex, String widgetName, String value) {
+        intended(hasComponent(PaymentListActivity.class.getName()));
+        Matcher<View> list = withId(R.id.recyclerview_paymentlist);
+        onView(list).check(matches(isViewInWidget(cardIndex, hasTextInputLayoutValue(value), widgetName, R.id.textinputlayout)));
     }
 }
