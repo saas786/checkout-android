@@ -16,6 +16,7 @@ import java.util.Map;
 import com.payoneer.checkout.model.Interaction;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * Class holding individual localizations to provide easy access to all translations.
@@ -94,7 +95,8 @@ public final class Localization {
         Interaction interaction = interactionMessage.getInteraction();
         if (interactionMessage.hasOperationType()) {
             String operationType = interactionMessage.getOperationType();
-            String text = loc.getSharedTranslation(LocalizationKey.interactionKey(interaction, operationType, labelType));
+            String interactionKey = LocalizationKey.interactionKey(interaction, operationType, labelType);
+            String text = loc.getSharedTranslation(interactionKey);
             if (!TextUtils.isEmpty(text)) {
                 return text;
             }

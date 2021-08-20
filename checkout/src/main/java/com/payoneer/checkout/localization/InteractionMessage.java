@@ -17,6 +17,7 @@ import android.text.TextUtils;
  */
 public final class InteractionMessage {
 
+    public final static String DELETE = "DELETE";
     private final Interaction interaction;
     private final String operationType;
 

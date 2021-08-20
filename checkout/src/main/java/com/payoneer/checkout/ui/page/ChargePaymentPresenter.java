@@ -196,7 +196,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
             case InteractionCode.TRY_OTHER_ACCOUNT:
             case InteractionCode.TRY_OTHER_NETWORK:
             case InteractionCode.RETRY:
-                showErrorAndCloseWithErrorCode(result);
+                showMessageAndCloseWithErrorCode(result);
                 break;
             default:
                 closeWithErrorCode(result);
@@ -227,7 +227,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
         networkService.processPayment(operation);
     }
 
-    private void showErrorAndCloseWithErrorCode(PaymentResult result) {
+    private void showMessageAndCloseWithErrorCode(PaymentResult result) {
         Interaction interaction = result.getInteraction();
         String operationType = session != null ? session.getListOperationType() : null;
         InteractionMessage message = new InteractionMessage(interaction, operationType);
