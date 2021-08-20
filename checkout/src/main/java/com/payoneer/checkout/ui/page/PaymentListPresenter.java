@@ -228,11 +228,11 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 loadPaymentSession();
                 break;
             case RETRY:
-                showMessageAndPaymentSession(interaction, InteractionMessage.DELETE);
+                showMessageAndPaymentSession(InteractionMessage.createDeleteMessage(interaction));
                 break;
             case TRY_OTHER_ACCOUNT:
             case TRY_OTHER_NETWORK:
-                showMessageAndReloadPaymentSession(interaction, InteractionMessage.DELETE);
+                showMessageAndReloadPaymentSession(InteractionMessage.createDeleteMessage(interaction));
                 break;
             default:
                 closeWithErrorCode(result);
@@ -277,7 +277,8 @@ final class PaymentListPresenter extends BasePaymentPresenter
         Interaction interaction = result.getInteraction();
         switch (interaction.getReason()) {
             case PENDING:
-                showMessageAndResetPaymentSession(interaction, null);
+                InteractionMessage message = new InteractionMessage(interaction, session.getListOperationType());
+                showMessageAndResetPaymentSession(message);
                 break;
             case OK:
                 loadPaymentSession();
@@ -300,7 +301,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             case TRY_OTHER_ACCOUNT:
             case TRY_OTHER_NETWORK:
             case RETRY:
-                showMessageAndReloadPaymentSession(interaction, null);
+                showMessageAndReloadPaymentSession(createInteractionMessage(interaction));
                 break;
             default:
                 closeWithErrorCode(result);
@@ -332,10 +333,10 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 break;
             case TRY_OTHER_ACCOUNT:
             case TRY_OTHER_NETWORK:
-                showMessageAndReloadPaymentSession(interaction, null);
+                showMessageAndReloadPaymentSession(createInteractionMessage(interaction));
                 break;
             case RETRY:
-                showMessageAndPaymentSession(interaction, null);
+                showMessageAndPaymentSession(createInteractionMessage(interaction));
                 break;
             default:
                 closeWithErrorCode(result);
@@ -533,15 +534,13 @@ final class PaymentListPresenter extends BasePaymentPresenter
         sessionService.loadPaymentSession(listUrl, view.getActivity());
     }
 
-    private void showMessageAndResetPaymentSession(Interaction interaction, String operationType) {
-        InteractionMessage message = createInteractionMessage(interaction, operationType);
+    private void showMessageAndResetPaymentSession(InteractionMessage message) {
         view.showInteractionDialog(message, null);
         listView.clearPaymentList();
         listView.showPaymentSession(session);
     }
 
-    private void showMessageAndReloadPaymentSession(Interaction interaction, String operationType) {
-        InteractionMessage message = createInteractionMessage(interaction, operationType);
+    private void showMessageAndReloadPaymentSession(InteractionMessage message) {
         PaymentDialogListener listener = new PaymentDialogListener() {
             @Override
             public void onPositiveButtonClicked() {
@@ -561,16 +560,13 @@ final class PaymentListPresenter extends BasePaymentPresenter
         view.showInteractionDialog(message, listener);
     }
 
-    private void showMessageAndPaymentSession(Interaction interaction, String operationType) {
-        InteractionMessage message = createInteractionMessage(interaction, operationType);
+    private void showMessageAndPaymentSession(InteractionMessage message) {
         view.showInteractionDialog(message, null);
         listView.showPaymentSession(session);
     }
 
-    private InteractionMessage createInteractionMessage(Interaction interaction, String operationType) {
-        if (operationType == null) {
-            operationType = session != null ? session.getListOperationType() : null;
-        }
+    private InteractionMessage createInteractionMessage(Interaction interaction) {
+        String operationType = session != null ? session.getListOperationType() : null;
         return new InteractionMessage(interaction, operationType);
     }
 
