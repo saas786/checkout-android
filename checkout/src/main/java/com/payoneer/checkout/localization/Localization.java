@@ -16,7 +16,6 @@ import java.util.Map;
 import com.payoneer.checkout.model.Interaction;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Class holding individual localizations to provide easy access to all translations.
