@@ -39,6 +39,9 @@ public final class InteractionMessage {
      * @return newly created InteractionMessage
      */
     public static InteractionMessage fromInteraction(Interaction interaction) {
+        if (interaction == null) {
+            throw new IllegalArgumentException("interaction cannot be null");
+        }
         return new InteractionMessage(interaction, null);
     }
 
@@ -50,6 +53,9 @@ public final class InteractionMessage {
      * @return newly created InteractionMessage
      */
     public static InteractionMessage fromDeleteFlow(Interaction interaction) {
+        if (interaction == null) {
+            throw new IllegalArgumentException("interaction cannot be null");
+        }
         return new InteractionMessage(interaction, DELETE);
     }
 
@@ -62,6 +68,12 @@ public final class InteractionMessage {
      * @return newly created InteractionMessage
      */
     public static InteractionMessage fromOperationFlow(Interaction interaction, String operationType) {
+        if (interaction == null) {
+            throw new IllegalArgumentException("interaction cannot be null");
+        }
+        if (TextUtils.isEmpty(operationType)) {
+            throw new IllegalArgumentException("operationType cannot be null or empty");
+        }
         return new InteractionMessage(interaction, operationType);
     }
 
