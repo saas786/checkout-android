@@ -13,38 +13,67 @@ import com.payoneer.checkout.model.Interaction;
 import android.text.TextUtils;
 
 /**
- * Class for storing the interaction message details.
+ * Class storing information for localizing interactions.
  */
 public final class InteractionMessage {
 
     private final static String DELETE = "DELETE";
     private final Interaction interaction;
-    private final String operationType;
+    private final String flow;
 
     /**
-     * Construct a new InteractionMessage
+     * Construct a new InteractionMessage with the optional flow description.
      *
      * @param interaction containing the code and reason of the interaction
-     * @param operationType for specific localization of interactions per flow
+     * @param flow optional value describing the flow, e.g. delete or operation
      */
-    public InteractionMessage(Interaction interaction, String operationType) {
+    private InteractionMessage(Interaction interaction, String flow) {
         this.interaction = interaction;
-        this.operationType = operationType;
+        this.flow = flow;
     }
 
-    public static InteractionMessage createDeleteMessage(Interaction interaction) {
+    /**
+     * Create a default InteractionMessage for the provided interaction without a specific flow.
+     *
+     * @param interaction containing a recommendation how to proceed
+     * @return newly created InteractionMessage
+     */
+    public static InteractionMessage fromInteraction(Interaction interaction) {
+        return new InteractionMessage(interaction, null);
+    }
+
+    /**
+     * Create an InteractionMessage for the interaction that was generated during the deletion of
+     * a registered account.
+     *
+     * @param interaction containing a recommendation how to proceed
+     * @return newly created InteractionMessage
+     */
+    public static InteractionMessage fromDeleteFlow(Interaction interaction) {
         return new InteractionMessage(interaction, DELETE);
+    }
+
+    /**
+     * Create an InteractionMessage for the interaction that was generated during the flow described by
+     * the operationType.
+     *
+     * @param interaction containing a recommendation how to proceed
+     * @param operationType describing the flow of the interaction, e.g. CHARGE, PAYOUT, UPDATE
+     * @return newly created InteractionMessage
+     */
+    public static InteractionMessage fromOperationFlow(Interaction interaction, String operationType) {
+        return new InteractionMessage(interaction, operationType);
     }
 
     public Interaction getInteraction() {
         return interaction;
     }
 
-    public String getOperationType() {
-        return operationType;
+    public String getFlow() {
+        return flow;
     }
 
-    public boolean hasOperationType() {
-        return !TextUtils.isEmpty(operationType);
+    public boolean hasFlow() {
+        return !TextUtils.isEmpty(flow);
     }
 }
