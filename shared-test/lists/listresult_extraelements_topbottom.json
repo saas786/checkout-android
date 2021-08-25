@@ -32,7 +32,7 @@
             },
             {
                 "name": "topelement2",
-                "label": "Top Element [Number 2](https://number2.com) with Checkbox",
+                "label": "Top Element [Number 2](https://number2.com) with a [Checkbox](https://https://www.checkbox.com/) view",
                 "checkbox": {
                     "mode": "REQUIRED",
                     "requiredMessage": "top element 2 is required"
@@ -42,7 +42,7 @@
         "bottom": [
             {
                 "name": "bottomelement1",
-                "label": "Bottom Element [Number 1](https://number1.com) with Checkbox",
+                "label": "Bottom Element [Number 1](https://number1.com) with a [Checkbox](https://https://www.checkbox.com/) view",
                 "checkbox": {
                     "mode": "REQUIRED",
                     "requiredMessage": "bottom element 1 is required"
