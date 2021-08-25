@@ -10,8 +10,6 @@ package com.payoneer.checkout.examplecheckout;
 
 import static com.payoneer.checkout.sharedtest.checkout.MagicNumbers.CHARGE_PROCEED_OK;
 
-import java.util.Map;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
