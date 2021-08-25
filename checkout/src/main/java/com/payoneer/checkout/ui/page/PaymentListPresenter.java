@@ -228,11 +228,11 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 loadPaymentSession();
                 break;
             case RETRY:
-                showErrorAndPaymentSession(interaction);
+                showMessageAndPaymentSession(InteractionMessage.fromDeleteFlow(interaction));
                 break;
             case TRY_OTHER_ACCOUNT:
             case TRY_OTHER_NETWORK:
-                showErrorAndReloadPaymentSession(interaction);
+                showMessageAndReloadPaymentSession(InteractionMessage.fromDeleteFlow(interaction));
                 break;
             default:
                 closeWithErrorCode(result);
@@ -277,7 +277,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
         Interaction interaction = result.getInteraction();
         switch (interaction.getReason()) {
             case PENDING:
-                showErrorAndResetPaymentSession(interaction);
+                showMessageAndResetPaymentSession(createInteractionMessage(interaction, session));
                 break;
             case OK:
                 loadPaymentSession();
@@ -300,7 +300,7 @@ final class PaymentListPresenter extends BasePaymentPresenter
             case TRY_OTHER_ACCOUNT:
             case TRY_OTHER_NETWORK:
             case RETRY:
-                showErrorAndReloadPaymentSession(interaction);
+                showMessageAndReloadPaymentSession(createInteractionMessage(interaction, session));
                 break;
             default:
                 closeWithErrorCode(result);
@@ -332,10 +332,10 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 break;
             case TRY_OTHER_ACCOUNT:
             case TRY_OTHER_NETWORK:
-                showErrorAndReloadPaymentSession(interaction);
+                showMessageAndReloadPaymentSession(createInteractionMessage(interaction, session));
                 break;
             case RETRY:
-                showErrorAndPaymentSession(interaction);
+                showMessageAndPaymentSession(createInteractionMessage(interaction, session));
                 break;
             default:
                 closeWithErrorCode(result);
@@ -533,13 +533,13 @@ final class PaymentListPresenter extends BasePaymentPresenter
         sessionService.loadPaymentSession(listUrl, view.getActivity());
     }
 
-    private void showErrorAndResetPaymentSession(Interaction interaction) {
-        showInteractionDialog(interaction, null);
+    private void showMessageAndResetPaymentSession(InteractionMessage message) {
+        view.showInteractionDialog(message, null);
         listView.clearPaymentList();
         listView.showPaymentSession(session);
     }
 
-    private void showErrorAndReloadPaymentSession(Interaction interaction) {
+    private void showMessageAndReloadPaymentSession(InteractionMessage message) {
         PaymentDialogListener listener = new PaymentDialogListener() {
             @Override
             public void onPositiveButtonClicked() {
@@ -556,22 +556,16 @@ final class PaymentListPresenter extends BasePaymentPresenter
                 loadPaymentSession();
             }
         };
-        showInteractionDialog(interaction, listener);
+        view.showInteractionDialog(message, listener);
     }
 
-    private void showErrorAndPaymentSession(Interaction interaction) {
-        showInteractionDialog(interaction, null);
+    private void showMessageAndPaymentSession(InteractionMessage message) {
+        view.showInteractionDialog(message, null);
         listView.showPaymentSession(session);
     }
 
     private void showPaymentSession() {
         listView.showPaymentSession(session);
-    }
-
-    private void showInteractionDialog(Interaction interaction, PaymentDialogListener listener) {
-        String operationType = session != null ? session.getListOperationType() : null;
-        InteractionMessage message = new InteractionMessage(interaction, operationType);
-        view.showInteractionDialog(message, listener);
     }
 }
 
