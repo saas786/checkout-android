@@ -25,6 +25,7 @@
         "transactionId": "20678"
     },
     "extraElements": {
+        "top": [],
         "bottom": [
             {
                 "name": "bottomelement1",
