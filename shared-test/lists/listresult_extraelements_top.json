@@ -38,8 +38,6 @@
                     "requiredMessage": "top element 2 is required"
                 }
             }
-        ],
-        "bottom": [
         ]
     },
     "accounts": [
