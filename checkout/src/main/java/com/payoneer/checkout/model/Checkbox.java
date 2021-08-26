@@ -10,18 +10,18 @@ package com.payoneer.checkout.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * This class is designed to hold information checkbox element that is displayed on payment page.
  */
 @Getter
 @Setter
+@ToString
 public class Checkbox {
-    /** Advanced API, required */
-    private String name;
-    /** Advanced API, required */
+    /** Defines the mode of this Checkbox, required */
     @CheckboxMode.Definition
     private String mode;
-    /** Advanced API, optional */
-    private String requireMsg;
+    /** Error message that should be displayed if required checkbox is not checked by customer. */
+    private String requireMessage;
 }
