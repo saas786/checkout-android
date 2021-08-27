@@ -12,7 +12,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.form.Operation;
-import com.payoneer.checkout.markdown.MarkdownSpannableStringBuilder;
 import com.payoneer.checkout.model.CheckboxMode;
 
 import android.view.View;
@@ -22,17 +21,17 @@ import android.widget.TextView;
 /**
  * Widget for showing the CheckBox input element
  */
-public class CheckboxWidget extends FormWidget {
+public class ExtraElementWidget extends FormWidget {
 
-    SwitchMaterial switchView;
-    TextView labelView;
+    private SwitchMaterial switchView;
+    private TextView labelView;
 
     /**
      * Construct a new CheckBoxWidget
      *
      * @param name name identifying this widget
      */
-    public CheckboxWidget(String name) {
+    public ExtraElementWidget(String name) {
         super(name);
     }
 
@@ -46,7 +45,7 @@ public class CheckboxWidget extends FormWidget {
 
     @Override
     public void putValue(Operation operation) throws PaymentException {
-        operation.putInputElementBooleanValue(name, switchView.isChecked());
+        operation.putBooleanValue(name, switchView.isChecked());
     }
 
     /**
@@ -58,7 +57,7 @@ public class CheckboxWidget extends FormWidget {
      * @param label shown to the user
      */
     public void onBind(String mode, String label) {
-        labelView.setText(MarkdownSpannableStringBuilder.createFromText(label));
+        labelView.setText(label);
         switch (mode) {
             case CheckboxMode.OPTIONAL:
             case CheckboxMode.REQUIRED:

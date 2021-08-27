@@ -21,7 +21,7 @@ import android.text.TextUtils;
 /**
  * Widget for handling the date input
  */
-public final class DateWidget extends InputLayoutWidget {
+public final class ExpiryDateWidget extends InputLayoutWidget {
 
     private InputElement monthElement;
     private InputElement yearElement;
@@ -31,7 +31,7 @@ public final class DateWidget extends InputLayoutWidget {
      *
      * @param name name identifying this widget
      */
-    public DateWidget(String name) {
+    public ExpiryDateWidget(String name) {
         super(name);
     }
 
@@ -51,8 +51,8 @@ public final class DateWidget extends InputLayoutWidget {
     @Override
     public void putValue(Operation operation) throws PaymentException {
         ExpiryDate date = getExpiryDate();
-        operation.putStringValue(monthElement.getName(), date.month);
-        operation.putStringValue(yearElement.getName(), date.year);
+        operation.putInputElementStringValue(monthElement.getName(), date.month);
+        operation.putInputElementStringValue(yearElement.getName(), date.year);
     }
 
     /**

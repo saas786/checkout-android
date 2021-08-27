@@ -17,7 +17,8 @@ import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.RegistrationOption;
 import com.payoneer.checkout.ui.model.SmartSwitch;
-import com.payoneer.checkout.ui.widget.CheckboxWidget;
+import com.payoneer.checkout.ui.widget.FormWidget;
+import com.payoneer.checkout.ui.widget.RegistrationWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -39,8 +40,10 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         super(adapter, parent, networkCard);
         this.titleView = parent.findViewById(R.id.text_title);
 
-        addElementWidgets(networkCard);
+        addExtraElementWidgets(networkCard.getTopExtraElements());
+        addInputElementWidgets(networkCard.getInputElements());
         addRegistrationWidgets();
+        addExtraElementWidgets(networkCard.getBottomExtraElements());
         addButtonWidget();
         layoutWidgets();
 
@@ -57,8 +60,6 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
     }
 
     void onBind() {
-        super.onBind();
-
         NetworkCard networkCard = (NetworkCard) paymentCard;
         bindLabel(titleView, networkCard.getTitle(), false);
 
@@ -71,13 +72,19 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
             setTestId("group");
         }
         PaymentNetwork network = networkCard.getVisibleNetwork();
-        bindRegistrationWidget(AUTO_REGISTRATION, network.getAutoRegistration());
-        bindRegistrationWidget(ALLOW_RECURRENCE, network.getAllowRecurrence());
+        for (FormWidget widget : widgets.values()) {
+            if (widget instanceof RegistrationWidget) {
+                bindRegistrationWidget((RegistrationWidget) widget, network);
+            } else {
+                bindFormWidget(widget);
+            }
+        }
     }
 
-    void bindRegistrationWidget(String name, RegistrationOption option) {
-        CheckboxWidget widget = (CheckboxWidget) getFormWidget(name);
-        widget.onBind(option.getCheckboxMode(), option.getLabel());
+    void bindRegistrationWidget(RegistrationWidget widget, PaymentNetwork network) {
+        String name = widget.getName();
+        RegistrationOption option = name.equals(AUTO_REGISTRATION) ? network.getAutoRegistration() : network.getAllowRecurrence();
+        widget.onBind(option);
     }
 
     private void bindNetworkLogos(NetworkCard card) {
@@ -98,7 +105,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
     }
 
     private void addRegistrationWidgets() {
-        addWidget(new CheckboxWidget(AUTO_REGISTRATION));
-        addWidget(new CheckboxWidget(ALLOW_RECURRENCE));
+        putFormWidget(AUTO_REGISTRATION, new RegistrationWidget(AUTO_REGISTRATION));
+        putFormWidget(ALLOW_RECURRENCE, new RegistrationWidget(ALLOW_RECURRENCE));
     }
 }

@@ -102,7 +102,7 @@ public class Operation implements Parcelable {
      * @param name the name of the value
      * @param value containing the value
      */
-    public void putBooleanValue(String name, boolean value) throws PaymentException {
+    public void putInputElementBooleanValue(String name, boolean value) throws PaymentException {
 
         if (TextUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Name cannot be null or empty");
@@ -112,14 +112,8 @@ public class Operation implements Parcelable {
             case PaymentInputType.OPTIN:
                 account.setOptIn(value);
                 break;
-            case PaymentInputType.ALLOW_RECURRENCE:
-                operationData.setAllowRecurrence(value);
-                break;
-            case PaymentInputType.AUTO_REGISTRATION:
-                operationData.setAutoRegistration(value);
-                break;
             default:
-                String msg = "Operation.putBooleanValue failed for name: " + name;
+                String msg = "Operation.Account.putBooleanValue failed for name: " + name;
                 throw new PaymentException(msg);
         }
     }
@@ -131,7 +125,7 @@ public class Operation implements Parcelable {
      * @param name the name of the value
      * @param value containing the value
      */
-    public void putStringValue(String name, String value) throws PaymentException {
+    public void putInputElementStringValue(String name, String value) throws PaymentException {
 
         if (TextUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Name cannot be null or empty");
@@ -190,7 +184,32 @@ public class Operation implements Parcelable {
                 account.setInstallmentPlanId(value);
                 break;
             default:
-                String msg = "Operation.putStringValue failed for name: " + name;
+                String msg = "Operation.Account.putStringValue failed for name: " + name;
+                throw new PaymentException(msg);
+        }
+    }
+
+    /**
+     * Put a registration boolean value into this Operation form.
+     * Depending on the name of the value it will be added to the correct place in the Operation Json Object.
+     *
+     * @param name the name of the value
+     * @param value containing the value
+     */
+    public void putRegistrationValue(String name, boolean value) throws PaymentException {
+
+        if (TextUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("Registration name cannot be null or empty");
+        }
+        switch (name) {
+            case PaymentInputType.ALLOW_RECURRENCE:
+                operationData.setAllowRecurrence(value);
+                break;
+            case PaymentInputType.AUTO_REGISTRATION:
+                operationData.setAutoRegistration(value);
+                break;
+            default:
+                String msg = "Operation.Registration.setBooleanValue failed for name: " + name;
                 throw new PaymentException(msg);
         }
     }

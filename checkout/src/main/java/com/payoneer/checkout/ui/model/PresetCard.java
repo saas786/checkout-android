@@ -17,6 +17,7 @@ import java.util.Map;
 
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.AccountMask;
+import com.payoneer.checkout.model.ExtraElements;
 import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.PresetAccount;
 import com.payoneer.checkout.util.PaymentUtils;
@@ -28,8 +29,8 @@ public final class PresetCard extends PaymentCard {
     private final PresetAccount account;
     private final String buttonKey;
 
-    public PresetCard(PresetAccount account, String buttonKey) {
-        super(true);
+    public PresetCard(PresetAccount account, String buttonKey, ExtraElements extraElements) {
+        super(true, extraElements);
         this.account = account;
         this.buttonKey = buttonKey;
     }

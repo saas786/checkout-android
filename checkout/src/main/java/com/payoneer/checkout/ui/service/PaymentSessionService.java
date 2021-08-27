@@ -42,6 +42,7 @@ import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.localization.MultiLocalizationHolder;
 import com.payoneer.checkout.model.AccountRegistration;
 import com.payoneer.checkout.model.ApplicableNetwork;
+import com.payoneer.checkout.model.ExtraElements;
 import com.payoneer.checkout.model.ListResult;
 import com.payoneer.checkout.model.Networks;
 import com.payoneer.checkout.model.PresetAccount;
@@ -212,9 +213,7 @@ public final class PaymentSessionService {
             return null;
         }
         List<PaymentCard> cards = new ArrayList<>();
-        String buttonKey = LocalizationKey.operationButtonKey(PRESET);
-        PresetCard presetCard = new PresetCard(account, buttonKey);
-        cards.add(presetCard);
+        cards.add(createPresetCard(account, listResult));
         return new PaymentSection(LIST_HEADER_PRESET, cards);
     }
 
@@ -227,7 +226,7 @@ public final class PaymentSessionService {
         }
         for (AccountRegistration account : accounts) {
             if (NetworkServiceLookup.supports(account.getCode(), account.getMethod())) {
-                cards.add(createAccountCard(account));
+                cards.add(createAccountCard(account, listResult));
             }
         }
         if (cards.size() == 0) {
@@ -238,13 +237,21 @@ public final class PaymentSessionService {
         return new PaymentSection(labelKey, cards);
     }
 
-    private AccountCard createAccountCard(AccountRegistration account) {
+    private PresetCard createPresetCard(PresetAccount account, ListResult listResult) {
+        String buttonKey = LocalizationKey.operationButtonKey(PRESET);
+        ExtraElements extraElements = listResult.getExtraElements();
+        return new PresetCard(account, buttonKey, extraElements);
+    }
+
+
+    private AccountCard createAccountCard(AccountRegistration account, ListResult listResult) {
         String operationType = account.getOperationType();
         boolean update = UPDATE.equals(operationType);
+        ExtraElements extraElements = listResult.getExtraElements();
         String buttonKey = update ? BUTTON_UPDATE_ACCOUNT :
             LocalizationKey.operationButtonKey(operationType);
 
-        AccountCard card = new AccountCard(account, buttonKey, update, update);
+        AccountCard card = new AccountCard(account, buttonKey, update, update, extraElements);
 
         // Only in update flow and when the input form is empty, the input form is hidden
         if (update && card.hasEmptyInputForm()) {
@@ -264,9 +271,9 @@ public final class PaymentSessionService {
             group = groups.get(network.getNetworkCode());
 
             if (group == null) {
-                addNetwork2SingleCard(cards, network);
+                addNetwork2SingleCard(cards, network, listResult);
             } else {
-                addNetwork2GroupCard(cards, network, group);
+                addNetwork2GroupCard(cards, network, group, listResult);
             }
         }
         if (cards.size() == 0) {
@@ -329,28 +336,30 @@ public final class PaymentSessionService {
         return new PaymentNetwork(network, buttonKey, registration, recurrence);
     }
 
-    private void addNetwork2SingleCard(Map<String, NetworkCard> cards, PaymentNetwork network) {
-        NetworkCard card = new NetworkCard();
+    private void addNetwork2SingleCard(Map<String, NetworkCard> cards, PaymentNetwork network, ListResult listResult) {
+        NetworkCard card = new NetworkCard(listResult.getExtraElements());
         card.addPaymentNetwork(network);
         cards.put(network.getNetworkCode(), card);
     }
 
-    private void addNetwork2GroupCard(Map<String, NetworkCard> cards, PaymentNetwork network, PaymentGroup group) throws PaymentException {
+    private void addNetwork2GroupCard(Map<String, NetworkCard> cards, PaymentNetwork network, PaymentGroup group, ListResult listResult)
+        throws PaymentException {
         String code = network.getNetworkCode();
         String groupId = group.getId();
         String regex = group.getSmartSelectionRegex(code);
+        ExtraElements extraElements = listResult.getExtraElements();
 
         if (TextUtils.isEmpty(regex)) {
             throw new PaymentException("Missing regex for network: " + code + " in group: " + groupId);
         }
         NetworkCard card = cards.get(groupId);
         if (card == null) {
-            card = new NetworkCard();
+            card = new NetworkCard(extraElements);
             cards.put(groupId, card);
         }
         // a network can always be added to an empty card
         if (!card.addPaymentNetwork(network)) {
-            addNetwork2SingleCard(cards, network);
+            addNetwork2SingleCard(cards, network, listResult);
             return;
         }
         card.getSmartSwitch().addSelectionRegex(code, regex);

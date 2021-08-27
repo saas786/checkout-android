@@ -145,7 +145,7 @@ public abstract class InputLayoutWidget extends FormWidget {
     public void putValue(Operation operation) throws PaymentException {
         String val = getValue();
         if (!TextUtils.isEmpty(val)) {
-            operation.putStringValue(name, val);
+            operation.putInputElementStringValue(name, val);
         }
     }
 

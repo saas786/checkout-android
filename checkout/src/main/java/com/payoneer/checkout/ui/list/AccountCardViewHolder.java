@@ -11,6 +11,7 @@ package com.payoneer.checkout.ui.list;
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.AccountCard;
+import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -45,7 +46,10 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
             }
         });
         cardView = parent.findViewById(R.id.card_account);
-        addElementWidgets(accountCard);
+
+        addExtraElementWidgets(accountCard.getTopExtraElements());
+        addInputElementWidgets(accountCard.getInputElements());
+        addExtraElementWidgets(accountCard.getBottomExtraElements());
         addButtonWidget();
         layoutWidgets();
         setLastImeOptions();
@@ -59,8 +63,6 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
     @Override
     void onBind() {
-        super.onBind();
-
         PaymentUtils.setTestId(itemView, "card", "account");
         AccountCard card = (AccountCard) paymentCard;
         cardView.setCheckable(card.isCheckable());
@@ -68,6 +70,10 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         bindLabel(titleView, card.getTitle(), false);
         bindLabel(subtitleView, card.getSubtitle(), true);
         bindCardLogo(card.getNetworkCode(), card.getLogoLink());
+
+        for (FormWidget widget : widgets.values()) {
+            bindFormWidget(widget);
+        }
     }
 
     @Override
