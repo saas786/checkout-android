@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:layout_marginBottom="@dimen/pmborder_xmedium"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginTop="@dimen/pmborder_xsmall"
+    android:layout_marginBottom="@dimen/pmborder_xsmall" >
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textinputlayout"
