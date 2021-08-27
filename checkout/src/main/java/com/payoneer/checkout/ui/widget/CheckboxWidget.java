@@ -15,6 +15,7 @@ import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.markdown.MarkdownSpannableStringBuilder;
 import com.payoneer.checkout.model.CheckboxMode;
 
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class CheckboxWidget extends FormWidget {
         inflateWidgetView(parent, R.layout.widget_checkbox);
         labelView = widgetView.findViewById(R.id.label_checkbox);
         switchView = widgetView.findViewById(R.id.switch_checkbox);
+        labelView.setMovementMethod(LinkMovementMethod.getInstance());
         return widgetView;
     }
 
