@@ -8,11 +8,6 @@
 
 package com.payoneer.checkout.ui.widget;
 
-import com.payoneer.checkout.R;
-
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +20,7 @@ import com.payoneer.checkout.util.NetworkLogoLoader;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -40,7 +36,7 @@ public final class NetworkLogosWidget extends FormWidget {
     private ImageView selImage;
     private int margin;
     private LinearLayout layout;
-    
+
     /**
      * Construct a new NetworkLogosWidget
      *

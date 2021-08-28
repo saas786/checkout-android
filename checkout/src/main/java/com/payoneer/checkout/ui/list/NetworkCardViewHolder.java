@@ -72,11 +72,9 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         for (FormWidget widget : widgets.values()) {
             if (widget instanceof RegistrationWidget) {
                 bindRegistrationWidget((RegistrationWidget) widget, network);
-            }
-            else if (widget instanceof NetworkLogosWidget) {
+            } else if (widget instanceof NetworkLogosWidget) {
                 bindNetworkLogosWidget((NetworkLogosWidget) widget, networkCard);
-            }
-            else {
+            } else {
                 bindFormWidget(widget);
             }
         }
@@ -107,7 +105,7 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         NetworkLogosWidget widget = new NetworkLogosWidget(NETWORKLOGOS);
         putFormWidget(NETWORKLOGOS, widget);
     }
-    
+
     private void addRegistrationWidgets() {
         putFormWidget(AUTO_REGISTRATION, new RegistrationWidget(AUTO_REGISTRATION));
         putFormWidget(ALLOW_RECURRENCE, new RegistrationWidget(ALLOW_RECURRENCE));

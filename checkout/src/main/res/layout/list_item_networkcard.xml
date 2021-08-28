@@ -42,8 +42,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/pmborder_xsmall"
             android:orientation="vertical"
-            android:visibility="gone">
-        </LinearLayout>
+            android:visibility="gone"></LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
