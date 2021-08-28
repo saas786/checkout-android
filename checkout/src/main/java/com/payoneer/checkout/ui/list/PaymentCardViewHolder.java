@@ -48,9 +48,9 @@ import androidx.recyclerview.widget.RecyclerView;
  * The PaymentCardViewHolder holding the header and input widgets
  */
 public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
-
-    private final static String BUTTON = "button";
-    private final static String EXTRAELEMENT = "extraelement";
+    final static String NETWORKLOGOS = "networklogos";
+    final static String BUTTON = "button";
+    final static String EXTRAELEMENT = "extraelement";
 
     final ViewGroup formLayout;
     final Map<String, FormWidget> widgets;
@@ -190,10 +190,6 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     void putFormWidget(String key, FormWidget widget) {
         widget.setPresenter(cardHandler);
         widgets.put(key, widget);
-    }
-
-    void handleCardClicked() {
-        cardHandler.onCardClicked();
     }
 
     void layoutWidgets() {

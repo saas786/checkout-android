@@ -6,8 +6,13 @@
  * See the LICENSE file for more information.
  */
 
-package com.payoneer.checkout.ui.list;
+package com.payoneer.checkout.ui.widget;
 
+import com.payoneer.checkout.R;
+
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -26,34 +31,57 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ViewSwitcher;
 
 /**
- * Class displaying the network logo images
+ * Widget for showing the network logos for grouped cards
  */
-class NetworkLogosView {
+public final class NetworkLogosWidget extends FormWidget {
 
-    private final ViewSwitcher switcher;
     private final Map<String, NetworkLogo> logos;
-    private final ImageView selImage;
-    private final int margin;
+    private ViewSwitcher switcher;
+    private ImageView selImage;
+    private int margin;
+    private LinearLayout layout;
+    
+    /**
+     * Construct a new NetworkLogosWidget
+     *
+     * @param name the name of this widget
+     */
+    public NetworkLogosWidget(String name) {
+        super(name);
+        logos = new HashMap<>();
+    }
 
     /**
-     * Construct a new NetworkLogosView
-     *
-     * @param parent of this view
-     * @param networks list of payment networks for which logos should be shown
+     * {@inheritDoc}
      */
-    NetworkLogosView(View parent, List<PaymentNetwork> networks) {
-        switcher = parent.findViewById(R.id.viewswitcher_logos);
-        switcher.setVisibility(View.VISIBLE);
+    @Override
+    public View inflate(ViewGroup parent) {
+        inflateWidgetView(parent, R.layout.widget_networklogos);
 
-        logos = new HashMap<>();
-        selImage = parent.findViewById(R.id.image_selected);
+        switcher = widgetView.findViewById(R.id.viewswitcher_logos);
+        switcher.setVisibility(View.VISIBLE);
+        selImage = widgetView.findViewById(R.id.image_selected);
+        layout = widgetView.findViewById(R.id.layout_logos);
 
         Resources resources = parent.getContext().getResources();
         margin = (int) resources.getDimension(R.dimen.pmborder_small);
+        return widgetView;
+    }
 
-        LinearLayout layout = parent.findViewById(R.id.layout_logos);
+    public void onBind(List<PaymentNetwork> networks) {
+        logos.clear();
+        layout.removeAllViews();
+
         for (PaymentNetwork network : networks) {
             addNetworkLogo(network, layout);
+        }
+    }
+
+    public void setSelected(String networkCode) {
+        if (networkCode != null) {
+            showSelectedLogo(networkCode);
+        } else {
+            showAllLogos();
         }
     }
 
@@ -71,14 +99,6 @@ class NetworkLogosView {
         params.setMargins(0, 0, margin, 0);
         view.setLayoutParams(params);
         return view;
-    }
-
-    void setSelected(String networkCode) {
-        if (networkCode != null) {
-            showSelectedLogo(networkCode);
-        } else {
-            showAllLogos();
-        }
     }
 
     private void showSelectedLogo(String networkCode) {
