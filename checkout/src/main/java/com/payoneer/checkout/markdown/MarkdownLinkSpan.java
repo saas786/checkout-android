@@ -19,8 +19,8 @@ import android.util.Log;
 import android.view.View;
 
 /**
- * Implementation of a ClickableSpan containing a url. When the user clicks the url,
- * a ChromeCustomTab will be opened using this url.
+ * Implementation of a ClickableSpan containing a clickable link. When the user clicks the link,
+ * a ChromeCustomTab will be opened using the URL of the link.
  */
 public final class MarkdownLinkSpan extends ClickableSpan {
 

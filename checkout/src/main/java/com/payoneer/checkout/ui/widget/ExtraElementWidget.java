@@ -14,7 +14,7 @@ import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.model.ExtraElement;
 
 /**
- * Widget for showing the CheckBox input element
+ * Widget for showing the ExtraElement element
  */
 public class ExtraElementWidget extends CheckboxWidget {
 
@@ -25,7 +25,7 @@ public class ExtraElementWidget extends CheckboxWidget {
     @Override
     public void putValue(Operation operation) throws PaymentException {
         // Until optional checkboxes are supported for ExtraElements, this widget does not add any
-        // value to the operation.
+        // value to the operation
     }
 
     /**

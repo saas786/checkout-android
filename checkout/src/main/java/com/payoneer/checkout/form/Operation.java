@@ -223,16 +223,6 @@ public class Operation implements Parcelable {
         return operationType;
     }
 
-    /**
-     * Check if the type of this operation matches the given type.
-     *
-     * @param operationType to match with the type of this operation.
-     * @return true when the types matches, false otherwise.
-     */
-    public boolean isOperationType(String operationType) {
-        return Objects.equals(operationType, getOperationType());
-    }
-
     public String getNetworkCode() {
         return networkCode;
     }

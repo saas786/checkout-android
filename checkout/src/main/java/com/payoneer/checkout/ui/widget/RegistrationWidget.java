@@ -13,7 +13,7 @@ import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.ui.model.RegistrationOption;
 
 /**
- * Widget for showing the CheckBox input element
+ * Widget for showing the RegistrationOptions, e.g. allowRecurrence and autoRegistration
  */
 public class RegistrationWidget extends CheckboxWidget {
 
@@ -29,7 +29,7 @@ public class RegistrationWidget extends CheckboxWidget {
     /**
      * Bind this RegistrationWidget to the RegistrationOption
      *
-     * @param option containing the registration settings
+     * @param option containing the registration options
      */
     public void onBind(RegistrationOption option) {
         super.onBind(option.getCheckboxMode(), option.getLabel());
