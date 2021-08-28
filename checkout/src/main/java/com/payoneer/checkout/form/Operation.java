@@ -196,7 +196,7 @@ public class Operation implements Parcelable {
      * @param name the name of the value
      * @param value containing the value
      */
-    public void putRegistrationValue(String name, boolean value) throws PaymentException {
+    public void putRegistrationBooleanValue(String name, boolean value) throws PaymentException {
 
         if (TextUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Registration name cannot be null or empty");

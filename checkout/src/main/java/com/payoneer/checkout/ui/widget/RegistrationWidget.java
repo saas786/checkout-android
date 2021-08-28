@@ -23,7 +23,7 @@ public class RegistrationWidget extends CheckboxWidget {
 
     @Override
     public void putValue(Operation operation) throws PaymentException {
-        operation.putRegistrationValue(name, switchView.isChecked());
+        operation.putRegistrationBooleanValue(name, switchView.isChecked());
     }
 
     /**

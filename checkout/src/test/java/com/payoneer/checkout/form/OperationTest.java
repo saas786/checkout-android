@@ -42,33 +42,34 @@ public class OperationTest {
     public void putValue_invalidName_exception() throws PaymentException {
         URL url = TestUtils.createTestURL("http://localhost/charge");
         Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putStringValue(null, "Foo");
+        operation.putInputElementStringValue(null, "Foo");
     }
 
     @Test
     public void putValue_success() throws PaymentException {
         URL url = TestUtils.createTestURL("http://localhost/charge");
         Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putStringValue(PaymentInputType.HOLDER_NAME, "John Doe");
-        operation.putStringValue(PaymentInputType.ACCOUNT_NUMBER, "accountnumber123");
-        operation.putStringValue(PaymentInputType.BANK_CODE, "bankcode123");
-        operation.putStringValue(PaymentInputType.BANK_NAME, "bankname123");
-        operation.putStringValue(PaymentInputType.BIC, "bic123");
-        operation.putStringValue(PaymentInputType.BRANCH, "branch123");
-        operation.putStringValue(PaymentInputType.CITY, "city123");
-        operation.putStringValue(PaymentInputType.EXPIRY_MONTH, "12");
-        operation.putStringValue(PaymentInputType.EXPIRY_YEAR, "2019");
-        operation.putStringValue(PaymentInputType.IBAN, "iban123");
-        operation.putStringValue(PaymentInputType.LOGIN, "login123");
-        operation.putBooleanValue(PaymentInputType.OPTIN, true);
-        operation.putStringValue(PaymentInputType.PASSWORD, "password123");
-        operation.putStringValue(PaymentInputType.VERIFICATION_CODE, "123");
-        operation.putStringValue(PaymentInputType.CUSTOMER_BIRTHDAY, "3");
-        operation.putStringValue(PaymentInputType.CUSTOMER_BIRTHMONTH, "12");
-        operation.putStringValue(PaymentInputType.CUSTOMER_BIRTHYEAR, "72");
-        operation.putStringValue(PaymentInputType.INSTALLMENT_PLANID, "72");
-        operation.putBooleanValue(PaymentInputType.ALLOW_RECURRENCE, true);
-        operation.putBooleanValue(PaymentInputType.AUTO_REGISTRATION, true);
+        operation.putInputElementStringValue(PaymentInputType.HOLDER_NAME, "John Doe");
+        operation.putInputElementStringValue(PaymentInputType.ACCOUNT_NUMBER, "accountnumber123");
+        operation.putInputElementStringValue(PaymentInputType.BANK_CODE, "bankcode123");
+        operation.putInputElementStringValue(PaymentInputType.BANK_NAME, "bankname123");
+        operation.putInputElementStringValue(PaymentInputType.BIC, "bic123");
+        operation.putInputElementStringValue(PaymentInputType.BRANCH, "branch123");
+        operation.putInputElementStringValue(PaymentInputType.CITY, "city123");
+        operation.putInputElementStringValue(PaymentInputType.EXPIRY_MONTH, "12");
+        operation.putInputElementStringValue(PaymentInputType.EXPIRY_YEAR, "2019");
+        operation.putInputElementStringValue(PaymentInputType.IBAN, "iban123");
+        operation.putInputElementStringValue(PaymentInputType.LOGIN, "login123");
+        operation.putInputElementStringValue(PaymentInputType.PASSWORD, "password123");
+        operation.putInputElementStringValue(PaymentInputType.VERIFICATION_CODE, "123");
+        operation.putInputElementStringValue(PaymentInputType.CUSTOMER_BIRTHDAY, "3");
+        operation.putInputElementStringValue(PaymentInputType.CUSTOMER_BIRTHMONTH, "12");
+        operation.putInputElementStringValue(PaymentInputType.CUSTOMER_BIRTHYEAR, "72");
+        operation.putInputElementStringValue(PaymentInputType.INSTALLMENT_PLANID, "72");
+        operation.putInputElementBooleanValue(PaymentInputType.OPTIN, true);
+        
+        operation.putRegistrationBooleanValue(PaymentInputType.ALLOW_RECURRENCE, true);
+        operation.putRegistrationBooleanValue(PaymentInputType.AUTO_REGISTRATION, true);
 
         BrowserData browserData = new BrowserData();
         browserData.setJavaEnabled(true);
