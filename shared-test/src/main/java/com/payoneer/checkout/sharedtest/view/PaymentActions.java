@@ -66,15 +66,15 @@ public final class PaymentActions {
                 checkNotNull(viewHolder);
 
                 if (!(viewHolder instanceof PaymentCardViewHolder)) {
-                    throw createPerformException("ViewHolder is not of type PaymentCardViewHolder");
+                    throw createPerformException("ViewHolder is not of type PaymentCardViewHolder", "PaymentCardViewHolder");
                 }
                 FormWidget widget = ((PaymentCardViewHolder) viewHolder).getFormWidget(widgetName);
                 if (widget == null) {
-                    throw createPerformException(PaymentUtils.format("Widget %s could not be found inside card", widgetName));
+                    throw createPerformException(PaymentUtils.format("Widget %s could not be found inside card", widgetName), "FormWidget");
                 }
                 View formView = widget.getRootView().findViewById(viewResId);
                 if (formView == null) {
-                    throw createPerformException("Could not find the View inside the Widget: " + widgetName);
+                    throw createPerformException("Could not find the View inside the Widget: " + widgetName, "formView");
                 }
                 action.perform(uiController, formView);
             }
@@ -107,11 +107,11 @@ public final class PaymentActions {
                 checkNotNull(viewHolder);
 
                 if (!(viewHolder instanceof PaymentCardViewHolder)) {
-                    throw createPerformException("ViewHolder is not of type PaymentCardViewHolder");
+                    throw createPerformException("ViewHolder is not of type PaymentCardViewHolder", "PaymentCardViewHolder");
                 }
                 View cardView = viewHolder.itemView.findViewById(viewResId);
                 if (cardView == null) {
-                    throw createPerformException("Could not find the View inside the card at position: " + position);
+                    throw createPerformException("Could not find the View inside the card at position: " + position, "cardView");
                 }
                 action.perform(uiController, cardView);
             }
@@ -170,10 +170,10 @@ public final class PaymentActions {
         };
     }
 
-    private static PerformException createPerformException(String description) {
+    private static PerformException createPerformException(String actionDescription, String viewDescription) {
         return new PerformException.Builder()
-            .withActionDescription(description)
+            .withActionDescription(actionDescription)
+            .withViewDescription(viewDescription)
             .build();
     }
 }
-
