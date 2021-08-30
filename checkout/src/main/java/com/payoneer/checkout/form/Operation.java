@@ -108,10 +108,10 @@ public class Operation implements Parcelable {
     public void putBooleanValue(String category, String name, boolean value) throws PaymentException {
 
         if (TextUtils.isEmpty(category)) {
-            throw new IllegalArgumentException("Input category cannot be null or empty");
+            throw new IllegalArgumentException("Category cannot be null or empty");
         }
         if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("Input name cannot be null or empty");
+            throw new IllegalArgumentException("Name cannot be null or empty");
         }
         switch (category) {
             case INPUTELEMENT:
@@ -137,10 +137,10 @@ public class Operation implements Parcelable {
     public void putStringValue(String category, String name, String value) throws PaymentException {
 
         if (TextUtils.isEmpty(category)) {
-            throw new IllegalArgumentException("Input category cannot be null or empty");
+            throw new IllegalArgumentException("Category cannot be null or empty");
         }
         if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("Input name cannot be null or empty");
+            throw new IllegalArgumentException("Name cannot be null or empty");
         }
         switch (category) {
             case INPUTELEMENT:
