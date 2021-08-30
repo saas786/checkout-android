@@ -43,7 +43,7 @@ public final class Three3DS2Tests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 
@@ -65,7 +65,7 @@ public final class Three3DS2Tests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 
@@ -87,7 +87,7 @@ public final class Three3DS2Tests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
@@ -100,7 +100,7 @@ public final class Three3DS2Tests extends AbstractTest {
         PaymentDialogHelper.clickPaymentDialogButton("OK");
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
     }
 }

@@ -37,7 +37,7 @@ public final class SepaPaymentTests extends AbstractTest {
 
         int cardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(cardIndex, "card_network");
+        PaymentListHelper.openPaymentListCard(cardIndex, "card.network");
         PaymentListHelper.fillPaymentListCard(cardIndex, TestDataProvider.sepaTestData());
         PaymentListHelper.clickPaymentListCardButton(cardIndex);
 
