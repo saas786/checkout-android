@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.core.PaymentInputCategory;
 import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.model.BrowserData;
 import com.payoneer.checkout.test.util.TestUtils;
@@ -39,37 +40,58 @@ public class OperationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void putValue_invalidCategory_exception() throws PaymentException {
+        URL url = TestUtils.createTestURL("http://localhost/charge");
+        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+        operation.putStringValue(null, PaymentInputType.HOLDER_NAME, "Foo");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void putValue_invalidName_exception() throws PaymentException {
         URL url = TestUtils.createTestURL("http://localhost/charge");
         Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putInputElementStringValue(null, "Foo");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, null, "Foo");
+    }
+
+    @Test(expected = PaymentException.class)
+    public void putValue_invalidRegistrationName_exception() throws PaymentException {
+        URL url = TestUtils.createTestURL("http://localhost/charge");
+        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+        operation.putBooleanValue(PaymentInputCategory.REGISTRATION, PaymentInputType.HOLDER_NAME, true);
+    }
+
+    @Test(expected = PaymentException.class)
+    public void putValue_invalidInputElementName_exception() throws PaymentException {
+        URL url = TestUtils.createTestURL("http://localhost/charge");
+        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+        operation.putBooleanValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.ALLOW_RECURRENCE, true);
     }
 
     @Test
     public void putValue_success() throws PaymentException {
         URL url = TestUtils.createTestURL("http://localhost/charge");
         Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putInputElementStringValue(PaymentInputType.HOLDER_NAME, "John Doe");
-        operation.putInputElementStringValue(PaymentInputType.ACCOUNT_NUMBER, "accountnumber123");
-        operation.putInputElementStringValue(PaymentInputType.BANK_CODE, "bankcode123");
-        operation.putInputElementStringValue(PaymentInputType.BANK_NAME, "bankname123");
-        operation.putInputElementStringValue(PaymentInputType.BIC, "bic123");
-        operation.putInputElementStringValue(PaymentInputType.BRANCH, "branch123");
-        operation.putInputElementStringValue(PaymentInputType.CITY, "city123");
-        operation.putInputElementStringValue(PaymentInputType.EXPIRY_MONTH, "12");
-        operation.putInputElementStringValue(PaymentInputType.EXPIRY_YEAR, "2019");
-        operation.putInputElementStringValue(PaymentInputType.IBAN, "iban123");
-        operation.putInputElementStringValue(PaymentInputType.LOGIN, "login123");
-        operation.putInputElementStringValue(PaymentInputType.PASSWORD, "password123");
-        operation.putInputElementStringValue(PaymentInputType.VERIFICATION_CODE, "123");
-        operation.putInputElementStringValue(PaymentInputType.CUSTOMER_BIRTHDAY, "3");
-        operation.putInputElementStringValue(PaymentInputType.CUSTOMER_BIRTHMONTH, "12");
-        operation.putInputElementStringValue(PaymentInputType.CUSTOMER_BIRTHYEAR, "72");
-        operation.putInputElementStringValue(PaymentInputType.INSTALLMENT_PLANID, "72");
-        operation.putInputElementBooleanValue(PaymentInputType.OPTIN, true);
-        
-        operation.putRegistrationBooleanValue(PaymentInputType.ALLOW_RECURRENCE, true);
-        operation.putRegistrationBooleanValue(PaymentInputType.AUTO_REGISTRATION, true);
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.HOLDER_NAME, "John Doe");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.ACCOUNT_NUMBER, "accountnumber123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.BANK_CODE, "bankcode123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.BANK_NAME, "bankname123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.BIC, "bic123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.BRANCH, "branch123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.CITY, "city123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.EXPIRY_MONTH, "12");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.EXPIRY_YEAR, "2019");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.IBAN, "iban123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.LOGIN, "login123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.PASSWORD, "password123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.VERIFICATION_CODE, "123");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.CUSTOMER_BIRTHDAY, "3");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.CUSTOMER_BIRTHMONTH, "12");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.CUSTOMER_BIRTHYEAR, "72");
+        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.INSTALLMENT_PLANID, "72");
+        operation.putBooleanValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.OPTIN, true);
+
+        operation.putBooleanValue(PaymentInputCategory.REGISTRATION, PaymentInputType.ALLOW_RECURRENCE, true);
+        operation.putBooleanValue(PaymentInputCategory.REGISTRATION, PaymentInputType.AUTO_REGISTRATION, true);
 
         BrowserData browserData = new BrowserData();
         browserData.setJavaEnabled(true);
