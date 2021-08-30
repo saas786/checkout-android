@@ -8,8 +8,6 @@
 
 package com.payoneer.checkout.ui.widget;
 
-import com.payoneer.checkout.core.PaymentException;
-import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.ui.model.RegistrationOption;
 
 /**
@@ -17,13 +15,8 @@ import com.payoneer.checkout.ui.model.RegistrationOption;
  */
 public class RegistrationWidget extends CheckboxWidget {
 
-    public RegistrationWidget(String name) {
-        super(name);
-    }
-
-    @Override
-    public void putValue(Operation operation) throws PaymentException {
-        operation.putRegistrationBooleanValue(name, switchView.isChecked());
+    public RegistrationWidget(String category, String name) {
+        super(category, name);
     }
 
     /**

@@ -14,7 +14,7 @@ import java.lang.annotation.RetentionPolicy;
 import androidx.annotation.StringDef;
 
 /**
- * Class containing the different payment input types i.e. number, iban, bic etc.
+ * Class containing the different payment input types i.e. number, iban, bic, allowRecurrence etc.
  */
 public class PaymentInputType {
     public final static String HOLDER_NAME = "holderName";

@@ -18,8 +18,8 @@ import com.payoneer.checkout.model.ExtraElement;
  */
 public class ExtraElementWidget extends CheckboxWidget {
 
-    public ExtraElementWidget(String name) {
-        super(name);
+    public ExtraElementWidget(String category, String name) {
+        super(category, name);
     }
 
     @Override

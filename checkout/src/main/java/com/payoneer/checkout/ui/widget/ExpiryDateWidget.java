@@ -26,18 +26,10 @@ public final class ExpiryDateWidget extends InputLayoutWidget {
     private InputElement monthElement;
     private InputElement yearElement;
 
-    /**
-     * Construct a new DateWidget
-     *
-     * @param name name identifying this widget
-     */
-    public ExpiryDateWidget(String name) {
-        super(name);
+    public ExpiryDateWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean validate() {
         ExpiryDate date = getExpiryDate();
@@ -45,14 +37,11 @@ public final class ExpiryDateWidget extends InputLayoutWidget {
         return setValidationResult(result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putValue(Operation operation) throws PaymentException {
         ExpiryDate date = getExpiryDate();
-        operation.putInputElementStringValue(monthElement.getName(), date.month);
-        operation.putInputElementStringValue(yearElement.getName(), date.year);
+        operation.putStringValue(category, monthElement.getName(), date.month);
+        operation.putStringValue(category, yearElement.getName(), date.year);
     }
 
     /**

@@ -8,8 +8,10 @@
 
 package com.payoneer.checkout.form;
 
+import static com.payoneer.checkout.core.PaymentInputCategory.INPUTELEMENT;
+import static com.payoneer.checkout.core.PaymentInputCategory.REGISTRATION;
+
 import java.net.URL;
-import java.util.Objects;
 
 import com.google.gson.JsonSyntaxException;
 import com.payoneer.checkout.core.PaymentException;
@@ -97,41 +99,74 @@ public class Operation implements Parcelable {
 
     /**
      * Put a boolean value into this Operation form.
-     * Depending on the name of the value it will be added to the correct place in the Operation Json Object.
+     * Depending on the category and name of the value it will be added to the correct place in the Operation Json Object.
      *
-     * @param name the name of the value
-     * @param value containing the value
+     * @param inputCategory category the input value belongs to
+     * @param inputName name identifying the value
+     * @param value containing the value of the input
      */
-    public void putInputElementBooleanValue(String name, boolean value) throws PaymentException {
+    public void putBooleanValue(String inputCategory, String inputName, boolean value) throws PaymentException {
 
-        if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
+        if (TextUtils.isEmpty(inputCategory)) {
+            throw new IllegalArgumentException("Input category cannot be null or empty");
         }
-        AccountInputData account = operationData.getAccount();
-        switch (name) {
-            case PaymentInputType.OPTIN:
-                account.setOptIn(value);
+        if (TextUtils.isEmpty(inputName)) {
+            throw new IllegalArgumentException("Input name cannot be null or empty");
+        }
+        switch (inputCategory) {
+            case INPUTELEMENT:
+                putInputElementBooleanValue(inputName, value);
+                break;
+            case REGISTRATION:
+                putRegistrationBooleanValue(inputName, value);
                 break;
             default:
-                String msg = "Operation.Account.putBooleanValue failed for name: " + name;
+                String msg = "Operation.putBooleanValue failed for category: " + inputCategory;
                 throw new PaymentException(msg);
         }
     }
 
     /**
      * Put a String value into this Operation form.
-     * Depending on the name of the value it will be added to the correct place in the Operation Json Object.
+     * Depending on the category and name of the value it will be added to the correct place in the Operation Json Object.
      *
-     * @param name the name of the value
-     * @param value containing the value
+     * @param inputCategory category the input value belongs to
+     * @param inputName name identifying the value
+     * @param value containing the value of the input
      */
-    public void putInputElementStringValue(String name, String value) throws PaymentException {
+    public void putStringValue(String inputCategory, String inputName, String value) throws PaymentException {
 
-        if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
+        if (TextUtils.isEmpty(inputCategory)) {
+            throw new IllegalArgumentException("Input category cannot be null or empty");
         }
+        if (TextUtils.isEmpty(inputName)) {
+            throw new IllegalArgumentException("Input name cannot be null or empty");
+        }
+        switch (inputCategory) {
+            case INPUTELEMENT:
+                putInputElementStringValue(inputName, value);
+                break;
+            default:
+                String msg = "Operation.putStringValue failed for category: " + inputCategory;
+                throw new PaymentException(msg);
+        }
+    }
+
+    private void putInputElementBooleanValue(String inputName, boolean value) throws PaymentException {
         AccountInputData account = operationData.getAccount();
-        switch (name) {
+        switch (inputName) {
+            case PaymentInputType.OPTIN:
+                account.setOptIn(value);
+                break;
+            default:
+                String msg = "Operation.Account.putBooleanValue failed for name: " + inputName;
+                throw new PaymentException(msg);
+        }
+    }
+
+    private void putInputElementStringValue(String inputName, String value) throws PaymentException {
+        AccountInputData account = operationData.getAccount();
+        switch (inputName) {
             case PaymentInputType.HOLDER_NAME:
                 account.setHolderName(value);
                 break;
@@ -184,24 +219,13 @@ public class Operation implements Parcelable {
                 account.setInstallmentPlanId(value);
                 break;
             default:
-                String msg = "Operation.Account.putStringValue failed for name: " + name;
+                String msg = "Operation.Account.putStringValue failed for name: " + inputName;
                 throw new PaymentException(msg);
         }
     }
 
-    /**
-     * Put a registration boolean value into this Operation form.
-     * Depending on the name of the value it will be added to the correct place in the Operation Json Object.
-     *
-     * @param name the name of the value
-     * @param value containing the value
-     */
-    public void putRegistrationBooleanValue(String name, boolean value) throws PaymentException {
-
-        if (TextUtils.isEmpty(name)) {
-            throw new IllegalArgumentException("Registration name cannot be null or empty");
-        }
-        switch (name) {
+    private void putRegistrationBooleanValue(String inputName, boolean value) throws PaymentException {
+        switch (inputName) {
             case PaymentInputType.ALLOW_RECURRENCE:
                 operationData.setAllowRecurrence(value);
                 break;
@@ -209,7 +233,7 @@ public class Operation implements Parcelable {
                 operationData.setAutoRegistration(value);
                 break;
             default:
-                String msg = "Operation.Registration.setBooleanValue failed for name: " + name;
+                String msg = "Operation.Registration.setBooleanValue failed for name: " + inputName;
                 throw new PaymentException(msg);
         }
     }

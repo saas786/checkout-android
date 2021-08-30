@@ -28,13 +28,8 @@ public class CheckboxWidget extends FormWidget {
     SwitchMaterial switchView;
     TextView labelView;
 
-    /**
-     * Construct a new CheckBoxWidget
-     *
-     * @param name name identifying this widget
-     */
-    public CheckboxWidget(String name) {
-        super(name);
+    public CheckboxWidget(String category, String name) {
+        super(category, name);
     }
 
     @Override
@@ -48,7 +43,7 @@ public class CheckboxWidget extends FormWidget {
 
     @Override
     public void putValue(Operation operation) throws PaymentException {
-        operation.putInputElementBooleanValue(name, switchView.isChecked());
+        operation.putBooleanValue(category, name, switchView.isChecked());
     }
 
     /**

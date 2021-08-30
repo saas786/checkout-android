@@ -238,6 +238,6 @@ public final class PaymentUtils {
      * @param name the name of the view i.e. holderName
      */
     public static void setTestId(View view, String type, String name) {
-        view.setContentDescription(type + "_" + name);
+        view.setContentDescription(type + "." + name);
     }
 }

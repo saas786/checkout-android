@@ -35,18 +35,10 @@ public final class SelectWidget extends FormWidget {
     private TextView label;
     private ArrayAdapter<SpinnerItem> adapter;
 
-    /**
-     * Construct a new SelectWidget
-     *
-     * @param name identifying this widget
-     */
-    public SelectWidget(String name) {
-        super(name);
+    public SelectWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_select);
@@ -68,15 +60,12 @@ public final class SelectWidget extends FormWidget {
         return widgetView;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putValue(Operation operation) throws PaymentException {
         SpinnerItem selected = (SpinnerItem) spinner.getSelectedItem();
 
         if (selected != null) {
-            operation.putInputElementStringValue(name, selected.value);
+            operation.putStringValue(category, name, selected.value);
         }
     }
 

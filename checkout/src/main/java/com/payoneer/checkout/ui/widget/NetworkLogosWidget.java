@@ -37,13 +37,8 @@ public final class NetworkLogosWidget extends FormWidget {
     private int margin;
     private LinearLayout layout;
 
-    /**
-     * Construct a new NetworkLogosWidget
-     *
-     * @param name the name of this widget
-     */
-    public NetworkLogosWidget(String name) {
-        super(name);
+    public NetworkLogosWidget(String category, String name) {
+        super(category, name);
         logos = new HashMap<>();
     }
 

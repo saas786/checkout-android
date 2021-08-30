@@ -9,13 +9,13 @@
 package com.payoneer.checkout.ui.list;
 
 
+import static com.payoneer.checkout.core.PaymentInputCategory.REGISTRATION;
 import static com.payoneer.checkout.core.PaymentInputType.ALLOW_RECURRENCE;
 import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
-import com.payoneer.checkout.ui.model.RegistrationOption;
 import com.payoneer.checkout.ui.model.SmartSwitch;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.ui.widget.NetworkLogosWidget;
@@ -70,20 +70,16 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         }
         PaymentNetwork network = networkCard.getVisibleNetwork();
         for (FormWidget widget : widgets.values()) {
-            if (widget instanceof RegistrationWidget) {
-                bindRegistrationWidget((RegistrationWidget) widget, network);
-            } else if (widget instanceof NetworkLogosWidget) {
+            if (widget.matches(REGISTRATION, AUTO_REGISTRATION)) {
+                ((RegistrationWidget) widget).onBind(network.getAutoRegistration());
+            } else if (widget.matches(REGISTRATION, ALLOW_RECURRENCE)) {
+                ((RegistrationWidget) widget).onBind(network.getAllowRecurrence());
+            } else if (widget.matches(UIELEMENT, NETWORKLOGOS)) {
                 bindNetworkLogosWidget((NetworkLogosWidget) widget, networkCard);
             } else {
                 bindFormWidget(widget);
             }
         }
-    }
-
-    void bindRegistrationWidget(RegistrationWidget widget, PaymentNetwork network) {
-        String name = widget.getName();
-        RegistrationOption option = name.equals(AUTO_REGISTRATION) ? network.getAutoRegistration() : network.getAllowRecurrence();
-        widget.onBind(option);
     }
 
     private void bindNetworkLogosWidget(NetworkLogosWidget widget, NetworkCard card) {
@@ -102,12 +98,12 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
     }
 
     private void addNetworkLogosWidget() {
-        NetworkLogosWidget widget = new NetworkLogosWidget(NETWORKLOGOS);
-        putFormWidget(NETWORKLOGOS, widget);
+        NetworkLogosWidget widget = new NetworkLogosWidget(UIELEMENT, NETWORKLOGOS);
+        putFormWidget(widget);
     }
 
     private void addRegistrationWidgets() {
-        putFormWidget(AUTO_REGISTRATION, new RegistrationWidget(AUTO_REGISTRATION));
-        putFormWidget(ALLOW_RECURRENCE, new RegistrationWidget(ALLOW_RECURRENCE));
+        putFormWidget(new RegistrationWidget(REGISTRATION, AUTO_REGISTRATION));
+        putFormWidget(new RegistrationWidget(REGISTRATION, ALLOW_RECURRENCE));
     }
 }
