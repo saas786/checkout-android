@@ -22,7 +22,7 @@ import android.util.Patterns;
  */
 public final class MarkdownSpannableStringBuilder {
 
-    private final static String MARKDOWN_LINK_REGEX = "\\[(?<text>[^\\]]*)\\]\\((?<link>[^\\)]*)\\)";
+    private final static String MARKDOWN_LINK_REGEX = "\\[(?<text>[^\\]]*)\\]\\((?<link>[^\\]]*)(?:[ ]\"(?<title>[^\\]]*)\")?\\)";
 
     /**
      * Convenience static method to build a SpannableStringBuilder from the provided text.
@@ -61,8 +61,8 @@ public final class MarkdownSpannableStringBuilder {
         String name = matcher.group(1);
         String url = matcher.group(2);
 
-        // ignore this link if either name or url is not valid
-        if (TextUtils.isEmpty(name) || !Patterns.WEB_URL.matcher(url).matches()) {
+        // ignore this url if either name or url are empty
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(url)) {
             return builder;
         }
         int start = matcher.start();

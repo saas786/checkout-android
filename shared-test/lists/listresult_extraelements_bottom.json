@@ -30,7 +30,7 @@
         "bottom": [
             {
                 "name": "bottomelement1",
-                "label": "Bottom Element [Number 1](https://number1.com) with a [Checkbox](https://https://www.checkbox.com/) view",
+                "label": "Bottom Element [Number 1](https://number1.com) with an [Checkbox](https://www.checkbox.com/ \"Optional Title\") optional title",
                 "checkbox": {
                     "mode": "REQUIRED",
                     "requiredMessage": "bottom element 1 is required"
