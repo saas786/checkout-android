@@ -11,7 +11,8 @@
 
         <activity
             android:name=".settings.SettingsActivity"
-            android:theme="@style/PaymentTheme.Toolbar">
+            android:theme="@style/PaymentTheme.Toolbar"
+            android:windowSoftInputMode="stateHidden">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

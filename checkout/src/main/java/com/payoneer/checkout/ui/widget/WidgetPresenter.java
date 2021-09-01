@@ -56,7 +56,7 @@ public interface WidgetPresenter {
      * @param type of the input
      * @return the max length or -1 if not available
      */
-    int getMaxLength(String code, String type);
+    int getMaxInputLength(String code, String type);
 
     /**
      * Widgets call this method to validate their input values. The first value is mandatory, the second is optional.

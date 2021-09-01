@@ -21,22 +21,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.InputElementType;
-import com.payoneer.checkout.model.PaymentMethod;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.widget.ButtonWidget;
-import com.payoneer.checkout.ui.widget.CheckBoxWidget;
 import com.payoneer.checkout.ui.widget.DateWidget;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.ui.widget.SelectWidget;
 import com.payoneer.checkout.ui.widget.TextInputWidget;
 import com.payoneer.checkout.ui.widget.VerificationCodeWidget;
-import com.payoneer.checkout.ui.widget.WidgetPresenter;
 import com.payoneer.checkout.util.NetworkLogoLoader;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,15 +49,18 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
 
     final static String BUTTON_WIDGET = "buttonWidget";
     final ViewGroup formLayout;
-    final ListAdapter adapter;
-    final WidgetPresenter presenter;
     final Map<String, FormWidget> widgets;
     final ImageView cardLogoView;
+    final PaymentCard paymentCard;
+    final CardEventHandler cardHandler;
+    final ListAdapter adapter;
 
-    PaymentCardViewHolder(ListAdapter adapter, View parent) {
+    PaymentCardViewHolder(ListAdapter adapter, View parent, PaymentCard paymentCard) {
         super(parent);
+
         this.adapter = adapter;
-        this.presenter = new CardWidgetPresenter(this, adapter);
+        this.paymentCard = paymentCard;
+        this.cardHandler = new CardEventHandler(this, adapter);
         this.formLayout = parent.findViewById(R.id.layout_form);
         this.widgets = new LinkedHashMap<>();
         this.cardLogoView = parent.findViewById(R.id.image_logo);
@@ -69,19 +69,34 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.onItemClicked(getAdapterPosition());
+                cardHandler.onCardClicked();
             }
         });
     }
 
-    /**
-     * Get the FormWidget given the name, i.e. cardNumber or holderName.
-     *
-     * @param name of the widget to be returned
-     * @return the widget or null if it could not be found
-     */
     public FormWidget getFormWidget(String name) {
         return widgets.get(name);
+    }
+
+    PaymentCard getPaymentCard() {
+        return paymentCard;
+    }
+
+    boolean hasUserInputData() {
+        for (FormWidget widget : widgets.values()) {
+            if (widget.hasUserInputData()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Map<String, FormWidget> getFormWidgets() {
+        return widgets;
+    }
+
+    boolean hasValidPosition() {
+        return adapter.validPosition(getAdapterPosition());
     }
 
     void addButtonWidget() {
@@ -105,19 +120,23 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     void addWidget(FormWidget widget) {
         String name = widget.getName();
         if (!widgets.containsKey(name)) {
-            widget.setPresenter(presenter);
+            widget.setPresenter(cardHandler);
             widgets.put(name, widget);
         }
     }
 
+    void handleCardClicked() {
+        cardHandler.onCardClicked();
+    }
+
     void addElementWidgets(PaymentCard card) {
-        String code = card.getCode();
+        String code = card.getNetworkCode();
         List<InputElement> elements = card.getInputElements();
         boolean elementsContainExpiryDate = PaymentUtils.containsExpiryDate(elements);
 
         for (InputElement element : elements) {
             String name = element.getName();
-            if (adapter.isHidden(code, name)) {
+            if (cardHandler.isInputTypeHidden(code, name)) {
                 continue;
             }
             switch (element.getName()) {
@@ -142,10 +161,10 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         switch (element.getType()) {
             case InputElementType.SELECT:
                 widget = new SelectWidget(name);
-            case InputElementType.CHECKBOX:
-                widget = new CheckBoxWidget(name);
+                break;
             default:
                 widget = new TextInputWidget(name);
+                break;
         }
         addWidget(widget);
     }
@@ -181,7 +200,7 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         view.setLayoutParams(params);
         rowLayout.addView(view);
     }
-    
+
     /**
      * Check if two widgets can be placed next to eachother in a row
      *
@@ -197,14 +216,13 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
             }
             if (name.equals(name1)) {
                 nextName = name2;
-            }
-            else if (name.equals(name2)) {
+            } else if (name.equals(name2)) {
                 nextName = name1;
             }
         }
         return false;
     }
-    
+
     boolean requestFocusNextWidget(FormWidget currentWidget) {
         boolean requestFocus = false;
         for (Map.Entry<String, FormWidget> entry : widgets.entrySet()) {
@@ -221,18 +239,14 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void expand(boolean expand) {
-        formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
-        boolean focusRequested = false;
-
-        for (FormWidget widget : widgets.values()) {
-            widget.setValidation();
-            if (expand && !focusRequested) {
-                focusRequested = widget.requestFocus();
-            }
+        if (paymentCard.getHideInputForm()) {
+            formLayout.setVisibility(View.GONE);
+            return;
         }
+        formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
     }
 
-    void onBind(PaymentCard paymentCard) {
+    void onBind() {
         for (Map.Entry<String, FormWidget> entry : widgets.entrySet()) {
             FormWidget widget = entry.getValue();
 
@@ -253,23 +267,23 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     void bindButtonWidget(ButtonWidget widget, PaymentCard card) {
-        widget.onBind(card.getCode(), card.getButton());
+        widget.onBind(card.getButton());
     }
 
     void bindVerificationCodeWidget(VerificationCodeWidget widget, PaymentCard card) {
         InputElement element = card.getInputElement(VERIFICATION_CODE);
-        widget.onBind(card.getCode(), element);
+        widget.onBind(card.getNetworkCode(), element);
     }
 
     void bindDateWidget(DateWidget widget, PaymentCard card) {
         InputElement month = card.getInputElement(EXPIRY_MONTH);
         InputElement year = card.getInputElement(EXPIRY_YEAR);
-        widget.onBind(card.getCode(), month, year);
+        widget.onBind(card.getNetworkCode(), month, year);
     }
 
     void bindElementWidget(FormWidget widget, PaymentCard card) {
         InputElement element = card.getInputElement(widget.getName());
-        String code = card.getCode();
+        String code = card.getNetworkCode();
 
         if (widget instanceof SelectWidget) {
             ((SelectWidget) widget).onBind(code, element);
@@ -278,20 +292,10 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    void bindAccountMask(TextView title, TextView subtitle, AccountMask mask, String method) {
-        switch (method) {
-            case PaymentMethod.CREDIT_CARD:
-            case PaymentMethod.DEBIT_CARD:
-                title.setText(mask.getNumber());
-                String date = PaymentUtils.getExpiryDateString(mask);
-                if (date != null) {
-                    subtitle.setVisibility(View.VISIBLE);
-                    subtitle.setText(date);
-                }
-                break;
-            default:
-                title.setText(mask.getDisplayLabel());
-        }
+    void bindLabel(TextView view, String label, boolean hideWhenEmpty) {
+        int visibility = (hideWhenEmpty && TextUtils.isEmpty(label)) ? View.GONE : View.VISIBLE;
+        view.setVisibility(visibility);
+        view.setText(label);
     }
 
     void bindCardLogo(int logoResId) {

@@ -9,7 +9,6 @@
 package com.payoneer.checkout.ui.widget;
 
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.localization.Localization;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +47,7 @@ public final class ButtonWidget extends FormWidget {
         return widgetView;
     }
 
-    public void onBind(String code, String buttonKey) {
-        String label = Localization.translate(code, buttonKey);
+    public void onBind(String label) {
         button.setText(label);
     }
 

@@ -18,6 +18,7 @@ import androidx.annotation.StringDef;
  */
 public class CheckboxMode {
 
+    public final static String NONE = "NONE";
     public final static String OPTIONAL = "OPTIONAL";
     public final static String OPTIONAL_PRESELECTED = "OPTIONAL_PRESELECTED";
     public final static String REQUIRED = "REQUIRED";
@@ -35,6 +36,7 @@ public class CheckboxMode {
 
         if (mode != null) {
             switch (mode) {
+                case NONE:
                 case OPTIONAL:
                 case OPTIONAL_PRESELECTED:
                 case REQUIRED:
@@ -49,6 +51,7 @@ public class CheckboxMode {
 
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({
+        NONE,
         OPTIONAL,
         OPTIONAL_PRESELECTED,
         REQUIRED,

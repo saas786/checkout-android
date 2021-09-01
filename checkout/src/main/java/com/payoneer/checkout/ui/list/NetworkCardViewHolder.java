@@ -14,10 +14,10 @@ import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.NetworkCard;
-import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
+import com.payoneer.checkout.ui.model.RegistrationOption;
 import com.payoneer.checkout.ui.model.SmartSwitch;
-import com.payoneer.checkout.ui.widget.RegisterWidget;
+import com.payoneer.checkout.ui.widget.CheckboxWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -31,19 +31,22 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 final class NetworkCardViewHolder extends PaymentCardViewHolder {
 
-    private final TextView title;
+    private final TextView titleView;
     private NetworkLogosView networkLogosView;
 
+
     public NetworkCardViewHolder(ListAdapter adapter, View parent, NetworkCard networkCard) {
-        super(adapter, parent);
-        this.title = parent.findViewById(R.id.text_title);
+        super(adapter, parent, networkCard);
+        this.titleView = parent.findViewById(R.id.text_title);
 
         addElementWidgets(networkCard);
-        addRegisterWidgets();
+        addRegistrationWidgets();
         addButtonWidget();
         layoutWidgets();
 
-        addNetworkLogos(parent, networkCard);
+        if (networkCard.getPaymentNetworkCount() > 1) {
+            networkLogosView = new NetworkLogosView(parent, networkCard.getPaymentNetworks());
+        }
         setLastImeOptions();
     }
 
@@ -53,25 +56,28 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         return new NetworkCardViewHolder(adapter, view, networkCard);
     }
 
-    void onBind(PaymentCard paymentCard) {
-        if (!(paymentCard instanceof NetworkCard)) {
-            throw new IllegalArgumentException("Expected Networkcard in onBind");
-        }
-        super.onBind(paymentCard);
+    void onBind() {
+        super.onBind();
+
         NetworkCard networkCard = (NetworkCard) paymentCard;
-        PaymentNetwork network = networkCard.getVisibleNetwork();
-        title.setText(networkCard.getLabel());
+        bindLabel(titleView, networkCard.getTitle(), false);
 
         if (networkCard.getPaymentNetworkCount() == 1) {
-            bindCardLogo(networkCard.getCode(), networkCard.getLink("logo"));
+            bindCardLogo(networkCard.getNetworkCode(), networkCard.getLogoLink());
             setTestId("network");
         } else {
             bindCardLogo(R.drawable.ic_card);
             bindNetworkLogos(networkCard);
             setTestId("group");
         }
-        bindRegistrationWidget(network);
-        bindRecurrenceWidget(network);
+        PaymentNetwork network = networkCard.getVisibleNetwork();
+        bindRegistrationWidget(AUTO_REGISTRATION, network.getAutoRegistration());
+        bindRegistrationWidget(ALLOW_RECURRENCE, network.getAllowRecurrence());
+    }
+
+    void bindRegistrationWidget(String name, RegistrationOption option) {
+        CheckboxWidget widget = (CheckboxWidget) getFormWidget(name);
+        widget.onBind(option.getCheckboxMode(), option.getLabel());
     }
 
     private void bindNetworkLogos(NetworkCard card) {
@@ -81,35 +87,18 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
         SmartSwitch smartSwitch = card.getSmartSwitch();
         if (smartSwitch.getSelectedCount() == 1) {
             PaymentNetwork network = smartSwitch.getFirstSelected();
-            networkLogosView.setSelected(network.getCode());
+            networkLogosView.setSelected(network.getNetworkCode());
             return;
         }
         networkLogosView.setSelected(null);
-    }
-
-    private void addNetworkLogos(View parent, NetworkCard networkCard) {
-        if (networkCard.getPaymentNetworkCount() <= 1) {
-            return;
-        }
-        networkLogosView = new NetworkLogosView(parent, networkCard.getPaymentNetworks());
     }
 
     private void setTestId(String testId) {
         PaymentUtils.setTestId(itemView, "card", testId);
     }
 
-    private void addRegisterWidgets() {
-        addWidget(new RegisterWidget(AUTO_REGISTRATION));
-        addWidget(new RegisterWidget(ALLOW_RECURRENCE));
-    }
-
-    private void bindRegistrationWidget(PaymentNetwork network) {
-        RegisterWidget widget = (RegisterWidget) getFormWidget(AUTO_REGISTRATION);
-        widget.onBind(network.getRegistration());
-    }
-
-    private void bindRecurrenceWidget(PaymentNetwork network) {
-        RegisterWidget widget = (RegisterWidget) getFormWidget(ALLOW_RECURRENCE);
-        widget.onBind(network.getRecurrence());
+    private void addRegistrationWidgets() {
+        addWidget(new CheckboxWidget(AUTO_REGISTRATION));
+        addWidget(new CheckboxWidget(ALLOW_RECURRENCE));
     }
 }

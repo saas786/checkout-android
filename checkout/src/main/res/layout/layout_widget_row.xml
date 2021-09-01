@@ -5,5 +5,4 @@
     android:layout_height="wrap_content"
     android:divider="@drawable/row_divider"
     android:showDividers="middle"
-    android:orientation="horizontal">
-</LinearLayout>
+    android:orientation="horizontal"></LinearLayout>

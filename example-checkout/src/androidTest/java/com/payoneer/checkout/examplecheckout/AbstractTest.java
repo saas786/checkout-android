@@ -22,13 +22,16 @@ import org.junit.After;
 import org.junit.Before;
 
 import com.payoneer.checkout.sharedtest.service.ListService;
+import com.payoneer.checkout.sharedtest.service.ListSettings;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
+import com.payoneer.checkout.sharedtest.view.UiDeviceHelper;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
 
+import android.content.Context;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 class AbstractTest {
 
@@ -56,11 +59,20 @@ class AbstractTest {
         onView(withId(R.id.text_interactionreason)).check(matches(withText(interactionReason)));
     }
 
+    ListSettings createDefaultListSettings() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        ListSettings settings = new ListSettings(com.payoneer.checkout.examplecheckout.test.R.raw.listtemplate);
+        return settings.setAppId(context.getPackageName());
+    }
 
     String createListUrl() {
+        return createListUrl(createDefaultListSettings());
+    }
+
+    String createListUrl(ListSettings settings) {
         String baseUrl = BuildConfig.baseurl;
         String authHeader = BuildConfig.authheader;
-        return ListService.createListUrl(com.payoneer.checkout.examplecheckout.test.R.raw.listtemplate, false, baseUrl, authHeader);
+        return ListService.createListWithSettings(baseUrl, authHeader, settings);
     }
 
     void clickActionButton() {
@@ -75,5 +87,19 @@ class AbstractTest {
 
     void unregister(IdlingResource resource) {
         IdlingRegistry.getInstance().unregister(resource);
+    }
+
+    void clickDeviceCollectionPagePageButton(String buttonId) {
+        UiDeviceHelper.checkUiObjectContainsText("simulation of Device Data Collection (DDC) page");
+        UiDeviceHelper.clickUiObjectByResourceName(buttonId);
+    }
+
+    void clickCustomerDecisionPageButton(String buttonId) {
+        UiDeviceHelper.checkUiObjectContainsText("customer decision page");
+        UiDeviceHelper.clickUiObjectByResourceName(buttonId);
+    }
+
+    void waitForAppRelaunch() {
+        UiDeviceHelper.waitUiObjectHasPackage("com.payoneer.checkout.examplecheckout");
     }
 }

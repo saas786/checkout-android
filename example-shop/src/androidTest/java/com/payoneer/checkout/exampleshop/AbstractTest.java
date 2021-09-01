@@ -28,14 +28,16 @@ import com.payoneer.checkout.exampleshop.summary.SummaryActivity;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
 import com.payoneer.checkout.sharedtest.service.ListService;
+import com.payoneer.checkout.sharedtest.service.ListSettings;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
 import com.payoneer.checkout.sharedtest.view.PaymentActions;
 import com.payoneer.checkout.ui.page.ChargePaymentActivity;
 
+import android.content.Context;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 class AbstractTest {
 
@@ -49,11 +51,8 @@ class AbstractTest {
         Intents.release();
     }
 
-    CheckoutActivity openCheckoutActivity(boolean presetFirst) {
-        String baseUrl = BuildConfig.baseurl;
-        String authHeader = BuildConfig.authheader;
-        String listUrl =
-            ListService.createListUrl(com.payoneer.checkout.exampleshop.test.R.raw.listtemplate, presetFirst, baseUrl, authHeader);
+    CheckoutActivity openCheckoutActivity(String operationType) {
+        String listUrl = createListUrl(operationType);
 
         onView(withId(R.id.layout_settings)).check(matches(isDisplayed()));
         onView(withId(R.id.input_listurl)).perform(typeText(listUrl));
@@ -110,5 +109,16 @@ class AbstractTest {
 
     void unregister(IdlingResource resource) {
         IdlingRegistry.getInstance().unregister(resource);
+    }
+
+    private String createListUrl(String operationType) {
+        String baseUrl = BuildConfig.baseurl;
+        String authHeader = BuildConfig.authheader;
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        ListSettings settings = new ListSettings(com.payoneer.checkout.exampleshop.test.R.raw.listtemplate)
+            .setAppId(context.getPackageName())
+            .setOperationType(operationType);
+        return ListService.createListWithSettings(baseUrl, authHeader, settings);
     }
 }

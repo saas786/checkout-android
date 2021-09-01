@@ -29,16 +29,18 @@ public class RedirectRequestTest {
 
     @Test(expected = PaymentException.class)
     public void fromOperationResult_missingRedirect() throws PaymentException {
+        int requestCode = 1;
         OperationResult operationResult = new OperationResult();
         operationResult.setLinks(createLinks());
-        RedirectRequest.fromOperationResult(operationResult);
+        RedirectRequest.fromOperationResult(requestCode, operationResult);
     }
 
     @Test(expected = PaymentException.class)
     public void fromOperationResult_missingLink() throws PaymentException {
+        int requestCode = 1;
         OperationResult operationResult = new OperationResult();
         operationResult.setRedirect(new Redirect());
-        RedirectRequest.fromOperationResult(operationResult);
+        RedirectRequest.fromOperationResult(requestCode, operationResult);
     }
 
     @Test
@@ -48,9 +50,11 @@ public class RedirectRequestTest {
         Map<String, URL> links = createLinks();
         operationResult.setRedirect(redirect);
         operationResult.setLinks(links);
+        int requestCode = 1;
 
-        RedirectRequest request = RedirectRequest.fromOperationResult(operationResult);
+        RedirectRequest request = RedirectRequest.fromOperationResult(requestCode, operationResult);
         assertNotNull(request);
+        assertEquals(requestCode, request.getRequestCode());
         assertEquals(redirect, request.getRedirect());
         assertEquals(links.get("redirect"), request.getLink());
     }

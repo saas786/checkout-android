@@ -18,7 +18,6 @@ import com.payoneer.checkout.R;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.PresetAccount;
-import com.payoneer.checkout.ui.PaymentActivityResult;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +28,7 @@ import androidx.annotation.NonNull;
  * The ChargePaymentActivity is the view displaying the loading animation while posting the operation.
  * The presenter of this view will post the PresetAccount operation to the Payment API.
  */
-public final class ChargePaymentActivity extends BasePaymentActivity implements PaymentView {
+public final class ChargePaymentActivity extends BasePaymentActivity implements BasePaymentView {
 
     private final static String EXTRA_OPERATION = "operation";
     private ChargePaymentPresenter presenter;
@@ -139,21 +138,9 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
      * {@inheritDoc}
      */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        PaymentActivityResult result = PaymentActivityResult.fromActivityResult(requestCode, resultCode, data);
-        presenter.setPaymentActivityResult(result);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void showProgress(boolean visible) {
         super.showProgress(visible);
-        if (active) {
-            progressView.setLabels(Localization.translate(CHARGE_TITLE), Localization.translate(CHARGE_TEXT));
-        }
+        progressView.setLabels(Localization.translate(CHARGE_TITLE), Localization.translate(CHARGE_TEXT));
     }
 
     /**
@@ -161,11 +148,10 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
      */
     @Override
     public void onBackPressed() {
-        if (presenter.onBackPressed()) {
-            return;
+        if (!presenter.onBackPressed()) {
+            super.onBackPressed();
+            setOverridePendingTransition();
         }
-        super.onBackPressed();
-        setOverridePendingTransition();
     }
 
     /**

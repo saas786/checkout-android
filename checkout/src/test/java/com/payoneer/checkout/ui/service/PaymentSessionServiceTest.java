@@ -29,7 +29,7 @@ public class PaymentSessionServiceTest {
         PaymentSessionService service = new PaymentSessionService(context);
         assertTrue(service.isSupportedNetworkOperationType(NetworkOperationType.CHARGE));
         assertTrue(service.isSupportedNetworkOperationType(NetworkOperationType.PRESET));
-        assertFalse(service.isSupportedNetworkOperationType(NetworkOperationType.UPDATE));
+        assertTrue(service.isSupportedNetworkOperationType(NetworkOperationType.UPDATE));
         assertFalse(service.isSupportedNetworkOperationType(NetworkOperationType.ACTIVATION));
         assertFalse(service.isSupportedNetworkOperationType(NetworkOperationType.PAYOUT));
         assertFalse(service.isSupportedNetworkOperationType(null));

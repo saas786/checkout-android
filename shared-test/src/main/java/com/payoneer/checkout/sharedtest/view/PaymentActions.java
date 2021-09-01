@@ -82,6 +82,43 @@ public final class PaymentActions {
     }
 
     /**
+     * Perform the action on a View inside a card given position.
+     *
+     * @param position of the card inside the RecyclerView
+     * @param action to be performed on the View
+     * @param viewResId resource ID of the View
+     * @return the newly created ViewAction
+     */
+    public static ViewAction actionOnViewInPaymentCard(int position, final ViewAction action, final int viewResId) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isAssignableFrom(RecyclerView.class), isDisplayed());
+            }
+
+            @Override
+            public String getDescription() {
+                return PaymentUtils.format("perform action on view in card at position %d", position);
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                RecyclerView.ViewHolder viewHolder = ((RecyclerView) view).findViewHolderForAdapterPosition(position);
+                checkNotNull(viewHolder);
+
+                if (!(viewHolder instanceof PaymentCardViewHolder)) {
+                    throw createPerformException("ViewHolder is not of type PaymentCardViewHolder");
+                }
+                View cardView = viewHolder.itemView.findViewById(viewResId);
+                if (cardView == null) {
+                    throw createPerformException("Could not find the View inside the card at position: " + position);
+                }
+                action.perform(uiController, cardView);
+            }
+        };
+    }
+
+    /**
      * Scroll to the view action
      *
      * @return the newly created ViewAction

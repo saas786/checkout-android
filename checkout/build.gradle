@@ -46,6 +46,8 @@ android {
                 outputFileName = "PayoneerCheckout_${variant.name}_${defaultConfig.versionName}.aar"
             }
         }
+        applicationVariants {
+        }
     }
 }
 
@@ -53,6 +55,7 @@ dependencies {
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
     implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "com.google.code.gson:gson:${rootProject.gsonVersion}"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${rootProject.androidxSwiperefreshlayoutVersion}"
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
 
     compileOnly "org.projectlombok:lombok:${rootProject.lombokVersion}"
@@ -67,6 +70,7 @@ dependencies {
     testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
     testImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
     testImplementation "org.hamcrest:hamcrest-library:${rootProject.harmcrestVersion}"
+    testImplementation "com.tngtech.junit.dataprovider:junit4-dataprovider:${tngDataProviderVersion}"
 
     androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
     androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"

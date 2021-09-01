@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 
 import com.google.gson.JsonParseException;
 import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.form.DeleteAccount;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.model.OperationResult;
 
@@ -39,6 +40,39 @@ public final class PaymentConnection extends BaseConnection {
     }
 
     /**
+     * Delete the account from the Payment API
+     *
+     * @param account data to be deleted
+     * @return the OperationResult object received from the Payment API
+     */
+    public OperationResult deleteAccount(final DeleteAccount account) throws PaymentException {
+        if (account == null) {
+            throw new IllegalArgumentException("account cannot be null");
+        }
+        HttpURLConnection conn = null;
+
+        try {
+            conn = createDeleteConnection(account.getURL());
+            conn.setRequestProperty(HEADER_CONTENT_TYPE, VALUE_APP_JSON);
+            conn.setRequestProperty(HEADER_ACCEPT, VALUE_APP_JSON);
+
+            writeToOutputStream(conn, account.toJson());
+            conn.connect();
+            final int rc = conn.getResponseCode();
+            if (rc == HttpURLConnection.HTTP_OK) {
+                return handleOperationResult(readFromInputStream(conn));
+            }
+            throw createPaymentException(rc, conn);
+        } catch (MalformedURLException | SecurityException e) {
+            throw createPaymentException(e, false);
+        } catch (IOException e) {
+            throw createPaymentException(e, true);
+        } finally {
+            close(conn);
+        }
+    }
+
+    /**
      * Post an operation to the Payment API, i.e. a Preset or Charge operation.
      *
      * @param operation holding the request data
@@ -59,7 +93,7 @@ public final class PaymentConnection extends BaseConnection {
             conn.connect();
             final int rc = conn.getResponseCode();
             if (rc == HttpURLConnection.HTTP_OK) {
-                return handlePostOperationOk(readFromInputStream(conn));
+                return handleOperationResult(readFromInputStream(conn));
             }
             throw createPaymentException(rc, conn);
         } catch (MalformedURLException | SecurityException e) {
@@ -72,12 +106,12 @@ public final class PaymentConnection extends BaseConnection {
     }
 
     /**
-     * Handle the post Operation OK state
+     * Handle the Operation Result
      *
      * @param data the response data received from the API
      * @return the network response containing the OperationResult
      */
-    private OperationResult handlePostOperationOk(final String data) throws JsonParseException {
+    private OperationResult handleOperationResult(final String data) throws JsonParseException {
         return gson.fromJson(data, OperationResult.class);
     }
 }

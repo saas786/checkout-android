@@ -45,6 +45,7 @@ abstract class BaseConnection {
     private final static String HEADER_USER_AGENT = "User-Agent";
     private final static String HTTP_GET = "GET";
     private final static String HTTP_POST = "POST";
+    private final static String HTTP_DELETE = "DELETE";
     private final static String CONTENTTYPE_JSON = "application/json";
     private static volatile String userAgent;
 
@@ -121,6 +122,21 @@ abstract class BaseConnection {
         conn.setRequestMethod(HTTP_GET);
         conn.setDoInput(true);
         conn.setDoOutput(false);
+        return conn;
+    }
+
+    /**
+     * Creates a new HTTP DELETE connection
+     *
+     * @param url the Url pointing to the Payment API
+     * @return HttpURLConnection a HttpURLConnection object
+     */
+    HttpURLConnection createDeleteConnection(final URL url) throws IOException {
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        setConnProperties(conn);
+        conn.setRequestMethod(HTTP_DELETE);
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
         return conn;
     }
 

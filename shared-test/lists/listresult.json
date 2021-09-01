@@ -35,7 +35,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/AMEX/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/amex.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/AMEX",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/AMEX.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/AMEX/charge",
@@ -75,7 +75,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/DINERS/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/diners.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/DINERS",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/DINERS.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/DINERS/charge",
@@ -115,7 +115,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/DISCOVER/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/discover.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/DISCOVER",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/DISCOVER.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/DISCOVER/charge",
@@ -155,7 +155,7 @@
                 "recurrence": "NONE",
                 "redirect": true,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/IDEAL/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/ideal.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/IDEAL",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/IDEAL.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/IDEAL/charge",
@@ -179,7 +179,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/MAESTRO/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/maestro.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/MAESTRO",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/MAESTRO.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/MAESTRO/charge",
@@ -219,7 +219,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/MASTERCARD/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/mastercard.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/MASTERCARD",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/MASTERCARD.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/MASTERCARD/charge",
@@ -259,7 +259,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/MISTERCASH/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/mistercash.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/MISTERCASH",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/MISTERCASH.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/MISTERCASH/charge",
@@ -291,7 +291,7 @@
                 "recurrence": "NONE",
                 "redirect": true,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/PAYFAST/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/payfast.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/PAYFAST",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/PAYFAST.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/PAYFAST/charge",
@@ -309,7 +309,7 @@
                 "recurrence": "NONE",
                 "redirect": true,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/PAYPAL/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/paypal.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/PAYPAL",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/PAYPAL.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/PAYPAL/charge",
@@ -332,7 +332,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/POSTEPAY/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/postepay.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/POSTEPAY",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/POSTEPAY.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/POSTEPAY/charge",
@@ -372,7 +372,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/RATEPAY/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/ratepay.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/RATEPAY",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/RATEPAY.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/RATEPAY/charge",
@@ -390,7 +390,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/SEPADD/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/sepadd.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/SEPADD",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/SEPADD.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/SEPADD/charge",
@@ -422,7 +422,7 @@
                 "recurrence": "NONE",
                 "redirect": true,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/SOFORTUEBERWEISUNG/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/sofort.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/SOFORTUEBERWEISUNG",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/SOFORTUEBERWEISUNG.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/SOFORTUEBERWEISUNG/charge",
@@ -440,7 +440,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/UNIONPAY/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/unionpay.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/UNIONPAY",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/UNIONPAY.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/UNIONPAY/charge",
@@ -480,7 +480,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/VISA/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/visa.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/VISA",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/VISA.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/VISA/charge",
@@ -520,7 +520,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/VISAELECTRON/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/visaelectron.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/VISAELECTRON",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/VISAELECTRON.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/VISAELECTRON/charge",
@@ -560,7 +560,7 @@
                 "recurrence": "NONE",
                 "redirect": false,
                 "links": {
-                    "logo": "https://resources.integration.oscato.com/resource/network/MOBILETEAM/en_US/VISA_DANKORT/logo3x.png",
+                    "logo": "https://raw.githubusercontent.com/optile/checkout-android/develop/checkout/src/main/assets/networklogos/visa_dankort.png",
                     "self": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/VISA_DANKORT",
                     "lang": "https://resources.integration.oscato.com/resource/lang/MOBILETEAM/en_US/VISA_DANKORT.json",
                     "operation": "https://api.integration.oscato.com/pci/v1/6076b2feabe8170009d56de4l7ab1tlvai852jekk4s2h2b7it/VISA_DANKORT/charge",

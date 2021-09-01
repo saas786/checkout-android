@@ -8,6 +8,9 @@
 
 package com.payoneer.checkout.util;
 
+import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.WALLET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -15,7 +18,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentInputType;
+import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.model.InputElement;
 
 import android.content.res.Resources;
@@ -49,6 +55,20 @@ public class PaymentUtilsTest {
     }
 
     @Test
+    public void emptyListIfNull() {
+        List<String> list = new ArrayList<>();
+        assertEquals(list, PaymentUtils.emptyListIfNull(list));
+        assertNotNull(PaymentUtils.emptyListIfNull(null));
+    }
+
+    @Test
+    public void emptyMapIfNull() {
+        Map<String, String> map = new HashMap<>();
+        assertEquals(map, PaymentUtils.emptyMapIfNull(map));
+        assertNotNull(PaymentUtils.emptyMapIfNull(null));
+    }
+
+    @Test
     public void toInt() {
         assertEquals(PaymentUtils.toInt(null), 0);
         assertEquals(PaymentUtils.toInt(100), 100);
@@ -68,6 +88,27 @@ public class PaymentUtilsTest {
         elements.add(year);
         assertTrue(PaymentUtils.containsExpiryDate(elements));
 
+    }
+
+    @Test
+    public void isCardPaymentMethod() {
+        assertTrue(PaymentUtils.isCardPaymentMethod(CREDIT_CARD));
+        assertTrue(PaymentUtils.isCardPaymentMethod(DEBIT_CARD));
+        assertFalse(PaymentUtils.isCardPaymentMethod(WALLET));
+    }
+
+    @Test
+    public void getAccountMaskLabel() {
+        String numberLabel = "numberLabel";
+        String displayLabel = "displayLabel";
+
+        AccountMask accountMask = new AccountMask();
+        accountMask.setNumber(numberLabel);
+        accountMask.setDisplayLabel(displayLabel);
+
+        assertEquals(numberLabel, PaymentUtils.getAccountMaskLabel(accountMask, CREDIT_CARD));
+        assertEquals(numberLabel, PaymentUtils.getAccountMaskLabel(accountMask, DEBIT_CARD));
+        assertEquals(displayLabel, PaymentUtils.getAccountMaskLabel(accountMask, WALLET));
     }
 
     @Test(expected = IOException.class)

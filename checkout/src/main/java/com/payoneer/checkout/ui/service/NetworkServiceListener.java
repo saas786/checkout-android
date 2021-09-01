@@ -15,7 +15,7 @@ import com.payoneer.checkout.ui.PaymentResult;
 /**
  * Presenter to be called by the NetworkService to inform about payment updates and to show i.e. a progress view or progress dialog.
  */
-public interface NetworkServicePresenter {
+public interface NetworkServiceListener {
 
     /**
      * Notify the presenter that the service is in progress and requires a progress indicator
@@ -32,11 +32,18 @@ public interface NetworkServicePresenter {
     void redirect(RedirectRequest request) throws PaymentException;
 
     /**
-     * Called when the payment is processed. The NetworkService can either pass the result through the Activity.onActivityResult or
-     * directly through this callback method.
+     * Called when NetworkService is done processing the request.
      *
      * @param resultCode code describing the state of the paymentResult
      * @param paymentResult containing the information describing the result
      */
     void onProcessPaymentResult(int resultCode, PaymentResult paymentResult);
+
+    /**
+     * Called when NetworkService is done deleting the account.
+     *
+     * @param resultCode code describing the state of the paymentResult
+     * @param paymentResult containing the information describing the result
+     */
+    void onDeleteAccountResult(int resultCode, PaymentResult paymentResult);
 }

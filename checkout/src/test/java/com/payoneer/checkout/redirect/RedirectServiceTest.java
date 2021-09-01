@@ -33,7 +33,8 @@ public class RedirectServiceTest {
         redirect.setMethod(HttpMethod.GET);
 
         URL link = TestUtils.createDefaultURL();
-        RedirectRequest request = new RedirectRequest(redirect, link);
+        int requestType = 1;
+        RedirectRequest request = new RedirectRequest(requestType, redirect, link);
         assertTrue(RedirectService.supports(context, request));
 
         redirect.setMethod(HttpMethod.POST);

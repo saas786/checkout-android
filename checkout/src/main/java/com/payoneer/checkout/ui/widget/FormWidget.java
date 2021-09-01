@@ -79,6 +79,15 @@ public abstract class FormWidget {
     }
 
     /**
+     * Does this widget have any input data entered by the user
+     *
+     * @return true when data has been entered, false otherwise
+     */
+    public boolean hasUserInputData() {
+        return false;
+    }
+
+    /**
      * Set the validation in this widget given the current input value.
      */
     public void setValidation() {

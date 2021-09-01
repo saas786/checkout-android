@@ -50,15 +50,15 @@ public class ValidatorTest {
     }
 
     @Test
-    public void getMaxLength_from_resource() throws PaymentException {
+    public void getMaxInputLength_from_resource() throws PaymentException {
         final Validator validator = createValidator(R.raw.validations);
-        assertEquals(3, validator.getMaxLength(PaymentNetworkCodes.VISA, PaymentInputType.VERIFICATION_CODE));
+        assertEquals(3, validator.getMaxInputLength(PaymentNetworkCodes.VISA, PaymentInputType.VERIFICATION_CODE));
     }
 
     @Test
-    public void getMaxLength_default() throws PaymentException {
+    public void getMaxInputLength_default() throws PaymentException {
         final Validator validator = createValidator(R.raw.validations);
-        assertEquals(Validator.MAXLENGTH_VERIFICATION_CODE, validator.getMaxLength("FOO", PaymentInputType.VERIFICATION_CODE));
+        assertEquals(Validator.MAXLENGTH_VERIFICATION_CODE, validator.getMaxInputLength("FOO", PaymentInputType.VERIFICATION_CODE));
     }
 
     @Test

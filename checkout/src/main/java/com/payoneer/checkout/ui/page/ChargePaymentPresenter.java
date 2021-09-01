@@ -21,19 +21,15 @@ import com.payoneer.checkout.model.ErrorInfo;
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.ListResult;
-import com.payoneer.checkout.model.OperationResult;
 import com.payoneer.checkout.redirect.RedirectRequest;
 import com.payoneer.checkout.redirect.RedirectService;
-import com.payoneer.checkout.ui.PaymentActivityResult;
 import com.payoneer.checkout.ui.PaymentResult;
 import com.payoneer.checkout.ui.PaymentUI;
+import com.payoneer.checkout.ui.dialog.PaymentDialogFragment;
 import com.payoneer.checkout.ui.dialog.PaymentDialogFragment.PaymentDialogListener;
 import com.payoneer.checkout.ui.model.PaymentSession;
-import com.payoneer.checkout.ui.service.LocalizationLoaderListener;
-import com.payoneer.checkout.ui.service.LocalizationLoaderService;
 import com.payoneer.checkout.ui.service.NetworkService;
-import com.payoneer.checkout.ui.service.NetworkServiceLookup;
-import com.payoneer.checkout.ui.service.NetworkServicePresenter;
+import com.payoneer.checkout.ui.service.NetworkServiceListener;
 import com.payoneer.checkout.ui.service.PaymentSessionListener;
 import com.payoneer.checkout.ui.service.PaymentSessionService;
 import com.payoneer.checkout.util.PaymentResultHelper;
@@ -42,75 +38,47 @@ import android.content.Context;
 
 /**
  * The ChargePaymentPresenter takes care of posting the operation to the Payment API.
- * First this presenter will load the list, checks if the operation is present in the list and then post the operation to the Payment API.
+ * First this presenter will load the list, checks if the operation is present and then post the operation to the Payment API.
  */
-final class ChargePaymentPresenter implements PaymentSessionListener, NetworkServicePresenter, LocalizationLoaderListener {
+final class ChargePaymentPresenter extends BasePaymentPresenter implements PaymentSessionListener, NetworkServiceListener {
 
-    private final static int CHARGE_REQUEST_CODE = 1;
-    private final PaymentView view;
     private final PaymentSessionService sessionService;
-    private final LocalizationLoaderService localizationService;
-
     private PaymentSession session;
-    private String listUrl;
     private Operation operation;
-    private PaymentActivityResult paymentActivityResult;
     private NetworkService networkService;
-    private boolean redirected;
+    private RedirectRequest redirectRequest;
 
     /**
      * Create a new ChargePaymentPresenter
      *
-     * @param view The ChargePaymentView displaying the progress animation
+     * @param view the BasePaymentView displaying payment information
      */
-    ChargePaymentPresenter(PaymentView view) {
-        this.view = view;
+    ChargePaymentPresenter(BasePaymentView view) {
+        super(PaymentUI.getInstance().getListUrl(), view);
         sessionService = new PaymentSessionService(view.getActivity());
         sessionService.setListener(this);
-
-        localizationService = new LocalizationLoaderService(view.getActivity());
-        localizationService.setListener(this);
     }
 
     void onStart(Operation operation) {
         this.operation = operation;
-        this.listUrl = PaymentUI.getInstance().getListUrl();
+        setState(STARTED);
 
-        if (redirected) {
-            handleRedirectResult();
-            redirected = false;
-        } else if (paymentActivityResult != null) {
-            handlePaymentActivityResult(paymentActivityResult);
-            paymentActivityResult = null;
+        if (redirectRequest != null) {
+            handleRedirectRequest(redirectRequest);
+            redirectRequest = null;
         } else {
-            loadPaymentSession(this.listUrl);
+            loadPaymentSession();
         }
     }
 
-    /**
-     * Notify this presenter that it should stop and cleanup its resources
-     */
     void onStop() {
+        setState(STOPPED);
         sessionService.stop();
-        localizationService.stop();
-
         if (networkService != null) {
             networkService.stop();
         }
     }
 
-    /**
-     * Set the payment result received through the onActivityResult method
-     *
-     * @param paymentActivityResult result to be set and handled when the presenter is started.
-     */
-    void setPaymentActivityResult(PaymentActivityResult paymentActivityResult) {
-        this.paymentActivityResult = paymentActivityResult;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onPaymentSessionSuccess(PaymentSession session) {
         ListResult listResult = session.getListResult();
@@ -125,51 +93,67 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onPaymentSessionError(Throwable cause) {
         handleLoadingError(cause);
     }
 
+    @Override
+    public void showProgress(boolean visible) {
+        view.showProgress(visible);
+    }
+
+    @Override
+    public void onProcessPaymentResult(int resultCode, PaymentResult result) {
+        setState(STARTED);
+        switch (resultCode) {
+            case RESULT_CODE_PROCEED:
+                closeWithProceedCode(result);
+                break;
+            case RESULT_CODE_ERROR:
+                handleProcessPaymentError(result);
+                break;
+        }
+    }
+
+    @Override
+    public void onDeleteAccountResult(int resultCode, PaymentResult result) {
+    }
+
+    @Override
+    public void redirect(RedirectRequest redirectRequest) throws PaymentException {
+        Context context = view.getActivity();
+
+        if (!RedirectService.supports(context, redirectRequest)) {
+            throw new PaymentException("The Redirect payment method is not supported by the Android-SDK");
+        }
+        this.redirectRequest = redirectRequest;
+        view.showProgress(false);
+        RedirectService.redirect(context, redirectRequest);
+    }
+
+    boolean onBackPressed() {
+        view.showWarningMessage(Localization.translate(CHARGE_INTERRUPTED));
+        return true;
+    }
+
+    private void handleRedirectRequest(RedirectRequest redirectRequest) {
+        networkService.onRedirectResult(redirectRequest, RedirectService.getRedirectResult());
+    }
+
     private void handleLoadSessionProceed(PaymentSession session) {
-        if (!session.containsLink("operation", operation.getURL())) {
+        if (!session.containsOperationLink(operation.getURL())) {
             closeWithErrorCode("operation not found in ListResult");
             return;
         }
-        this.session = session;
-        loadLocalizations(session);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onLocalizationSuccess(Localization localization) {
-        Localization.setInstance(localization);
-        String networkCode = operation.getNetworkCode();
-        String paymentMethod = operation.getPaymentMethod();
-        networkService = NetworkServiceLookup.createService(view.getActivity(), networkCode, paymentMethod);
-        if (networkService == null) {
-            closeWithErrorCode("NetworkService lookup failed for: " + networkCode + ", " + paymentMethod);
-            return;
+        try {
+            this.session = session;
+            networkService = loadNetworkService(operation.getNetworkCode(), operation.getPaymentMethod());
+            networkService.setListener(this);
+            processPayment(operation);
+        } catch (PaymentException e) {
+            closeWithErrorCode(PaymentResultHelper.fromThrowable(e));
         }
-        networkService.setPresenter(this);
-        processPayment();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onLocalizationError(Throwable cause) {
-        handleLoadingError(cause);
-    }
-
-    private void loadLocalizations(PaymentSession session) {
-        Context context = view.getActivity();
-        localizationService.loadLocalizations(context, session);
     }
 
     private void handleLoadingError(Throwable cause) {
@@ -186,11 +170,7 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
         view.showConnectionErrorDialog(new PaymentDialogListener() {
             @Override
             public void onPositiveButtonClicked() {
-                if (session == null) {
-                    loadPaymentSession(listUrl);
-                } else {
-                    loadLocalizations(session);
-                }
+                loadPaymentSession();
             }
 
             @Override
@@ -203,60 +183,6 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
                 closeWithErrorCode(result);
             }
         });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showProgress(boolean visible) {
-        view.showProgress(visible);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onProcessPaymentResult(int resultCode, PaymentResult result) {
-        switch (resultCode) {
-            case RESULT_CODE_PROCEED:
-                closeWithProceedCode(result);
-                break;
-            case RESULT_CODE_ERROR:
-                handleProcessPaymentError(result);
-                break;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void redirect(RedirectRequest redirectRequest) throws PaymentException {
-        Context context = view.getActivity();
-        if (!RedirectService.supports(context, redirectRequest)) {
-            throw new PaymentException("The Redirect payment method is not supported by the Android-SDK");
-        }
-        view.showProgress(false);
-        RedirectService.redirect(context, redirectRequest);
-        this.redirected = true;
-    }
-
-    private void handleRedirectResult() {
-        if (session == null) {
-            handleMissingCachedSession();
-            return;
-        }
-        OperationResult result = RedirectService.getRedirectResult();
-        if (result != null) {
-            networkService.onRedirectSuccess(result);
-        } else {
-            networkService.onRedirectError();
-        }
-    }
-
-    private void handleMissingCachedSession() {
-        closeWithErrorCode("Missing cached session in ChargePaymentPresenter");
     }
 
     private void handleProcessPaymentError(PaymentResult result) {
@@ -269,7 +195,7 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
             case InteractionCode.TRY_OTHER_ACCOUNT:
             case InteractionCode.TRY_OTHER_NETWORK:
             case InteractionCode.RETRY:
-                showErrorAndCloseWithErrorCode(result);
+                showMessageAndCloseWithErrorCode(result);
                 break;
             default:
                 closeWithErrorCode(result);
@@ -280,7 +206,7 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
         view.showConnectionErrorDialog(new PaymentDialogListener() {
             @Override
             public void onPositiveButtonClicked() {
-                processPayment();
+                processPayment(operation);
             }
 
             @Override
@@ -295,55 +221,15 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
         });
     }
 
-    /**
-     * Let this presenter handle the back pressed.
-     *
-     * @return true when this presenter handled the back press, false otherwise
-     */
-    boolean onBackPressed() {
-        view.showWarningMessage(Localization.translate(CHARGE_INTERRUPTED));
-        return true;
+    private void processPayment(Operation operation) {
+        setState(PROCESS);
+        networkService.processPayment(operation);
     }
 
-    private void processPayment() {
-        networkService.processPayment(view.getActivity(), CHARGE_REQUEST_CODE, operation);
-    }
-
-    private void handlePaymentActivityResult(PaymentActivityResult result) {
-        if (session == null) {
-            handleMissingCachedSession();
-            return;
-        }
-        if (result.getRequestCode() == CHARGE_REQUEST_CODE) {
-            onProcessPaymentResult(result.getResultCode(), result.getPaymentResult());
-        }
-    }
-
-    private void loadPaymentSession(final String listUrl) {
-        this.session = null;
-        view.showProgress(true);
-        sessionService.loadPaymentSession(listUrl, view.getActivity());
-    }
-
-    private void closeWithProceedCode(PaymentResult result) {
-        view.setPaymentResult(RESULT_CODE_PROCEED, result);
-        view.close();
-    }
-
-    private void closeWithErrorCode(String message) {
-        PaymentResult result = PaymentResultHelper.fromErrorMessage(message);
-        closeWithErrorCode(result);
-    }
-
-    private void closeWithErrorCode(PaymentResult result) {
-        view.setPaymentResult(RESULT_CODE_ERROR, result);
-        view.close();
-    }
-
-    private void showErrorAndCloseWithErrorCode(PaymentResult result) {
-        view.setPaymentResult(RESULT_CODE_ERROR, result);
+    private void showMessageAndCloseWithErrorCode(PaymentResult result) {
         Interaction interaction = result.getInteraction();
-        PaymentDialogListener listener = new PaymentDialogListener() {
+        view.setPaymentResult(RESULT_CODE_ERROR, result);
+        PaymentDialogFragment.PaymentDialogListener listener = new PaymentDialogFragment.PaymentDialogListener() {
             @Override
             public void onPositiveButtonClicked() {
                 view.close();
@@ -359,6 +245,12 @@ final class ChargePaymentPresenter implements PaymentSessionListener, NetworkSer
                 view.close();
             }
         };
-        view.showInteractionDialog(interaction, listener);
+        view.showInteractionDialog(createInteractionMessage(interaction, session), listener);
+    }
+
+    private void loadPaymentSession() {
+        this.session = null;
+        view.showProgress(true);
+        sessionService.loadPaymentSession(listUrl, view.getActivity());
     }
 }

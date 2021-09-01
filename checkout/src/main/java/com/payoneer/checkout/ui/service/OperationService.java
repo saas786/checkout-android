@@ -15,6 +15,7 @@ import com.payoneer.checkout.core.WorkerSubscriber;
 import com.payoneer.checkout.core.WorkerTask;
 import com.payoneer.checkout.core.Workers;
 import com.payoneer.checkout.form.BrowserDataBuilder;
+import com.payoneer.checkout.form.DeleteAccount;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.model.BrowserData;
 import com.payoneer.checkout.model.OperationResult;
@@ -30,10 +31,10 @@ public final class OperationService {
     private final PaymentConnection paymentConnection;
     private final BrowserData browserData;
     private OperationListener listener;
-    private WorkerTask<OperationResult> operationTask;
+    private WorkerTask<OperationResult> task;
 
     /**
-     * Create a new OperationService, this service is used to load the Operation.
+     * Create a new OperationService
      *
      * @param context context in which this service will run
      */
@@ -55,9 +56,9 @@ public final class OperationService {
      * Stop and unsubscribe from the task that is currently active in this service.
      */
     public void stop() {
-        if (operationTask != null) {
-            operationTask.unsubscribe();
-            operationTask = null;
+        if (task != null) {
+            task.unsubscribe();
+            task = null;
         }
     }
 
@@ -67,7 +68,45 @@ public final class OperationService {
      * @return true when active, false otherwise
      */
     public boolean isActive() {
-        return operationTask != null && operationTask.isSubscribed();
+        return task != null && task.isSubscribed();
+    }
+
+    /**
+     * Delete a saved account
+     *
+     * @param account to be deleted
+     */
+    public void deleteAccount(final DeleteAccount account) {
+
+        if (isActive()) {
+            throw new IllegalStateException("OperationService is already active, stop first");
+        }
+        task = WorkerTask.fromCallable(new Callable<OperationResult>() {
+            @Override
+            public OperationResult call() throws PaymentException {
+                return asyncDeleteAccount(account);
+            }
+        });
+        task.subscribe(new WorkerSubscriber<OperationResult>() {
+            @Override
+            public void onSuccess(OperationResult result) {
+                task = null;
+
+                if (listener != null) {
+                    listener.onDeleteAccountSuccess(result);
+                }
+            }
+
+            @Override
+            public void onError(Throwable cause) {
+                task = null;
+
+                if (listener != null) {
+                    listener.onDeleteAccountError(cause);
+                }
+            }
+        });
+        Workers.getInstance().forNetworkTasks().execute(task);
     }
 
     /**
@@ -80,16 +119,16 @@ public final class OperationService {
         if (isActive()) {
             throw new IllegalStateException("Already posting operation, stop first");
         }
-        operationTask = WorkerTask.fromCallable(new Callable<OperationResult>() {
+        task = WorkerTask.fromCallable(new Callable<OperationResult>() {
             @Override
             public OperationResult call() throws PaymentException {
                 return asyncPostOperation(operation);
             }
         });
-        operationTask.subscribe(new WorkerSubscriber<OperationResult>() {
+        task.subscribe(new WorkerSubscriber<OperationResult>() {
             @Override
             public void onSuccess(OperationResult result) {
-                operationTask = null;
+                task = null;
 
                 if (listener != null) {
                     listener.onOperationSuccess(result);
@@ -98,18 +137,22 @@ public final class OperationService {
 
             @Override
             public void onError(Throwable cause) {
-                operationTask = null;
+                task = null;
 
                 if (listener != null) {
                     listener.onOperationError(cause);
                 }
             }
         });
-        Workers.getInstance().forNetworkTasks().execute(operationTask);
+        Workers.getInstance().forNetworkTasks().execute(task);
     }
 
     private OperationResult asyncPostOperation(Operation operation) throws PaymentException {
         operation.setBrowserData(browserData);
         return paymentConnection.postOperation(operation);
+    }
+
+    private OperationResult asyncDeleteAccount(DeleteAccount account) throws PaymentException {
+        return paymentConnection.deleteAccount(account);
     }
 }

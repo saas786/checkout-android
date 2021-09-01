@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/label_value"
+            android:id="@+id/label_checkbox"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="?attr/colorOnSurface"
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
     </LinearLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/checkbox_value"
+        android:id="@+id/switch_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

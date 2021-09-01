@@ -8,10 +8,9 @@
 
 package com.payoneer.checkout.ui.model;
 
-import static com.payoneer.checkout.localization.LocalizationKey.NETWORK_LABEL;
+import static com.payoneer.checkout.ui.model.PaymentSession.LINK_LANGUAGE;
 
 import java.net.URL;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,21 +22,35 @@ import com.payoneer.checkout.util.PaymentUtils;
 /**
  * Class for holding the ApplicableNetwork
  */
-public class PaymentNetwork {
+public final class PaymentNetwork {
 
     private final ApplicableNetwork network;
+    private final String buttonKey;
+    private final RegistrationOption autoRegistration;
+    private final RegistrationOption allowRecurrence;
 
-    public PaymentNetwork(ApplicableNetwork network) {
+
+    public PaymentNetwork(ApplicableNetwork network, String buttonKey, RegistrationOption autoRegistration,
+        RegistrationOption allowRecurrence) {
         this.network = network;
+        this.buttonKey = buttonKey;
+        this.autoRegistration = autoRegistration;
+        this.allowRecurrence = allowRecurrence;
+    }
+
+    public void putLanguageLink(Map<String, URL> links) {
+        URL url = getLink(LINK_LANGUAGE);
+        if (url != null) {
+            links.put(getNetworkCode(), url);
+        }
+    }
+
+    public URL getLink(String name) {
+        return getLinks().get(name);
     }
 
     public boolean containsLink(String name, URL url) {
         return PaymentUtils.equalsAsString(getLink(name), url);
-    }
-
-    public URL getLink(String name) {
-        Map<String, URL> links = network.getLinks();
-        return links != null ? links.get(name) : null;
     }
 
     public String getOperationType() {
@@ -48,20 +61,24 @@ public class PaymentNetwork {
         return network.getMethod();
     }
 
-    public String getCode() {
+    public String getNetworkCode() {
         return network.getCode();
     }
 
-    public String getLabel() {
-        return Localization.translate(network.getCode(), NETWORK_LABEL);
+    public String getTitle() {
+        return Localization.translateNetworkLabel(getNetworkCode());
     }
 
-    public String getRecurrence() {
-        return network.getRecurrence();
+    public String getButton() {
+        return Localization.translate(getNetworkCode(), buttonKey);
     }
 
-    public String getRegistration() {
-        return network.getRegistration();
+    public RegistrationOption getAllowRecurrence() {
+        return allowRecurrence;
+    }
+
+    public RegistrationOption getAutoRegistration() {
+        return autoRegistration;
     }
 
     public boolean isPreselected() {
@@ -69,8 +86,11 @@ public class PaymentNetwork {
     }
 
     public List<InputElement> getInputElements() {
-        List<InputElement> elements = network.getInputElements();
-        return elements == null ? Collections.emptyList() : elements;
+        return PaymentUtils.emptyListIfNull(network.getInputElements());
+    }
+
+    public Map<String, URL> getLinks() {
+        return PaymentUtils.emptyMapIfNull(network.getLinks());
     }
 
     public boolean compare(PaymentNetwork network) {
