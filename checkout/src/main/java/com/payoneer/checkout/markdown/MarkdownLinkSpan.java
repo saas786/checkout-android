@@ -45,6 +45,10 @@ public final class MarkdownLinkSpan extends ClickableSpan {
         super.updateDrawState(ds);
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     private void openUrl(Context context, String url) {
         try {
             ChromeCustomTabs.open(context, RedirectUriBuilder.fromString(url));
