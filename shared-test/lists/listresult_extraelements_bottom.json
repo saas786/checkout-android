@@ -30,7 +30,7 @@
         "bottom": [
             {
                 "name": "bottomelement1",
-                "label": "Bottom Element [Number 1](https://number1.com) with an [Checkbox](https://www.checkbox.com/ \"Optional Title\") optional title",
+                "label": "Bottom Element [Number 1](https://en.wikipedia.org/wiki/1) with an [Checkbox](https://en.wikipedia.org/wiki/Checkbox \"Optional Title\") optional title",
                 "checkbox": {
                     "mode": "REQUIRED",
                     "requiredMessage": "bottom element 1 is required"
@@ -38,7 +38,7 @@
             },
             {
                 "name": "bottomelement2",
-                "label": "Bottom Element [Number 2](https://number2.com) without Checkbox"
+                "label": "Bottom Element [Number 2](https://en.wikipedia.org/wiki/2) without Checkbox"
             }
         ]
     },

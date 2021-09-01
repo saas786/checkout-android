@@ -28,11 +28,11 @@
         "top": [
             {
                 "name": "topelement1",
-                "label": "Top Element [Number 1](https://number1.com) without Checkbox"
+                "label": "Top Element [Number 1](https://en.wikipedia.org/wiki/1) without Checkbox"
             },
             {
                 "name": "topelement2",
-                "label": "Top Element [Number 2](https://number2.com) with a [Checkbox](https://www.checkbox.com/) view",
+                "label": "Top Element [Number 2](https://en.wikipedia.org/wiki/2) with a [Checkbox](https://en.wikipedia.org/wiki/Checkbox) view",
                 "checkbox": {
                     "mode": "REQUIRED",
                     "requiredMessage": "top element 2 is required"
@@ -42,7 +42,7 @@
         "bottom": [
             {
                 "name": "bottomelement1",
-                "label": "Bottom Element [Number 1](https://number1.com) with a [Checkbox](https://www.checkbox.com/) view",
+                "label": "Bottom Element [Number 1](https://en.wikipedia.org/wiki/1) with a [Checkbox](https://www.checkbox.com/) view",
                 "checkbox": {
                     "mode": "REQUIRED",
                     "requiredMessage": "bottom element 1 is required"
@@ -50,7 +50,7 @@
             },
             {
                 "name": "bottomelement2",
-                "label": "Bottom Element [Number 2](https://number2.com \"Optional Title\") with optional title"
+                "label": "Bottom Element [Number 2](https://en.wikipedia.org/wiki/2 \"Optional Title\") with optional title"
             }
         ]
     },
