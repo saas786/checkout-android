@@ -39,7 +39,12 @@
             {
                 "name": "bottomelement2",
                 "label": "Bottom Element [Number 2](https://en.wikipedia.org/wiki/2) without Checkbox"
+            },
+	    {
+                "name": "bottomelement3",
+                "label": "BottomElement[Number3](https://en.wikipedia.org/wiki/3)BottomElement[Number4](https://en.wikipedia.org/wiki/4 \"thisisatitle\")withoutSpaceswithoutSpacesButWithTitle"
             }
+
         ]
     },
     "accounts": [
