@@ -1,6 +1,20 @@
 Changelog - Payoneer Checkout SDK for Android-based devices
 -----------------------
 
+**Version checkout-android 0.72.0**
+
+* [PCX-1902] - Fix Android registration functional test
+* [PCX-1659] - Fix testing ListResult by removing integration dependency for logos
+* [PCX-1808] - Support flow-specific translations
+* [PCX-1793] - Prevent card-number-like input in the cardholder name field
+* [PCX-1780] - Add 3DS2 UI Tests to the Android Checkout SDK
+* [PCX-1779] - Add TestPSP UI Tests to the Android Checkout SDK
+* [PCX-1676] - Replace method display label on deletion popup
+* [PCX-1675] - Hide "Update" button for registered methods with empty forms
+* [PCX-1540] - Display main UPDATE page
+* [PCX-1395] - Add and save new payment method
+* [PCX-1384] - Delete saved payment method
+
 **Version checkout-android 0.71.0**
 
 * [PCX-1190] - Expiry and CVV field on same line for credit/debit card forms
