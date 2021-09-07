@@ -23,5 +23,5 @@ public class Checkbox {
     @CheckboxMode.Definition
     private String mode;
     /** Error message that should be displayed if required checkbox is not checked by customer. */
-    private String requireMessage;
+    private String requiredMessage;
 }
