@@ -21,18 +21,10 @@ public final class ButtonWidget extends FormWidget {
 
     private Button button;
 
-    /**
-     * Construct a new ButtonWidget
-     *
-     * @param name the name of this widget
-     */
-    public ButtonWidget(String name) {
-        super(name);
+    public ButtonWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_button);

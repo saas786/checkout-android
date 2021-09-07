@@ -46,7 +46,7 @@ public final class CardPaymentTests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 
@@ -66,7 +66,7 @@ public final class CardPaymentTests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 
@@ -84,7 +84,7 @@ public final class CardPaymentTests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
 
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
@@ -94,7 +94,7 @@ public final class CardPaymentTests extends AbstractTest {
         PaymentDialogHelper.clickPaymentDialogButton("OK");
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.matchesInputTextInWidget(groupCardIndex, "number", "4111 1111 1111 1111");
+        PaymentListHelper.matchesInputTextInWidget(groupCardIndex, "inputelement.number", "4111 1111 1111 1111");
     }
 
     @Test
@@ -106,7 +106,7 @@ public final class CardPaymentTests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
 
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
@@ -116,7 +116,7 @@ public final class CardPaymentTests extends AbstractTest {
         PaymentDialogHelper.clickPaymentDialogButton("OK");
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 2);
     }
 
@@ -130,7 +130,7 @@ public final class CardPaymentTests extends AbstractTest {
         int groupCardIndex = 1;
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
 
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
@@ -140,7 +140,7 @@ public final class CardPaymentTests extends AbstractTest {
         PaymentDialogHelper.clickPaymentDialogButton("OK");
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.matchesCardGroupCount(groupCardIndex, 3);
     }
 
@@ -153,7 +153,7 @@ public final class CardPaymentTests extends AbstractTest {
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
 
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.riskDeniedCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);

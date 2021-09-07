@@ -17,6 +17,7 @@ import java.util.Map;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.model.AccountMask;
 import com.payoneer.checkout.model.AccountRegistration;
+import com.payoneer.checkout.model.ExtraElements;
 import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.util.PaymentUtils;
 
@@ -28,8 +29,8 @@ public final class AccountCard extends PaymentCard {
     private final String buttonKey;
     private final boolean deletable;
 
-    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean checkable) {
-        super(checkable);
+    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean checkable, ExtraElements extraElements) {
+        super(checkable, extraElements);
         this.account = account;
         this.buttonKey = buttonKey;
         this.deletable = deletable;

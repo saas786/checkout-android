@@ -26,13 +26,8 @@ import android.view.ViewGroup;
  */
 public final class TextInputWidget extends InputLayoutWidget {
 
-    /**
-     * Construct a new TextInputWidget
-     *
-     * @param name name identifying this widget
-     */
-    public TextInputWidget(String name) {
-        super(name);
+    public TextInputWidget(String category, String name) {
+        super(category, name);
     }
 
     /**

@@ -47,7 +47,7 @@ public final class PresetAccountTests extends AbstractTest {
         clickCheckoutButton();
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
         register(checkoutResultHandledIdlingResource);

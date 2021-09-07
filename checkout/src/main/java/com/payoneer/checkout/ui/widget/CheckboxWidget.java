@@ -12,8 +12,10 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.form.Operation;
+import com.payoneer.checkout.markdown.MarkdownSpannableStringBuilder;
 import com.payoneer.checkout.model.CheckboxMode;
 
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,16 +25,11 @@ import android.widget.TextView;
  */
 public class CheckboxWidget extends FormWidget {
 
-    private SwitchMaterial switchView;
-    private TextView labelView;
+    SwitchMaterial switchView;
+    TextView labelView;
 
-    /**
-     * Construct a new CheckBoxWidget
-     *
-     * @param name name identifying this widget
-     */
-    public CheckboxWidget(String name) {
-        super(name);
+    public CheckboxWidget(String category, String name) {
+        super(category, name);
     }
 
     @Override
@@ -40,12 +37,13 @@ public class CheckboxWidget extends FormWidget {
         inflateWidgetView(parent, R.layout.widget_checkbox);
         labelView = widgetView.findViewById(R.id.label_checkbox);
         switchView = widgetView.findViewById(R.id.switch_checkbox);
+        labelView.setMovementMethod(LinkMovementMethod.getInstance());
         return widgetView;
     }
 
     @Override
     public void putValue(Operation operation) throws PaymentException {
-        operation.putBooleanValue(name, switchView.isChecked());
+        operation.putBooleanValue(category, name, switchView.isChecked());
     }
 
     /**
@@ -57,7 +55,7 @@ public class CheckboxWidget extends FormWidget {
      * @param label shown to the user
      */
     public void onBind(String mode, String label) {
-        labelView.setText(label);
+        labelView.setText(MarkdownSpannableStringBuilder.createFromText(label));
         switch (mode) {
             case CheckboxMode.OPTIONAL:
             case CheckboxMode.REQUIRED:

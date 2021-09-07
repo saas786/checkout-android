@@ -94,7 +94,7 @@ public final class PaymentListHelper {
 
     public static void clickPaymentListCardButton(int cardIndex) {
         intended(hasComponent(PaymentListActivity.class.getName()));
-        onView(withId(R.id.recyclerview_paymentlist)).perform(actionOnViewInWidget(cardIndex, click(), "buttonWidget", R.id.button));
+        onView(withId(R.id.recyclerview_paymentlist)).perform(actionOnViewInWidget(cardIndex, click(), "uielement.button", R.id.button));
     }
 
     public static void clickPaymentListCardIcon(int cardIndex) {

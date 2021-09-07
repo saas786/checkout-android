@@ -37,18 +37,10 @@ public abstract class InputLayoutWidget extends FormWidget {
     EditTextInputMode mode;
     private String helperText;
 
-    /**
-     * Construct a new InputLayoutWidget
-     *
-     * @param name name identifying this widget
-     */
-    InputLayoutWidget(String name) {
-        super(name);
+    InputLayoutWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_textinput);
@@ -145,7 +137,7 @@ public abstract class InputLayoutWidget extends FormWidget {
     public void putValue(Operation operation) throws PaymentException {
         String val = getValue();
         if (!TextUtils.isEmpty(val)) {
-            operation.putStringValue(name, val);
+            operation.putStringValue(category, name, val);
         }
     }
 

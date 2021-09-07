@@ -20,7 +20,6 @@ import android.net.Uri;
  * Class for constructing a Uri from a Redirect model class
  */
 public final class RedirectUriBuilder {
-
     /**
      * Create a Uri from the provided redirect
      *
@@ -48,5 +47,9 @@ public final class RedirectUriBuilder {
      */
     public static Uri fromURL(URL url) {
         return Uri.parse(url.toString());
+    }
+
+    public static Uri fromString(String url) {
+        return Uri.parse(url);
     }
 }

@@ -9,15 +9,17 @@
 package com.payoneer.checkout.ui.list;
 
 
+import static com.payoneer.checkout.core.PaymentInputCategory.REGISTRATION;
 import static com.payoneer.checkout.core.PaymentInputType.ALLOW_RECURRENCE;
 import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentNetwork;
-import com.payoneer.checkout.ui.model.RegistrationOption;
 import com.payoneer.checkout.ui.model.SmartSwitch;
-import com.payoneer.checkout.ui.widget.CheckboxWidget;
+import com.payoneer.checkout.ui.widget.FormWidget;
+import com.payoneer.checkout.ui.widget.NetworkLogosWidget;
+import com.payoneer.checkout.ui.widget.RegistrationWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -30,23 +32,22 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  * The NetworkCardViewHolder
  */
 final class NetworkCardViewHolder extends PaymentCardViewHolder {
-
     private final TextView titleView;
-    private NetworkLogosView networkLogosView;
-
 
     public NetworkCardViewHolder(ListAdapter adapter, View parent, NetworkCard networkCard) {
         super(adapter, parent, networkCard);
         this.titleView = parent.findViewById(R.id.text_title);
 
-        addElementWidgets(networkCard);
-        addRegistrationWidgets();
-        addButtonWidget();
-        layoutWidgets();
-
+        addExtraElementWidgets(networkCard.getTopExtraElements());
         if (networkCard.getPaymentNetworkCount() > 1) {
-            networkLogosView = new NetworkLogosView(parent, networkCard.getPaymentNetworks());
+            addNetworkLogosWidget();
         }
+        addInputElementWidgets(networkCard.getInputElements());
+        addRegistrationWidgets();
+        addExtraElementWidgets(networkCard.getBottomExtraElements());
+        addButtonWidget();
+
+        layoutWidgets();
         setLastImeOptions();
     }
 
@@ -57,8 +58,6 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
     }
 
     void onBind() {
-        super.onBind();
-
         NetworkCard networkCard = (NetworkCard) paymentCard;
         bindLabel(titleView, networkCard.getTitle(), false);
 
@@ -67,38 +66,44 @@ final class NetworkCardViewHolder extends PaymentCardViewHolder {
             setTestId("network");
         } else {
             bindCardLogo(R.drawable.ic_card);
-            bindNetworkLogos(networkCard);
             setTestId("group");
         }
         PaymentNetwork network = networkCard.getVisibleNetwork();
-        bindRegistrationWidget(AUTO_REGISTRATION, network.getAutoRegistration());
-        bindRegistrationWidget(ALLOW_RECURRENCE, network.getAllowRecurrence());
-    }
-
-    void bindRegistrationWidget(String name, RegistrationOption option) {
-        CheckboxWidget widget = (CheckboxWidget) getFormWidget(name);
-        widget.onBind(option.getCheckboxMode(), option.getLabel());
-    }
-
-    private void bindNetworkLogos(NetworkCard card) {
-        if (networkLogosView == null) {
-            return;
+        for (FormWidget widget : widgets.values()) {
+            if (widget.matches(REGISTRATION, AUTO_REGISTRATION)) {
+                ((RegistrationWidget) widget).onBind(network.getAutoRegistration());
+            } else if (widget.matches(REGISTRATION, ALLOW_RECURRENCE)) {
+                ((RegistrationWidget) widget).onBind(network.getAllowRecurrence());
+            } else if (widget.matches(UIELEMENT, NETWORKLOGOS)) {
+                bindNetworkLogosWidget((NetworkLogosWidget) widget, networkCard);
+            } else {
+                bindFormWidget(widget);
+            }
         }
+    }
+
+    private void bindNetworkLogosWidget(NetworkLogosWidget widget, NetworkCard card) {
+        widget.onBind(card.getPaymentNetworks());
         SmartSwitch smartSwitch = card.getSmartSwitch();
         if (smartSwitch.getSelectedCount() == 1) {
             PaymentNetwork network = smartSwitch.getFirstSelected();
-            networkLogosView.setSelected(network.getNetworkCode());
+            widget.setSelected(network.getNetworkCode());
             return;
         }
-        networkLogosView.setSelected(null);
+        widget.setSelected(null);
     }
 
     private void setTestId(String testId) {
         PaymentUtils.setTestId(itemView, "card", testId);
     }
 
+    private void addNetworkLogosWidget() {
+        NetworkLogosWidget widget = new NetworkLogosWidget(UIELEMENT, NETWORKLOGOS);
+        putFormWidget(widget);
+    }
+
     private void addRegistrationWidgets() {
-        addWidget(new CheckboxWidget(AUTO_REGISTRATION));
-        addWidget(new CheckboxWidget(ALLOW_RECURRENCE));
+        putFormWidget(new RegistrationWidget(REGISTRATION, AUTO_REGISTRATION));
+        putFormWidget(new RegistrationWidget(REGISTRATION, ALLOW_RECURRENCE));
     }
 }

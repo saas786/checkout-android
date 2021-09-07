@@ -11,6 +11,7 @@ package com.payoneer.checkout.ui.list;
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.PresetCard;
+import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.LayoutInflater;
@@ -35,6 +36,8 @@ final class PresetCardViewHolder extends PaymentCardViewHolder {
         card = parent.findViewById(R.id.card_preset);
         card.setCheckable(true);
 
+        addExtraElementWidgets(presetCard.getTopExtraElements());
+        addExtraElementWidgets(presetCard.getTopExtraElements());
         addButtonWidget();
         layoutWidgets();
     }
@@ -46,14 +49,16 @@ final class PresetCardViewHolder extends PaymentCardViewHolder {
     }
 
     void onBind() {
-        super.onBind();
-
         PaymentUtils.setTestId(itemView, "card", "preset");
         PresetCard card = (PresetCard) paymentCard;
 
         bindLabel(titleView, card.getTitle(), false);
         bindLabel(subtitleView, card.getSubtitle(), true);
         bindCardLogo(paymentCard.getNetworkCode(), card.getLogoLink());
+
+        for (FormWidget widget : widgets.values()) {
+            bindFormWidget(widget);
+        }
     }
 
     void expand(boolean expand) {

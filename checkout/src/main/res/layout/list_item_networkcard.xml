@@ -40,13 +40,9 @@
             android:id="@+id/layout_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/pmborder_medium"
+            android:paddingTop="@dimen/pmborder_xsmall"
             android:orientation="vertical"
-            android:visibility="gone">
-
-            <include layout="@layout/view_networklogos" />
-
-        </LinearLayout>
+            android:visibility="gone"></LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

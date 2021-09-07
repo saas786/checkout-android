@@ -12,13 +12,25 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * This class is designed to hold information about extra elements that should be displayed on payment page.
+ * Represents a collection of custom extra elements that the merchant can define to be visualised on payment pages.
  */
 @Getter
 @Setter
+@ToString
 public class ExtraElements {
+
+    /**
+     * Elements that should be displayed at the top of the payment page.
+     * The display order of the elements is defined by the order in which they appear in the collection.
+     */
     private List<ExtraElement> top;
+
+    /**
+     * Elements that should be displayed at the bottom of the payment page.
+     * The display order of the elements is defined by the order in which they appear in the collection.
+     */
     private List<ExtraElement> bottom;
 }

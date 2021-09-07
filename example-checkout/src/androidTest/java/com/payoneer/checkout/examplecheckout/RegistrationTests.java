@@ -41,7 +41,7 @@ public final class RegistrationTests extends AbstractTest {
 
         // First register an applicable network
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(cardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(cardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(cardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(cardIndex);
 
@@ -62,7 +62,7 @@ public final class RegistrationTests extends AbstractTest {
 
         // First register an applicable network
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(cardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(cardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(cardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(cardIndex);
 
@@ -82,13 +82,13 @@ public final class RegistrationTests extends AbstractTest {
 
         // First register an ApplicableNetwork
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(cardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(cardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(cardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(cardIndex);
 
         // Open the newly registered account and click the delete button
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(cardIndex, "card_account");
+        PaymentListHelper.openPaymentListCard(cardIndex, "card.account");
         PaymentListHelper.clickPaymentListCardIcon(cardIndex);
         PaymentListHelper.waitForPaymentListDialog();
         PaymentDialogHelper.clickPaymentDialogButton("Delete");

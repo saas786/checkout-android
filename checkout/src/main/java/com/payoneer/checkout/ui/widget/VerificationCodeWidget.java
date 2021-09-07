@@ -24,18 +24,10 @@ import android.view.ViewGroup;
  */
 public final class VerificationCodeWidget extends InputLayoutWidget {
 
-    /**
-     * Construct a new VerificationCodeWidget
-     *
-     * @param name name identifying this widget
-     */
-    public VerificationCodeWidget(String name) {
-        super(name);
+    public VerificationCodeWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         super.inflate(parent);

@@ -38,7 +38,7 @@ public final class GroupedCardsTests extends AbstractTest {
         clickCheckoutButton();
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 
@@ -54,7 +54,7 @@ public final class GroupedCardsTests extends AbstractTest {
         clickCheckoutButton();
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 

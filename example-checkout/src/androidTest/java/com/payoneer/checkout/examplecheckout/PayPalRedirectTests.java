@@ -42,7 +42,7 @@ public final class PayPalRedirectTests extends AbstractTest {
 
         int networkCardIndex = 3;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
         clickCustomerDecisionPageButton("com.android.chrome:id/close_button");
@@ -61,7 +61,7 @@ public final class PayPalRedirectTests extends AbstractTest {
 
         int networkCardIndex = 3;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
         clickCustomerDecisionPageButton("customer-accept");
@@ -79,7 +79,7 @@ public final class PayPalRedirectTests extends AbstractTest {
 
         int networkCardIndex = 3;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card_network");
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
         clickCustomerDecisionPageButton("customer-abort");

@@ -13,10 +13,14 @@ import static com.payoneer.checkout.ui.model.PaymentSession.LINK_OPERATION;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.payoneer.checkout.model.ExtraElement;
+import com.payoneer.checkout.model.ExtraElements;
 import com.payoneer.checkout.model.InputElement;
+import com.payoneer.checkout.util.PaymentUtils;
 
 import android.text.TextUtils;
 
@@ -26,6 +30,7 @@ import android.text.TextUtils;
 public abstract class PaymentCard {
 
     private final boolean checkable;
+    private ExtraElements extraElements;
     private boolean hideInputForm;
     final List<String> userInputTypes;
 
@@ -34,9 +39,11 @@ public abstract class PaymentCard {
      * a highlighted border is drawn around the card.
      *
      * @param checkable is the PaymentCard checkable
+     * @param extraElements optional elements to be shown in this PaymentCard
      */
-    public PaymentCard(boolean checkable) {
+    public PaymentCard(boolean checkable, ExtraElements extraElements) {
         this.checkable = checkable;
+        this.extraElements = extraElements;
         this.userInputTypes = new ArrayList<>();
     }
 
@@ -107,6 +114,27 @@ public abstract class PaymentCard {
     }
 
     /**
+     * Get the ExtraElement given the name
+     *
+     * @param name of the ExtraElement to be returned
+     * @return the ExtraElement with the given name or null if not found
+     */
+    public ExtraElement getExtraElement(String name) {
+        for (ExtraElement element : getTopExtraElements()) {
+            if (element.getName().equals(name)) {
+                return element;
+            }
+        }
+        for (ExtraElement element : getBottomExtraElements()) {
+            if (element.getName().equals(name)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+
+    /**
      * Is the input form hidden from the user or not.
      *
      * @return true when the input form should be hidden, false otherwise
@@ -151,6 +179,30 @@ public abstract class PaymentCard {
      */
     public void reset() {
         userInputTypes.clear();
+    }
+
+    /**
+     * Get the top ExtraElements that should be shown to the user in the top of the payment card
+     *
+     * @return list with optional top ExtraElements
+     */
+    public List<ExtraElement> getTopExtraElements() {
+        if (extraElements == null) {
+            return Collections.emptyList();
+        }
+        return PaymentUtils.emptyListIfNull(extraElements.getTop());
+    }
+
+    /**
+     * Get the bottom ExtraElements that should be shown to the user in the bottom of the payment card
+     *
+     * @return list with optional bottom ExtraElements
+     */
+    public List<ExtraElement> getBottomExtraElements() {
+        if (extraElements == null) {
+            return Collections.emptyList();
+        }
+        return PaymentUtils.emptyListIfNull(extraElements.getBottom());
     }
 
     /**
