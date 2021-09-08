@@ -13,6 +13,8 @@ import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.model.ExtraElement;
 
+import android.util.Log;
+
 /**
  * Widget for showing the ExtraElement element
  */
@@ -34,6 +36,7 @@ public class ExtraElementWidget extends CheckboxWidget {
      * @param extraElement containing the label and optional checkbox
      */
     public void onBind(ExtraElement extraElement) {
-        super.onBind(CheckboxMode.FORCED_DISPLAYED, extraElement.getLabel());
+        String checkboxMode = (extraElement.getCheckbox() == null) ? CheckboxMode.FORCED_DISPLAYED : CheckboxMode.NONE;
+        super.onBind(checkboxMode, extraElement.getLabel());
     }
 }
