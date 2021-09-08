@@ -28,11 +28,14 @@ public final class AccountCard extends PaymentCard {
     private final AccountRegistration account;
     private final String buttonKey;
     private final boolean deletable;
+    private final boolean editable;
 
-    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean checkable, ExtraElements extraElements) {
+    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean editable, boolean checkable,
+        ExtraElements extraElements) {
         super(checkable, extraElements);
         this.account = account;
         this.buttonKey = buttonKey;
+        this.editable = editable;
         this.deletable = deletable;
     }
 
@@ -112,6 +115,10 @@ public final class AccountCard extends PaymentCard {
 
     public boolean isDeletable() {
         return deletable;
+    }
+
+    public boolean isEditable() {
+        return editable;
     }
 
     public AccountMask getMaskedAccount() {
