@@ -61,7 +61,9 @@ class IconView {
     }
 
     void showIcon(int index) {
-        switcher.setDisplayedChild(index);
+        if (switcher.getDisplayedChild() != index) {
+            switcher.setDisplayedChild(index);
+        }
     }
 
     interface IconClickListener {

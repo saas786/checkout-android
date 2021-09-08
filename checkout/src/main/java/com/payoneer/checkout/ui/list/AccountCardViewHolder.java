@@ -74,6 +74,10 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         for (FormWidget widget : widgets.values()) {
             bindFormWidget(widget);
         }
+        if (card.isEditable()) {
+            iconView.show();
+            iconView.setIconResource(ICON_COLLAPSED, R.drawable.ic_edit);
+        }
         if (card.isDeletable()) {
             iconView.show();
             iconView.setIconResource(ICON_EXPANDED, R.drawable.ic_delete);
@@ -87,7 +91,8 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         if (accountCard.isCheckable()) {
             cardView.setChecked(expand);
         }
-        iconView.showIcon(expand ? ICON_EXPANDED : ICON_COLLAPSED);
+        int icon = (expand && accountCard.isDeletable()) ? ICON_EXPANDED : ICON_COLLAPSED;
+        iconView.showIcon(icon);
     }
 
     private void handleIconClicked(int index) {
