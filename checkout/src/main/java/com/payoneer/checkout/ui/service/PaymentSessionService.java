@@ -58,6 +58,7 @@ import com.payoneer.checkout.ui.model.PaymentSection;
 import com.payoneer.checkout.ui.model.PaymentSession;
 import com.payoneer.checkout.ui.model.PresetCard;
 import com.payoneer.checkout.ui.model.RegistrationOption;
+import com.payoneer.checkout.util.PaymentUtils;
 import com.payoneer.checkout.validation.Validator;
 
 import android.content.Context;
@@ -246,18 +247,31 @@ public final class PaymentSessionService {
 
     private AccountCard createAccountCard(AccountRegistration account, ListResult listResult) {
         String operationType = account.getOperationType();
-        boolean update = UPDATE.equals(operationType);
-        ExtraElements extraElements = listResult.getExtraElements();
-        String buttonKey = update ? BUTTON_UPDATE_ACCOUNT :
-            LocalizationKey.operationButtonKey(operationType);
+        boolean updateFlow = UPDATE.equals(operationType);
+        Boolean allowDelete = listResult.getAllowDelete();
 
-        AccountCard card = new AccountCard(account, buttonKey, update, update, extraElements);
+        boolean deletable = isAccountDeletable(operationType, allowDelete);
+        ExtraElements extraElements = listResult.getExtraElements();
+        String buttonKey = updateFlow ? BUTTON_UPDATE_ACCOUNT :
+            LocalizationKey.operationButtonKey(operationType);
+        AccountCard card = new AccountCard(account, buttonKey, deletable, updateFlow, updateFlow, extraElements);
 
         // Only in update flow and when the input form is empty, the input form is hidden
-        if (update && card.hasEmptyInputForm()) {
+        if (updateFlow && card.hasEmptyInputForm()) {
             card.setHideInputForm(true);
         }
         return card;
+    }
+
+    private boolean isAccountDeletable(String operationType, Boolean allowDelete) {
+        switch (operationType) {
+            case UPDATE:
+                return PaymentUtils.toBoolean(allowDelete, true);
+            case CHARGE:
+                return PaymentUtils.toBoolean(allowDelete, false);
+            default:
+                return false;
+        }
     }
 
     private PaymentSection createNetworkSection(ListResult listResult, Context context, boolean containsAccounts)

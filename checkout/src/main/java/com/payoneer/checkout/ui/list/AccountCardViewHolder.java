@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 public final class AccountCardViewHolder extends PaymentCardViewHolder {
 
-    private final static int ICON_PENCIL = 0;
-    private final static int ICON_TRASHCAN = 1;
+    private final static int ICON_COLLAPSED = 0;
+    private final static int ICON_EXPANDED = 1;
 
     private final TextView titleView;
     private final TextView subtitleView;
@@ -74,27 +74,33 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         for (FormWidget widget : widgets.values()) {
             bindFormWidget(widget);
         }
+        if (card.isEditable()) {
+            iconView.show();
+            iconView.setIconResource(ICON_COLLAPSED, R.drawable.ic_edit);
+        }
+        if (card.isDeletable()) {
+            iconView.show();
+            iconView.setIconResource(ICON_EXPANDED, R.drawable.ic_delete);
+        }
     }
 
     @Override
     void expand(boolean expand) {
         super.expand(expand);
-
         AccountCard accountCard = (AccountCard) paymentCard;
         if (accountCard.isCheckable()) {
             cardView.setChecked(expand);
         }
-
-        if (accountCard.isDeletable()) {
-            iconView.showIcon(expand ? ICON_TRASHCAN : ICON_PENCIL);
-        }
+        int icon = (expand && accountCard.isDeletable()) ? ICON_EXPANDED : ICON_COLLAPSED;
+        iconView.showIcon(icon);
     }
 
     private void handleIconClicked(int index) {
-        if (index == 0) {
-            cardHandler.onCardClicked();
-        } else {
+        boolean deletable = ((AccountCard) paymentCard).isDeletable();
+        if (index == ICON_EXPANDED && deletable) {
             cardHandler.onDeleteClicked();
+        } else {
+            cardHandler.onCardClicked();
         }
     }
 }
