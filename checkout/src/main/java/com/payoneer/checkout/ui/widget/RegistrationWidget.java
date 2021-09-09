@@ -8,7 +8,9 @@
 
 package com.payoneer.checkout.ui.widget;
 
-import com.payoneer.checkout.ui.model.RegistrationOption;
+import com.payoneer.checkout.localization.Localization;
+import com.payoneer.checkout.localization.LocalizationKey;
+import com.payoneer.checkout.ui.model.RegistrationOptions;
 
 /**
  * Widget for showing the RegistrationOptions, e.g. allowRecurrence and autoRegistration
@@ -24,7 +26,8 @@ public class RegistrationWidget extends CheckboxWidget {
      *
      * @param option containing the registration options
      */
-    public void onBind(RegistrationOption option) {
-        super.onBind(option.getCheckboxMode(), option.getLabel());
+    public void onBind(RegistrationOptions option) {
+        String label = Localization.translate(LocalizationKey.NETWORKS_REGISTRATION_LABEL);
+        super.onBind(option.getCheckboxMode(), label);
     }
 }

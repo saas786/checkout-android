@@ -8,15 +8,16 @@
 
 package com.payoneer.checkout.ui.service;
 
-import static com.payoneer.checkout.localization.LocalizationKey.ALLOW_RECURRENCE_FORCED;
-import static com.payoneer.checkout.localization.LocalizationKey.ALLOW_RECURRENCE_OPTIONAL;
-import static com.payoneer.checkout.localization.LocalizationKey.AUTO_REGISTRATION_FORCED;
-import static com.payoneer.checkout.localization.LocalizationKey.AUTO_REGISTRATION_OPTIONAL;
 import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
+import static com.payoneer.checkout.model.RegistrationType.FORCED;
+import static com.payoneer.checkout.model.RegistrationType.FORCED_DISPLAYED;
+import static com.payoneer.checkout.model.RegistrationType.NONE;
+import static com.payoneer.checkout.model.RegistrationType.OPTIONAL;
+import static com.payoneer.checkout.model.RegistrationType.OPTIONAL_PRESELECTED;
 
+import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.model.CheckboxMode;
-import com.payoneer.checkout.model.RegistrationType;
-import com.payoneer.checkout.ui.model.RegistrationOption;
+import com.payoneer.checkout.ui.model.RegistrationOptions;
 
 import android.text.TextUtils;
 
@@ -30,82 +31,65 @@ public final class RegistrationOptionsBuilder {
     private String allowRecurrence;
     private String operationType;
 
+    private final static RegistrationOptions[] DEFAULT_REGISTRATION_OPTIONS = {
+        new RegistrationOptions(NONE, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED_DISPLAYED, NONE, CheckboxMode.FORCED_DISPLAYED),
+        new RegistrationOptions(FORCED, FORCED, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.FORCED_DISPLAYED),
+        new RegistrationOptions(OPTIONAL, NONE, CheckboxMode.OPTIONAL),
+        new RegistrationOptions(OPTIONAL_PRESELECTED, NONE, CheckboxMode.OPTIONAL_PRESELECTED),
+        new RegistrationOptions(OPTIONAL, OPTIONAL, CheckboxMode.OPTIONAL),
+        new RegistrationOptions(OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.OPTIONAL_PRESELECTED)
+    };
+
+    private final static RegistrationOptions[] UPDATE_REGISTRATION_OPTIONS = {
+        new RegistrationOptions(NONE, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED_DISPLAYED, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED, FORCED, CheckboxMode.NONE),
+        new RegistrationOptions(FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.NONE),
+        new RegistrationOptions(OPTIONAL, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(OPTIONAL_PRESELECTED, NONE, CheckboxMode.NONE),
+        new RegistrationOptions(OPTIONAL, OPTIONAL, CheckboxMode.NONE),
+        new RegistrationOptions(OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.NONE)
+    };
+
     /**
      * Build the RegistrationOption for autoRegistration
      *
      * @return the newly build RegistrationOption for autoRegistration
+     * @throws PaymentException when an invalid registration combination is set
      */
-    public RegistrationOption buildAutoRegistrationOption() {
-        if (TextUtils.isEmpty(operationType) || TextUtils.isEmpty(autoRegistration)) {
-            throw new IllegalStateException("operationType or autoRegistration may not be null or empty");
+    public RegistrationOptions buildRegistrationOptions() throws PaymentException {
+        if (TextUtils.isEmpty(operationType)) {
+            throw new IllegalStateException("operationType may not be null or empty");
         }
-        if (UPDATE.equals(operationType)) {
-            return buildUpdateAutoRegistrationOption();
+        if (TextUtils.isEmpty(autoRegistration)) {
+            throw new IllegalStateException("autoRegistration may not be null or empty");
         }
-        return buildDefaultAutoRegistrationOption();
+        if (TextUtils.isEmpty(allowRecurrence)) {
+            throw new IllegalStateException("allowRecurrence may not be null or empty");
+        }
+        RegistrationOptions[] list = (UPDATE.equals(operationType)) ? UPDATE_REGISTRATION_OPTIONS : DEFAULT_REGISTRATION_OPTIONS;
+        RegistrationOptions options = getRegistrationOptions(list);
+
+        if (options == null) {
+            String message = "Unsupported combination of autoRegistration (" + autoRegistration + ") "
+                + "and allowRecurrence (" + allowRecurrence + ") "
+                + "for operationType (" + operationType + ")";
+            throw new PaymentException(message);
+        }
+        return options;
     }
 
-    private RegistrationOption buildUpdateAutoRegistrationOption() {
-        switch (autoRegistration) {
-            case RegistrationType.NONE:
-                return new RegistrationOption(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);
-            default:
-                return new RegistrationOption(CheckboxMode.FORCED, AUTO_REGISTRATION_FORCED);
+    private RegistrationOptions getRegistrationOptions(RegistrationOptions[] registrationOptions) {
+        for (RegistrationOptions options : registrationOptions) {
+            if (options.matches(autoRegistration, allowRecurrence)) {
+                return options;
+            }
         }
-    }
-
-    private RegistrationOption buildDefaultAutoRegistrationOption() {
-        switch (autoRegistration) {
-            case RegistrationType.OPTIONAL:
-                return new RegistrationOption(CheckboxMode.OPTIONAL, AUTO_REGISTRATION_OPTIONAL);
-            case RegistrationType.OPTIONAL_PRESELECTED:
-                return new RegistrationOption(CheckboxMode.OPTIONAL_PRESELECTED, AUTO_REGISTRATION_OPTIONAL);
-            case RegistrationType.FORCED:
-                return new RegistrationOption(CheckboxMode.FORCED, AUTO_REGISTRATION_FORCED);
-            case RegistrationType.FORCED_DISPLAYED:
-                return new RegistrationOption(CheckboxMode.FORCED_DISPLAYED, AUTO_REGISTRATION_FORCED);
-            default:
-                return new RegistrationOption(CheckboxMode.NONE, AUTO_REGISTRATION_FORCED);
-        }
-    }
-
-    /**
-     * Build the RegistrationOption for allowRecurrence
-     *
-     * @return the newly build RegistrationOption for allowRecurrence
-     */
-    public RegistrationOption buildAllowRecurrenceOption() {
-        if (TextUtils.isEmpty(operationType) || TextUtils.isEmpty(allowRecurrence)) {
-            throw new IllegalStateException("operationType or allowRecurrence may not be null or empty");
-        }
-        if (UPDATE.equals(operationType)) {
-            return buildUpdateAllowRecurrenceOption();
-        }
-        return buildDefaultAllowRecurrenceOption();
-    }
-
-    private RegistrationOption buildDefaultAllowRecurrenceOption() {
-        switch (allowRecurrence) {
-            case RegistrationType.OPTIONAL:
-                return new RegistrationOption(CheckboxMode.OPTIONAL, ALLOW_RECURRENCE_OPTIONAL);
-            case RegistrationType.OPTIONAL_PRESELECTED:
-                return new RegistrationOption(CheckboxMode.OPTIONAL_PRESELECTED, ALLOW_RECURRENCE_OPTIONAL);
-            case RegistrationType.FORCED:
-                return new RegistrationOption(CheckboxMode.FORCED, ALLOW_RECURRENCE_FORCED);
-            case RegistrationType.FORCED_DISPLAYED:
-                return new RegistrationOption(CheckboxMode.FORCED_DISPLAYED, ALLOW_RECURRENCE_FORCED);
-            default:
-                return new RegistrationOption(CheckboxMode.NONE, ALLOW_RECURRENCE_FORCED);
-        }
-    }
-
-    private RegistrationOption buildUpdateAllowRecurrenceOption() {
-        switch (allowRecurrence) {
-            case RegistrationType.NONE:
-                return new RegistrationOption(CheckboxMode.NONE, ALLOW_RECURRENCE_FORCED);
-            default:
-                return new RegistrationOption(CheckboxMode.FORCED, ALLOW_RECURRENCE_FORCED);
-        }
+        return null;
     }
 
     public RegistrationOptionsBuilder setOperationType(String operationType) {
@@ -113,12 +97,8 @@ public final class RegistrationOptionsBuilder {
         return this;
     }
 
-    public RegistrationOptionsBuilder setAutoRegistration(String autoRegistration) {
+    public RegistrationOptionsBuilder setRegistrationOptions(String autoRegistration, String allowRecurrence) {
         this.autoRegistration = autoRegistration;
-        return this;
-    }
-
-    public RegistrationOptionsBuilder setAllowRecurrence(String allowRecurrence) {
         this.allowRecurrence = allowRecurrence;
         return this;
     }

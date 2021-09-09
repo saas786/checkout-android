@@ -18,7 +18,7 @@ import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.model.RegistrationType;
-import com.payoneer.checkout.ui.model.RegistrationOption;
+import com.payoneer.checkout.ui.model.RegistrationOptions;
 
 @RunWith(RobolectricTestRunner.class)
 public class RegistrationOptionsBuilderTest {
@@ -58,7 +58,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.OPTIONAL)
             .setAllowRecurrence(RegistrationType.OPTIONAL);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.OPTIONAL);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_OPTIONAL);
 
@@ -74,7 +74,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.OPTIONAL_PRESELECTED)
             .setAllowRecurrence(RegistrationType.OPTIONAL_PRESELECTED);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.OPTIONAL_PRESELECTED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_OPTIONAL);
 
@@ -90,7 +90,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.FORCED)
             .setAllowRecurrence(RegistrationType.FORCED);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -106,7 +106,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.FORCED_DISPLAYED)
             .setAllowRecurrence(RegistrationType.FORCED_DISPLAYED);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED_DISPLAYED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -122,7 +122,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.NONE)
             .setAllowRecurrence(RegistrationType.NONE);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.NONE);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -138,7 +138,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.OPTIONAL)
             .setAllowRecurrence(RegistrationType.OPTIONAL);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -154,7 +154,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.OPTIONAL_PRESELECTED)
             .setAllowRecurrence(RegistrationType.OPTIONAL_PRESELECTED);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -170,7 +170,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.FORCED)
             .setAllowRecurrence(RegistrationType.FORCED);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -186,7 +186,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.FORCED_DISPLAYED)
             .setAllowRecurrence(RegistrationType.FORCED_DISPLAYED);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
@@ -202,7 +202,7 @@ public class RegistrationOptionsBuilderTest {
             .setAutoRegistration(RegistrationType.NONE)
             .setAllowRecurrence(RegistrationType.NONE);
 
-        RegistrationOption settings = builder.buildAutoRegistrationOption();
+        RegistrationOptions settings = builder.buildAutoRegistrationOption();
         assertEquals(settings.getCheckboxMode(), CheckboxMode.NONE);
         assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
 
