@@ -8,13 +8,18 @@
 
 package com.payoneer.checkout.ui.service;
 
+import static com.payoneer.checkout.model.RegistrationType.FORCED;
+import static com.payoneer.checkout.model.RegistrationType.FORCED_DISPLAYED;
+import static com.payoneer.checkout.model.RegistrationType.NONE;
+import static com.payoneer.checkout.model.RegistrationType.OPTIONAL;
+import static com.payoneer.checkout.model.RegistrationType.OPTIONAL_PRESELECTED;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-import com.payoneer.checkout.localization.LocalizationKey;
+import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.model.RegistrationType;
@@ -23,191 +28,82 @@ import com.payoneer.checkout.ui.model.RegistrationOptions;
 @RunWith(RobolectricTestRunner.class)
 public class RegistrationOptionsBuilderTest {
 
+    private final static String[][] DEFAULT_REGISTRATION_OPTIONS = {
+        { NONE, NONE, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED_DISPLAYED, NONE, CheckboxMode.FORCED_DISPLAYED },
+        { FORCED, FORCED, CheckboxMode.NONE },
+        { FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.FORCED_DISPLAYED },
+        { OPTIONAL, NONE, CheckboxMode.OPTIONAL },
+        { OPTIONAL_PRESELECTED, NONE, CheckboxMode.OPTIONAL_PRESELECTED },
+        { OPTIONAL, OPTIONAL, CheckboxMode.OPTIONAL },
+        { OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.OPTIONAL_PRESELECTED }
+    };
+
+    private final static String[][] UPDATE_REGISTRATION_OPTIONS = {
+        { NONE, NONE, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED_DISPLAYED, NONE, CheckboxMode.NONE },
+        { FORCED, FORCED, CheckboxMode.NONE },
+        { FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.NONE },
+        { OPTIONAL, NONE, CheckboxMode.NONE },
+        { OPTIONAL_PRESELECTED, NONE, CheckboxMode.NONE },
+        { OPTIONAL, OPTIONAL, CheckboxMode.NONE },
+        { OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.NONE }
+    };
+
     @Test(expected = IllegalStateException.class)
-    public void buildRegistrationOption_missingOperationType() {
+    public void buildRegistrationOptions_missingOperationType() throws PaymentException {
         RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
-        builder.setAutoRegistration(RegistrationType.OPTIONAL);
-        builder.buildAutoRegistrationOption();
+        builder.setRegistrationOptions(RegistrationType.OPTIONAL, RegistrationType.OPTIONAL);
+        builder.buildRegistrationOptions();
     }
 
     @Test(expected = IllegalStateException.class)
-    public void buildRegistrationOption_missingRegistration() {
+    public void buildRegistrationOptions_missingRegistrationOptions() throws PaymentException {
         RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
         builder.setOperationType(NetworkOperationType.UPDATE);
-        builder.buildAutoRegistrationOption();
+        builder.buildRegistrationOptions();
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void buildRecurrenceOption_missingOperationType() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
-        builder.setAllowRecurrence(RegistrationType.OPTIONAL);
-        builder.buildAllowRecurrenceOption();
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void buildRecurrenceOption_missingRecurrence() {
+    @Test(expected = PaymentException.class)
+    public void buildRegistrationOptions_invalidRegistrationOptions() throws PaymentException {
         RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
         builder.setOperationType(NetworkOperationType.UPDATE);
-        builder.buildAllowRecurrenceOption();
+        builder.setRegistrationOptions(RegistrationType.NONE, RegistrationType.OPTIONAL);
+        builder.buildRegistrationOptions();
     }
 
     @Test
-    public void buildRegistrationOptions_CHARGE_OPTIONAL() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.CHARGE)
-            .setAutoRegistration(RegistrationType.OPTIONAL)
-            .setAllowRecurrence(RegistrationType.OPTIONAL);
+    public void buildRegistrationOptions_validDefaultRegistrationOptions() throws PaymentException {
+        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
+        builder.setOperationType(NetworkOperationType.CHARGE);
 
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.OPTIONAL);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_OPTIONAL);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.OPTIONAL);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_OPTIONAL);
+        for (String[] registrationOptions : DEFAULT_REGISTRATION_OPTIONS) {
+            testValidRegistrationOptions(builder, registrationOptions);
+        }
     }
 
     @Test
-    public void buildRegistrationOptions_CHARGE_OPTIONAL_PRESELECTED() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.CHARGE)
-            .setAutoRegistration(RegistrationType.OPTIONAL_PRESELECTED)
-            .setAllowRecurrence(RegistrationType.OPTIONAL_PRESELECTED);
+    public void buildRegistrationOptions_validUpdateRegistrationOptions() throws PaymentException {
+        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
+        builder.setOperationType(NetworkOperationType.UPDATE);
 
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.OPTIONAL_PRESELECTED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_OPTIONAL);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.OPTIONAL_PRESELECTED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_OPTIONAL);
+        for (String[] registrationOptions : UPDATE_REGISTRATION_OPTIONS) {
+            testValidRegistrationOptions(builder, registrationOptions);
+        }
     }
 
-    @Test
-    public void buildRegistrationOptions_CHARGE_FORCED() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.CHARGE)
-            .setAutoRegistration(RegistrationType.FORCED)
-            .setAllowRecurrence(RegistrationType.FORCED);
+    private void testValidRegistrationOptions(RegistrationOptionsBuilder builder, String[] registrationOptions) throws PaymentException {
+        builder.setRegistrationOptions(registrationOptions[0], registrationOptions[1]);
+        RegistrationOptions options = builder.buildRegistrationOptions();
 
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
+        String autoRegistration = registrationOptions[0];
+        String allowRecurrence = registrationOptions[1];
+        String checkboxMode = registrationOptions[2];
 
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_CHARGE_FORCED_DISPLAYED() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.CHARGE)
-            .setAutoRegistration(RegistrationType.FORCED_DISPLAYED)
-            .setAllowRecurrence(RegistrationType.FORCED_DISPLAYED);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED_DISPLAYED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED_DISPLAYED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_CHARGE_NONE() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.CHARGE)
-            .setAutoRegistration(RegistrationType.NONE)
-            .setAllowRecurrence(RegistrationType.NONE);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.NONE);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.NONE);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_UPDATE_OPTIONAL() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.UPDATE)
-            .setAutoRegistration(RegistrationType.OPTIONAL)
-            .setAllowRecurrence(RegistrationType.OPTIONAL);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_UPDATE_OPTIONAL_PRESELECTED() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.UPDATE)
-            .setAutoRegistration(RegistrationType.OPTIONAL_PRESELECTED)
-            .setAllowRecurrence(RegistrationType.OPTIONAL_PRESELECTED);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_UPDATE_UPDATE_FORCED() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.UPDATE)
-            .setAutoRegistration(RegistrationType.FORCED)
-            .setAllowRecurrence(RegistrationType.FORCED);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_UPDATE_FORCED_DISPLAYED() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.UPDATE)
-            .setAutoRegistration(RegistrationType.FORCED_DISPLAYED)
-            .setAllowRecurrence(RegistrationType.FORCED_DISPLAYED);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.FORCED);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
-    }
-
-    @Test
-    public void buildRegistrationOptions_UPDATE_NONE() {
-        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder()
-            .setOperationType(NetworkOperationType.UPDATE)
-            .setAutoRegistration(RegistrationType.NONE)
-            .setAllowRecurrence(RegistrationType.NONE);
-
-        RegistrationOptions settings = builder.buildAutoRegistrationOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.NONE);
-        assertEquals(settings.getLabelKey(), LocalizationKey.AUTO_REGISTRATION_FORCED);
-
-        settings = builder.buildAllowRecurrenceOption();
-        assertEquals(settings.getCheckboxMode(), CheckboxMode.NONE);
-        assertEquals(settings.getLabelKey(), LocalizationKey.ALLOW_RECURRENCE_FORCED);
+        assertEquals("Expect autoRegistration: " + autoRegistration, autoRegistration, options.getAutoRegistration());
+        assertEquals("Expect allowRecurrence: " + allowRecurrence, allowRecurrence, options.getAllowRecurrence());
+        assertEquals("Expect checkboxMode: " + checkboxMode, checkboxMode, options.getCheckboxMode());
     }
 }
