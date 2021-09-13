@@ -8,8 +8,6 @@
 
 package com.payoneer.checkout.ui.widget;
 
-import static com.payoneer.checkout.core.PaymentInputType.ALLOW_RECURRENCE;
-import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 import static com.payoneer.checkout.model.RegistrationType.FORCED;
 import static com.payoneer.checkout.model.RegistrationType.FORCED_DISPLAYED;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL;
@@ -20,6 +18,7 @@ import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.ui.model.RegistrationOptions;
+import com.payoneer.checkout.ui.model.RegistrationOptions.RegistrationOption;
 
 /**
  * Widget for showing the RegistrationOptions, e.g. allowRecurrence and autoRegistration
@@ -34,19 +33,20 @@ public class RegistrationWidget extends CheckboxWidget {
 
     @Override
     public void putValue(Operation operation) throws PaymentException {
-        putRegistrationValue(operation, AUTO_REGISTRATION, registrationOptions.getAutoRegistration());
-        putRegistrationValue(operation, ALLOW_RECURRENCE, registrationOptions.getAllowRecurrence());
+        for (RegistrationOption option : registrationOptions.getRegistrationOptions()) {
+            putRegistrationValue(operation, option);
+        }
     }
 
-    private void putRegistrationValue(Operation operation, String registrationName, String registrationOption) throws PaymentException {
-        switch (registrationOption) {
+    private void putRegistrationValue(Operation operation, RegistrationOption option) throws PaymentException {
+        switch (option.getType()) {
             case FORCED:
             case FORCED_DISPLAYED:
-                operation.putBooleanValue(category, registrationName, true);
+                operation.putBooleanValue(category, option.getName(), true);
                 break;
             case OPTIONAL:
             case OPTIONAL_PRESELECTED:
-                operation.putBooleanValue(category, registrationName, switchView.isChecked());
+                operation.putBooleanValue(category, option.getName(), switchView.isChecked());
         }
     }
 

@@ -8,6 +8,8 @@
 
 package com.payoneer.checkout.ui.service;
 
+import static com.payoneer.checkout.core.PaymentInputType.ALLOW_RECURRENCE;
+import static com.payoneer.checkout.core.PaymentInputType.AUTO_REGISTRATION;
 import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
 import static com.payoneer.checkout.model.RegistrationType.FORCED;
 import static com.payoneer.checkout.model.RegistrationType.FORCED_DISPLAYED;
@@ -15,9 +17,13 @@ import static com.payoneer.checkout.model.RegistrationType.NONE;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL_PRESELECTED;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.ui.model.RegistrationOptions;
+import com.payoneer.checkout.ui.model.RegistrationOptions.RegistrationOption;
 
 import android.text.TextUtils;
 
@@ -31,28 +37,40 @@ public final class RegistrationOptionsBuilder {
     private String allowRecurrence;
     private String operationType;
 
-    private final static RegistrationOptions[] DEFAULT_REGISTRATION_OPTIONS = {
-        new RegistrationOptions(NONE, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED_DISPLAYED, NONE, CheckboxMode.FORCED_DISPLAYED),
-        new RegistrationOptions(FORCED, FORCED, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.FORCED_DISPLAYED),
-        new RegistrationOptions(OPTIONAL, NONE, CheckboxMode.OPTIONAL),
-        new RegistrationOptions(OPTIONAL_PRESELECTED, NONE, CheckboxMode.OPTIONAL_PRESELECTED),
-        new RegistrationOptions(OPTIONAL, OPTIONAL, CheckboxMode.OPTIONAL),
-        new RegistrationOptions(OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.OPTIONAL_PRESELECTED)
+    private final static String[][] VALID_COMBINATIONS = {
+        { NONE, NONE },
+        { FORCED, NONE },
+        { FORCED_DISPLAYED, NONE },
+        { FORCED, FORCED },
+        { FORCED_DISPLAYED, FORCED_DISPLAYED },
+        { OPTIONAL, NONE },
+        { OPTIONAL_PRESELECTED, NONE },
+        { OPTIONAL, OPTIONAL },
+        { OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED }
     };
 
-    private final static RegistrationOptions[] UPDATE_REGISTRATION_OPTIONS = {
-        new RegistrationOptions(NONE, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED_DISPLAYED, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED, FORCED, CheckboxMode.NONE),
-        new RegistrationOptions(FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.NONE),
-        new RegistrationOptions(OPTIONAL, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(OPTIONAL_PRESELECTED, NONE, CheckboxMode.NONE),
-        new RegistrationOptions(OPTIONAL, OPTIONAL, CheckboxMode.NONE),
-        new RegistrationOptions(OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.NONE)
+    private final static String[][] DEFAULT_VALUES = {
+        { NONE, NONE, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED_DISPLAYED, NONE, CheckboxMode.FORCED_DISPLAYED },
+        { FORCED, FORCED, CheckboxMode.NONE },
+        { FORCED_DISPLAYED, FORCED_DISPLAYED, CheckboxMode.FORCED_DISPLAYED },
+        { OPTIONAL, NONE, CheckboxMode.OPTIONAL },
+        { OPTIONAL_PRESELECTED, NONE, CheckboxMode.OPTIONAL_PRESELECTED },
+        { OPTIONAL, OPTIONAL, CheckboxMode.OPTIONAL },
+        { OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.OPTIONAL_PRESELECTED }
+    };
+
+    private final static String[][] UPDATE_VALUES = {
+        { NONE, NONE, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED, FORCED, CheckboxMode.NONE },
+        { FORCED, FORCED, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED, NONE, CheckboxMode.NONE },
+        { FORCED, FORCED, CheckboxMode.NONE },
+        { FORCED, FORCED, CheckboxMode.NONE }
     };
 
     /**
@@ -71,25 +89,26 @@ public final class RegistrationOptionsBuilder {
         if (TextUtils.isEmpty(allowRecurrence)) {
             throw new IllegalStateException("allowRecurrence may not be null or empty");
         }
-        RegistrationOptions[] list = (UPDATE.equals(operationType)) ? UPDATE_REGISTRATION_OPTIONS : DEFAULT_REGISTRATION_OPTIONS;
-        RegistrationOptions options = getRegistrationOptions(list);
+        int index = getRegistrationOptionIndex();
+        String[][] settings = (UPDATE.equals(operationType)) ? UPDATE_VALUES : DEFAULT_VALUES;
 
-        if (options == null) {
-            String message = "Unsupported combination of autoRegistration (" + autoRegistration + ") "
-                + "and allowRecurrence (" + allowRecurrence + ") "
-                + "for operationType (" + operationType + ")";
-            throw new PaymentException(message);
-        }
-        return options;
+        List<RegistrationOption> options = new ArrayList<>();
+        options.add(new RegistrationOption(AUTO_REGISTRATION, settings[index][0]));
+        options.add(new RegistrationOption(ALLOW_RECURRENCE, settings[index][1]));
+        return new RegistrationOptions(options, settings[index][2]);
     }
 
-    private RegistrationOptions getRegistrationOptions(RegistrationOptions[] registrationOptions) {
-        for (RegistrationOptions options : registrationOptions) {
-            if (options.matches(autoRegistration, allowRecurrence)) {
-                return options;
+    private int getRegistrationOptionIndex() throws PaymentException {
+        for (int i = 0, e = VALID_COMBINATIONS.length; i < e; i++) {
+            String[] types = VALID_COMBINATIONS[i];
+            if (types[0].equals(autoRegistration) && types[1].equals(allowRecurrence)) {
+                return i;
             }
         }
-        return null;
+        String message = "Unsupported combination of autoRegistration (" + autoRegistration + ") "
+            + "and allowRecurrence (" + allowRecurrence + ") "
+            + "for operationType (" + operationType + ")";
+        throw new PaymentException(message);
     }
 
     public RegistrationOptionsBuilder setOperationType(String operationType) {
