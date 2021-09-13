@@ -16,16 +16,19 @@ import java.util.List;
 public final class RegistrationOptions {
     private final String checkboxMode;
     private final List<RegistrationOption> options;
+    private final String labelKey;
 
     /**
      * Construct a new RegistrationOptions with the combined checkboxMode
      *
      * @param options list of registration options the checkbox is used for
      * @param checkboxMode the combined checkbox mode of the registration options
+     * @param labelKey localization key for this registrationOptions
      */
-    public RegistrationOptions(List<RegistrationOption> options, String checkboxMode) {
+    public RegistrationOptions(List<RegistrationOption> options, String checkboxMode, String labelKey) {
         this.options = options;
         this.checkboxMode = checkboxMode;
+        this.labelKey = labelKey;
     }
 
     public List<RegistrationOption> getRegistrationOptions() {
@@ -34,6 +37,10 @@ public final class RegistrationOptions {
 
     public String getCheckboxMode() {
         return checkboxMode;
+    }
+
+    public String getLabelKey() {
+        return labelKey;
     }
 
     public static class RegistrationOption {

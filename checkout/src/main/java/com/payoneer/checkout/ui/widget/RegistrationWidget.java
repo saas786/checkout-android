@@ -57,7 +57,7 @@ public class RegistrationWidget extends CheckboxWidget {
      */
     public void onBind(RegistrationOptions registrationOptions) {
         this.registrationOptions = registrationOptions;
-        String label = Localization.translate(LocalizationKey.NETWORKS_REGISTRATION_LABEL);
+        String label = Localization.translate(registrationOptions.getLabelKey());
         super.onBind(registrationOptions.getCheckboxMode(), label);
     }
 }

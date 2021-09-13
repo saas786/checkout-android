@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.ui.model.RegistrationOptions;
 import com.payoneer.checkout.ui.model.RegistrationOptions.RegistrationOption;
@@ -95,7 +96,7 @@ public final class RegistrationOptionsBuilder {
         List<RegistrationOption> options = new ArrayList<>();
         options.add(new RegistrationOption(AUTO_REGISTRATION, settings[index][0]));
         options.add(new RegistrationOption(ALLOW_RECURRENCE, settings[index][1]));
-        return new RegistrationOptions(options, settings[index][2]);
+        return new RegistrationOptions(options, settings[index][2], LocalizationKey.NETWORKS_REGISTRATION_LABEL);
     }
 
     private int getRegistrationOptionIndex() throws PaymentException {

@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.localization.LocalizationKey;
 import com.payoneer.checkout.model.CheckboxMode;
 import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.model.RegistrationType;
@@ -125,6 +126,7 @@ public class RegistrationOptionsBuilderTest {
         // Two registration options are expected, AUTO_REGISTRATION and ALLOW_RECURRENCE
         List<RegistrationOption> options = registrationOptions.getRegistrationOptions();
         assertEquals(2, options.size());
+        assertEquals(LocalizationKey.NETWORKS_REGISTRATION_LABEL, registrationOptions.getLabelKey());
 
         // Test autoRegistration option
         RegistrationOption option = options.get(0);
