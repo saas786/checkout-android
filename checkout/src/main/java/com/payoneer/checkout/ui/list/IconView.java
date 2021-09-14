@@ -52,12 +52,8 @@ class IconView {
         });
     }
 
-    void show() {
-        switcher.setVisibility(View.VISIBLE);
-    }
-
-    void hide() {
-        switcher.setVisibility(View.GONE);
+    void setVisible(boolean visible) {
+        switcher.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     void showIcon(int index) {

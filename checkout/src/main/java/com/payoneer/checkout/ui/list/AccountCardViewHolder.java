@@ -11,6 +11,7 @@ package com.payoneer.checkout.ui.list;
 import com.google.android.material.card.MaterialCardView;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.ui.model.AccountCard;
+import com.payoneer.checkout.ui.model.AccountCard.AccountIcon;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
@@ -74,14 +75,7 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         for (FormWidget widget : widgets.values()) {
             bindFormWidget(widget);
         }
-        if (card.isEditable()) {
-            iconView.show();
-            iconView.setIconResource(ICON_COLLAPSED, R.drawable.ic_edit);
-        }
-        if (card.isDeletable()) {
-            iconView.show();
-            iconView.setIconResource(ICON_EXPANDED, R.drawable.ic_delete);
-        }
+        bindAccountIcon(card.getAccountIcon());
     }
 
     @Override
@@ -91,8 +85,18 @@ public final class AccountCardViewHolder extends PaymentCardViewHolder {
         if (accountCard.isCheckable()) {
             cardView.setChecked(expand);
         }
-        int icon = (expand && accountCard.isDeletable()) ? ICON_EXPANDED : ICON_COLLAPSED;
+        int icon = (expand) ? ICON_EXPANDED : ICON_COLLAPSED;
         iconView.showIcon(icon);
+    }
+
+    private void bindAccountIcon(AccountIcon icon) {
+        if (icon != null) {
+            iconView.setVisible(true);
+            iconView.setIconResource(ICON_COLLAPSED, icon.getCollapsedResId());
+            iconView.setIconResource(ICON_EXPANDED, icon.getExpandedResId());
+        } else {
+            iconView.setVisible(false);
+        }
     }
 
     private void handleIconClicked(int index) {

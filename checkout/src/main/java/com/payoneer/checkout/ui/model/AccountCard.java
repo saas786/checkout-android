@@ -27,16 +27,13 @@ import com.payoneer.checkout.util.PaymentUtils;
 public final class AccountCard extends PaymentCard {
     private final AccountRegistration account;
     private final String buttonKey;
-    private final boolean deletable;
-    private final boolean editable;
+    private boolean deletable;
+    private AccountIcon accountIcon;
 
-    public AccountCard(AccountRegistration account, String buttonKey, boolean deletable, boolean editable, boolean checkable,
-        ExtraElements extraElements) {
-        super(checkable, extraElements);
+    public AccountCard(AccountRegistration account, String buttonKey, ExtraElements extraElements) {
+        super(extraElements);
         this.account = account;
         this.buttonKey = buttonKey;
-        this.editable = editable;
-        this.deletable = deletable;
     }
 
     @Override
@@ -60,11 +57,6 @@ public final class AccountCard extends PaymentCard {
     @Override
     public String getNetworkCode() {
         return account.getCode();
-    }
-
-    @Override
-    public boolean hasEmptyInputForm() {
-        return getInputElements().size() == 0;
     }
 
     @Override
@@ -113,12 +105,20 @@ public final class AccountCard extends PaymentCard {
         return false;
     }
 
-    public boolean isDeletable() {
-        return deletable;
+    public void setAccountIcon(AccountIcon accountIcon) {
+        this.accountIcon = accountIcon;
     }
 
-    public boolean isEditable() {
-        return editable;
+    public AccountIcon getAccountIcon() {
+        return accountIcon;
+    }
+
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
+    }
+
+    public boolean isDeletable() {
+        return deletable;
     }
 
     public AccountMask getMaskedAccount() {
@@ -128,4 +128,23 @@ public final class AccountCard extends PaymentCard {
     public AccountRegistration getAccountRegistration() {
         return account;
     }
+
+    public static class AccountIcon {
+        private final int collapsedResId;
+        private final int expandedResId;
+
+        public AccountIcon(final int collapsedResId, final int expandedResId) {
+            this.collapsedResId = collapsedResId;
+            this.expandedResId = expandedResId;
+        }
+
+        public int getCollapsedResId() {
+            return collapsedResId;
+        }
+
+        public int getExpandedResId() {
+            return expandedResId;
+        }
+    }
+
 }
