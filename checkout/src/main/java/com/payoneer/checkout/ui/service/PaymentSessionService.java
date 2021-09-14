@@ -39,7 +39,7 @@ import com.payoneer.checkout.validation.Validator;
 import android.content.Context;
 
 /**
- * The PaymentSessionService providing asynchronous loading of the PaymentSession.
+ * The PaymentSessionService providing asynchronous loading of the PaymentSession, validator and localizations.
  * This service makes callbacks in the listener to notify of request completions.
  */
 public final class PaymentSessionService {
