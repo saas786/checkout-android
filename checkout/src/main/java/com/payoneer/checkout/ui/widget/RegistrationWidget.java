@@ -40,7 +40,7 @@ public class RegistrationWidget extends CheckboxWidget {
     }
 
     private void putRegistrationValue(Operation operation, RegistrationOption option) throws PaymentException {
-        boolean value = false;
+        boolean value;
         switch (option.getType()) {
             case FORCED:
             case FORCED_DISPLAYED:
@@ -49,6 +49,9 @@ public class RegistrationWidget extends CheckboxWidget {
             case OPTIONAL:
             case OPTIONAL_PRESELECTED:
                 value = switchView.isChecked();
+                break;
+            default:
+                value = false;
         }
         operation.putBooleanValue(category, option.getName(), value);
     }
