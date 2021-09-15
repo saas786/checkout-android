@@ -10,6 +10,7 @@ package com.payoneer.checkout.ui.widget;
 
 import static com.payoneer.checkout.model.RegistrationType.FORCED;
 import static com.payoneer.checkout.model.RegistrationType.FORCED_DISPLAYED;
+import static com.payoneer.checkout.model.RegistrationType.NONE;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL_PRESELECTED;
 
@@ -39,15 +40,17 @@ public class RegistrationWidget extends CheckboxWidget {
     }
 
     private void putRegistrationValue(Operation operation, RegistrationOption option) throws PaymentException {
+        boolean value = false;
         switch (option.getType()) {
             case FORCED:
             case FORCED_DISPLAYED:
-                operation.putBooleanValue(category, option.getName(), true);
+                value = true;
                 break;
             case OPTIONAL:
             case OPTIONAL_PRESELECTED:
-                operation.putBooleanValue(category, option.getName(), switchView.isChecked());
+                value = switchView.isChecked();
         }
+        operation.putBooleanValue(category, option.getName(), value);
     }
 
     /**
