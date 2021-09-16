@@ -40,49 +40,59 @@ public final class ExtraElementTests extends AbstractTest {
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
-    public void testBottomExtraElements_clickBottomLink_openBrowserWindow() {
-        enterListUrl(LISTRESULT_BOTTOM);
-        clickActionButton();
-
-        int networkCardIndex = 1;
-        PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.group");
-        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement2", "Number 2");
-        clickBrowserPageButton("two", CHROME_CLOSE_BUTTON);
-    }
-
-    @Test
-    public void testTopExtraElements_clickTopLink_openBrowserWindow() {
+    public void testGroupedNetworks_topElement_clickLink() {
         enterListUrl(LISTRESULT_TOP);
         clickActionButton();
 
         int networkCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
         PaymentListHelper.openPaymentListCard(networkCardIndex, "card.group");
+
         PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.topelement1", "Number 1");
         clickBrowserPageButton("one", CHROME_CLOSE_BUTTON);
     }
 
     @Test
-    public void testTopBottomExtraElements_clickTopLink_openBrowserWindow() {
-        enterListUrl(LISTRESULT_TOPBOTTOM);
+    public void testSingleNetwork_bottomElement_clickLink() {
+        enterListUrl(LISTRESULT_BOTTOM);
         clickActionButton();
 
-        int networkCardIndex = 1;
+        int networkCardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.group");
-        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.topelement1", "Number 1");
-        clickBrowserPageButton("one", CHROME_CLOSE_BUTTON);
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
+
+        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement2", "Number 2");
+        clickBrowserPageButton("two", CHROME_CLOSE_BUTTON);
     }
 
     @Test
-    public void testTopBottomExtraElements_clickBottomLink_openBrowserWindow() {
+    public void testSingleNetwork_topBottomElements_clickTopBottomLinks() {
         enterListUrl(LISTRESULT_TOPBOTTOM);
         clickActionButton();
 
-        int networkCardIndex = 1;
+        int networkCardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.group");
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
+
+        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.topelement1", "Number 1");
+        clickBrowserPageButton("one", CHROME_CLOSE_BUTTON);
+        waitForAppRelaunch();
+        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement2", "Number 2");
+        clickBrowserPageButton("two", CHROME_CLOSE_BUTTON);
+    }
+
+    @Test
+    public void testSingleNetwork_bottomElement_clickBothLinks() {
+        enterListUrl(LISTRESULT_BOTTOM);
+        clickActionButton();
+
+        int networkCardIndex = 2;
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
+
+        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement3", "Number3A");
+        clickBrowserPageButton("3A", CHROME_CLOSE_BUTTON);
+        waitForAppRelaunch();
         PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement3", "Number3B");
         clickBrowserPageButton("3B", CHROME_CLOSE_BUTTON);
     }
