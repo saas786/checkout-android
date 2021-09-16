@@ -93,7 +93,6 @@ class AbstractTest {
 
     void clickDeviceCollectionPagePageButton(String buttonId) {
         clickBrowserPageButton("simulation of Device Data Collection (DDC) page", buttonId);
-        UiDeviceHelper.clickUiObjectByResourceName(buttonId);
     }
 
     void clickCustomerDecisionPageButton(String buttonId) {
