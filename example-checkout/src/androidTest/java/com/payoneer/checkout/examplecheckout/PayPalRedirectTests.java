@@ -45,7 +45,7 @@ public final class PayPalRedirectTests extends AbstractTest {
         PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
         PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
 
-        clickCustomerDecisionPageButton("com.android.chrome:id/close_button");
+        clickCustomerDecisionPageButton(CHROME_CLOSE_BUTTON);
         waitForAppRelaunch();
 
         register(resultIdlingResource);

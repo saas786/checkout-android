@@ -54,7 +54,7 @@
             },
 	    {
                 "name": "bottomelement3",
-                "label": "BottomElement[Number3](https://en.wikipedia.org/wiki/3)withsecondlink[Number3](https://en.wikipedia.org/wiki/3 \"thisisatitle\")withoutSpaceswithoutSpacesButWithTitle"
+                "label": "BottomElement[Number3A](https://en.wikipedia.org/wiki/3A)withsecondlink[Number3B](https://en.wikipedia.org/wiki/3B \"thisisatitle\")withoutSpaceswithoutSpacesButWithTitle"
             }
 
         ]

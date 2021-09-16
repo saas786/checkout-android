@@ -35,6 +35,8 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 class AbstractTest {
 
+    public final static String CHROME_CLOSE_BUTTON = "com.android.chrome:id/close_button";
+
     @Before
     public void beforeTest() {
         Intents.init();
@@ -90,12 +92,16 @@ class AbstractTest {
     }
 
     void clickDeviceCollectionPagePageButton(String buttonId) {
-        UiDeviceHelper.checkUiObjectContainsText("simulation of Device Data Collection (DDC) page");
+        clickBrowserPageButton("simulation of Device Data Collection (DDC) page", buttonId);
         UiDeviceHelper.clickUiObjectByResourceName(buttonId);
     }
 
     void clickCustomerDecisionPageButton(String buttonId) {
-        UiDeviceHelper.checkUiObjectContainsText("customer decision page");
+        clickBrowserPageButton("customer decision page", buttonId);
+    }
+
+    void clickBrowserPageButton(String textOnPage, String buttonId) {
+        UiDeviceHelper.checkUiObjectContainsText(textOnPage);
         UiDeviceHelper.clickUiObjectByResourceName(buttonId);
     }
 
