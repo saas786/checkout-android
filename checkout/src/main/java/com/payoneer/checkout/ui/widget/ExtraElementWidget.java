@@ -34,6 +34,7 @@ public class ExtraElementWidget extends CheckboxWidget {
      * @param extraElement containing the label and optional checkbox
      */
     public void onBind(ExtraElement extraElement) {
-        super.onBind(CheckboxMode.FORCED_DISPLAYED, extraElement.getLabel());
+        String checkboxMode = (extraElement.getCheckbox() == null) ? CheckboxMode.FORCED_DISPLAYED : CheckboxMode.NONE;
+        super.onBind(checkboxMode, extraElement.getLabel());
     }
 }
