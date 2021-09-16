@@ -50,7 +50,7 @@ public final class RegistrationOptionsBuilder {
         { OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED }
     };
 
-    private final static String[][] DEFAULT_VALUES = {
+    private final static String[][] DEFAULT_FLOW_OPTIONS = {
         { NONE, NONE, CheckboxMode.NONE },
         { FORCED, NONE, CheckboxMode.NONE },
         { FORCED_DISPLAYED, NONE, CheckboxMode.FORCED_DISPLAYED },
@@ -62,7 +62,7 @@ public final class RegistrationOptionsBuilder {
         { OPTIONAL_PRESELECTED, OPTIONAL_PRESELECTED, CheckboxMode.OPTIONAL_PRESELECTED }
     };
 
-    private final static String[][] UPDATE_VALUES = {
+    private final static String[][] UPDATE_FLOW_OPTIONS = {
         { NONE, NONE, CheckboxMode.NONE },
         { FORCED, NONE, CheckboxMode.NONE },
         { FORCED, NONE, CheckboxMode.NONE },
@@ -91,7 +91,7 @@ public final class RegistrationOptionsBuilder {
             throw new IllegalStateException("allowRecurrence may not be null or empty");
         }
         int index = getRegistrationOptionIndex();
-        String[][] settings = (UPDATE.equals(operationType)) ? UPDATE_VALUES : DEFAULT_VALUES;
+        String[][] settings = (UPDATE.equals(operationType)) ? UPDATE_FLOW_OPTIONS : DEFAULT_FLOW_OPTIONS;
 
         List<RegistrationOption> options = new ArrayList<>();
         options.add(new RegistrationOption(AUTO_REGISTRATION, settings[index][0]));
@@ -100,7 +100,7 @@ public final class RegistrationOptionsBuilder {
     }
 
     private int getRegistrationOptionIndex() throws PaymentException {
-        for (int i = 0, e = VALID_COMBINATIONS.length; i < e; i++) {
+        for (int i = 0; i < VALID_COMBINATIONS.length; i++) {
             String[] types = VALID_COMBINATIONS[i];
             if (types[0].equals(autoRegistration) && types[1].equals(allowRecurrence)) {
                 return i;
