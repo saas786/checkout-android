@@ -89,10 +89,39 @@ dependencies {
     deployerJars "io.packagecloud.maven.wagon:maven-packagecloud-wagon:${rootProject.packagecloudWagonVersion}"
 }
 
+/*||
+
+ // Deploy release builds to nexus/releases/payoneer
+ ((repository == publishing.repositories.nexusReleases) &&
+ (publication == publishing.publications.nexusReleases) &&
+ (rootProject.snapshotVersion == false)) ||
+
+ // Deploy snapshot builds to nexus/snapshots/payoneer
+ ((repository == publishing.repositories.nexusSnapshots) &&
+ (publication == publishing.publications.nexusSnapshots) &&
+ (rootProject.snapshotVersion == true))
+
+ tasks.withType(PublishToMavenRepository) {
+ onlyIf {
+ // Deploy release builds to packagecloud/repo
+ (repository == publishing.repositories.packagecloud &&
+ publication == publishing.publications.packagecloud &&
+ rootProject.snapshotVersion == true)
+ }
+ }
+ */
+
 afterEvaluate {
+
+    tasks.withType(PublishToMavenRepository) {
+        onlyIf {
+            ((repository == publishing.repositories.packagecloud) &&
+             (publication == publishing.publications.packagecloud) &&
+             (rootProject.snapshotVersion == false))
+        }
+    }
     publishing {
         publications {
-            // Publish release to packagecloud
             packagecloud(MavenPublication) {
                 from components.release
                 groupId = 'com.payoneer'
@@ -102,6 +131,7 @@ afterEvaluate {
         }
         repositories {
             maven {
+                name = "packagecloud"
                 url = "https://packagecloud.io/optile/test/java/maven2/"
                 credentials {
                     username = packageCloudMavenPassword
@@ -111,5 +141,3 @@ afterEvaluate {
         }
     }
 }
-
-
