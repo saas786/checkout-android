@@ -71,24 +71,32 @@ public final class ListService {
 
     private String createListRequestBody(ListSettings settings) throws JSONException, IOException {
         JSONObject json = loadJSONTemplate(settings.getListResId());
-        String value = settings.getLanguage();
-        if (value != null) {
-            JSONObject language = json.getJSONObject("style");
-            language.put("language", value);
+        String language = settings.getLanguage();
+        if (language != null) {
+            JSONObject style = json.getJSONObject("style");
+            style.put("language", language);
         }
         BigDecimal amount = settings.getAmount();
         if (amount != null) {
             JSONObject payment = json.getJSONObject("payment");
             payment.put("amount", amount);
         }
-        value = settings.getAppId();
-        if (value != null) {
+        String appId = settings.getAppId();
+        if (appId != null) {
             JSONObject callback = json.getJSONObject("callback");
-            callback.put("appId", value);
+            callback.put("appId", appId);
         }
-        value = settings.getOperationType();
-        if (value != null) {
-            json.put("operationType", value);
+        String operationType = settings.getOperationType();
+        if (operationType != null) {
+            json.put("operationType", operationType);
+        }
+        String checkoutConfigurationName = settings.getCheckoutConfigurationName();
+        if (checkoutConfigurationName != null) {
+            json.put("checkoutConfigurationName", checkoutConfigurationName);
+        }
+        String division = settings.getDivision();
+        if (division != null) {
+            json.put("division", checkoutConfigurationName);
         }
         return json.toString();
     }
