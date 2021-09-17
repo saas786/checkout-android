@@ -1,5 +1,4 @@
 apply plugin: "com.android.library"
-apply plugin: "maven"
 
 assemble.dependsOn('lint')
 
@@ -31,14 +30,19 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode rootProject.versionCode
-        versionName rootProject.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            buildConfigField("int", "VERSION_CODE", "${rootProject.versionCode}")
+            buildConfigField("String","VERSION_NAME","\"${rootProject.versionName}\"")
+        }
         release {
             minifyEnabled false
+            buildConfigField("int", "VERSION_CODE", "${rootProject.versionCode}")
+            buildConfigField("String","VERSION_NAME","\"${rootProject.versionName}\"")
         }
 
         libraryVariants.all { variant ->
@@ -85,7 +89,7 @@ dependencies {
 //
 // This task contains the upload repositories for Nexus release & snapshot
 //
-uploadArchives {
+/*uploadArchives {
     if (!(project.hasProperty('mavenUser') && project.hasProperty('mavenPassword'))) {
         logger.warn('Missing mavenUser and/or mavenPassword from ~/.gradle/gradle.properties in uploadArchives task')
         return
@@ -106,7 +110,7 @@ uploadArchives {
             }
         }
     }
-}
+}*/
 
 //
 // This contains an additional task to upload to external packagecloud.io.
@@ -115,7 +119,7 @@ uploadArchives {
 // Documentation about packagecloud gradle at:
 // https://packagecloud.io/docs#gradle_deploy
 //
-task uploadExternal(type: Upload) {
+/*task uploadExternal(type: Upload) {
     if (!project.hasProperty('packageCloudMavenPassword')) {
         logger.warn('Missing packageCloudMavenPassword from ~/.gradle/gradle.properties in uploadExternal task')
         return
@@ -133,4 +137,4 @@ task uploadExternal(type: Upload) {
             pom.groupId = "com.payoneer"
         }
     }
-}
+}*/
