@@ -117,15 +117,26 @@ afterEvaluate {
         onlyIf {
             ((repository == publishing.repositories.packagecloud) &&
              (publication == publishing.publications.packagecloud) &&
-             (rootProject.snapshotVersion == true)) ||
+             (rootProject.snapshotVersion == false)) ||
 
 	    ((repository == publishing.repositories.nexusReleases) &&
              (publication == publishing.publications.nexusReleases) &&
-             (rootProject.snapshotVersion == false))
+             (rootProject.snapshotVersion == false)) ||
+
+	    ((repository == publishing.repositories.nexusSnapshots) &&
+             (publication == publishing.publications.nexusSnapshots) &&
+             (rootProject.snapshotVersion == true))
         }
     }
     publishing {
         publications {
+            // Publish release to nexus/snapshots
+            nexusSnapshots(MavenPublication) {
+                from components.release
+                groupId = 'com.payoneer'
+                artifactId = 'checkout-android'
+                version = versionName
+            }
             packagecloud(MavenPublication) {
                 from components.release
                 groupId = 'com.payoneer'
@@ -140,6 +151,14 @@ afterEvaluate {
             }
         }
         repositories {
+            maven {
+                name 'nexusSnapshots'
+                url "https://nexus.mgmt.oscato.com/repository/snapshots/"
+                credentials {
+                    username = mavenUser
+                    password = mavenPassword
+                }
+            }
             maven {
                 name = "packagecloud"
                 url = "https://packagecloud.io/optile/test/java/maven2/"
