@@ -117,12 +117,22 @@ afterEvaluate {
         onlyIf {
             ((repository == publishing.repositories.packagecloud) &&
              (publication == publishing.publications.packagecloud) &&
+             (rootProject.snapshotVersion == true)) ||
+
+	    ((repository == publishing.repositories.nexusReleases) &&
+             (publication == publishing.publications.nexusReleases) &&
              (rootProject.snapshotVersion == false))
         }
     }
     publishing {
         publications {
             packagecloud(MavenPublication) {
+                from components.release
+                groupId = 'com.payoneer'
+                artifactId = 'checkout-android'
+                version = versionName
+            }
+            nexusReleases(MavenPublication) {
                 from components.release
                 groupId = 'com.payoneer'
                 artifactId = 'checkout-android'
@@ -136,6 +146,14 @@ afterEvaluate {
                 credentials {
                     username = packageCloudMavenPassword
                     password = ""
+                }
+            }
+	    maven {
+                name 'nexusReleases'
+                url "https://nexus.mgmt.oscato.com/repository/releases/"
+                credentials {
+                    username = mavenUser
+                    password = mavenPassword
                 }
             }
         }
