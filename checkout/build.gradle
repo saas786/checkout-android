@@ -1,13 +1,17 @@
 apply plugin: "com.android.library"
+apply plugin: "maven-publish"
 
 assemble.dependsOn('lint')
 
 configurations {
     deployerJars
 }
+repositories {
+    gradlePluginPortal()
+}
+
 
 android {
-
     lintOptions {
         abortOnError true
         checkDependencies true
@@ -30,19 +34,18 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
+        versionName = rootProject.versionName
+        versionCode = rootProject.versionCode
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("int", "VERSION_CODE", "${versionCode}")
+        buildConfigField("String", "VERSION_NAME", "\"${versionName}\"")
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-            buildConfigField("int", "VERSION_CODE", "${rootProject.versionCode}")
-            buildConfigField("String","VERSION_NAME","\"${rootProject.versionName}\"")
-        }
         release {
             minifyEnabled false
-            buildConfigField("int", "VERSION_CODE", "${rootProject.versionCode}")
-            buildConfigField("String","VERSION_NAME","\"${rootProject.versionName}\"")
+            buildConfigField("int", "VERSION_CODE", "${defaultConfig.versionCode}")
+            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
         }
 
         libraryVariants.all { variant ->
@@ -86,55 +89,27 @@ dependencies {
     deployerJars "io.packagecloud.maven.wagon:maven-packagecloud-wagon:${rootProject.packagecloudWagonVersion}"
 }
 
-//
-// This task contains the upload repositories for Nexus release & snapshot
-//
-/*uploadArchives {
-    if (!(project.hasProperty('mavenUser') && project.hasProperty('mavenPassword'))) {
-        logger.warn('Missing mavenUser and/or mavenPassword from ~/.gradle/gradle.properties in uploadArchives task')
-        return
-    }
-    repositories {
-        mavenDeployer {
-            repository(url: "https://nexus.mgmt.oscato.com/repository/releases/") {
-                authentication(userName: mavenUser, password: mavenPassword)
-                pom.version = versionName
-                pom.artifactId = "checkout-android"
-                pom.groupId = "com.payoneer"
+afterEvaluate {
+    publishing {
+        publications {
+            // Publish release to packagecloud
+            packagecloud(MavenPublication) {
+                from components.release
+                groupId = 'com.payoneer'
+                artifactId = 'checkout-android'
+                version = versionName
             }
-            snapshotRepository(url: "https://nexus.mgmt.oscato.com/repository/snapshots/") {
-                authentication(userName: mavenUser, password: mavenPassword)
-                pom.version = versionName
-                pom.artifactId = "checkout-android"
-                pom.groupId = "com.payoneer"
+        }
+        repositories {
+            maven {
+                url = "https://packagecloud.io/optile/test/java/maven2/"
+                credentials {
+                    username = packageCloudMavenPassword
+                    password = ""
+                }
             }
         }
     }
-}*/
+}
 
-//
-// This contains an additional task to upload to external packagecloud.io.
-// Run using: gradle uploadExternal
-//
-// Documentation about packagecloud gradle at:
-// https://packagecloud.io/docs#gradle_deploy
-//
-/*task uploadExternal(type: Upload) {
-    if (!project.hasProperty('packageCloudMavenPassword')) {
-        logger.warn('Missing packageCloudMavenPassword from ~/.gradle/gradle.properties in uploadExternal task')
-        return
-    }
-    configuration = configurations.archives
-    uploadDescriptor = true
 
-    repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-
-        repository(url: "packagecloud+https://packagecloud.io/optile/android") {
-            authentication(password: packageCloudMavenPassword)
-            pom.version = versionName
-            pom.artifactId = "checkout-android"
-            pom.groupId = "com.payoneer"
-        }
-    }
-}*/

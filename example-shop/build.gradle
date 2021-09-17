@@ -22,6 +22,8 @@ android {
         applicationId "com.payoneer.checkout.exampleshop"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -88,7 +90,6 @@ task uploadToAppLive {
     dependsOn('clean')
     clean.mustRunAfter('uploadDebugToBrowserstackAppLive')
 }
-
 
 task runFunctionalTest {
     if (System.getenv('CHECKOUTANDROID_BASEURL') == null || System.getenv('CHECKOUTANDROID_AUTHHEADER') == null) {
