@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: "com.browserstack.gradle"
+apply plugin: 'com.browserstack.gradle'
 
 assemble.dependsOn('lint')
 
@@ -19,12 +19,12 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.payoneer.checkout.exampleshop"
+        applicationId 'com.payoneer.checkout.exampleshop'
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     signingConfigs {
@@ -38,8 +38,8 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "authheader", "\"$System.env.CHECKOUTANDROID_AUTHHEADER\""
-            buildConfigField "String", "baseurl", "\"$System.env.CHECKOUTANDROID_BASEURL\""
+            buildConfigField 'String', 'authheader', "\"$System.env.CHECKOUTANDROID_AUTHHEADER\""
+            buildConfigField 'String', 'baseurl', "\"$System.env.CHECKOUTANDROID_BASEURL\""
 
             testVariants.all { testVariant ->
                 testVariant.outputs.all { output ->
@@ -108,5 +108,5 @@ task runFunctionalTest {
 browserStackConfig {
     username = "$System.env.BROWSERSTACK_USER"
     accessKey = "$System.env.BROWSERSTACK_KEY"
-    configFilePath = "example-shop/browserstack.json"
+    configFilePath = 'example-shop/browserstack.json'
 }

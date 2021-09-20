@@ -1,5 +1,5 @@
-apply plugin: "com.android.library"
-apply plugin: "maven-publish"
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 assemble.dependsOn('lint')
 
@@ -28,9 +28,9 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionName = rootProject.versionName
         versionCode = rootProject.versionCode
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("int", "VERSION_CODE", "${versionCode}")
-        buildConfigField("String", "VERSION_NAME", "\"${versionName}\"")
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField('int', 'VERSION_CODE', "${versionCode}")
+        buildConfigField('String', 'VERSION_NAME', "\"${versionName}\"")
     }
 
     buildTypes {
@@ -77,4 +77,4 @@ dependencies {
 }
 
 // import the script for publishing release builds to Nexus and Packagecloud
-apply from: "publish.gradle"
+apply from: 'publish.gradle'
