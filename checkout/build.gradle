@@ -3,14 +3,6 @@ apply plugin: "maven-publish"
 
 assemble.dependsOn('lint')
 
-configurations {
-    deployerJars
-}
-repositories {
-    gradlePluginPortal()
-}
-
-
 android {
     lintOptions {
         abortOnError true
@@ -44,13 +36,10 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            buildConfigField("int", "VERSION_CODE", "${defaultConfig.versionCode}")
-            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
         }
-
         libraryVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "PayoneerCheckout_${variant.name}_${defaultConfig.versionName}.aar"
+                outputFileName = "PayoneerCheckout_${variant.name}_${versionName}.aar"
             }
         }
         applicationVariants {
@@ -85,65 +74,40 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
-
-    deployerJars "io.packagecloud.maven.wagon:maven-packagecloud-wagon:${rootProject.packagecloudWagonVersion}"
 }
-
-/*||
-
- // Deploy release builds to nexus/releases/payoneer
- ((repository == publishing.repositories.nexusReleases) &&
- (publication == publishing.publications.nexusReleases) &&
- (rootProject.snapshotVersion == false)) ||
-
- // Deploy snapshot builds to nexus/snapshots/payoneer
- ((repository == publishing.repositories.nexusSnapshots) &&
- (publication == publishing.publications.nexusSnapshots) &&
- (rootProject.snapshotVersion == true))
-
- tasks.withType(PublishToMavenRepository) {
- onlyIf {
- // Deploy release builds to packagecloud/repo
- (repository == publishing.repositories.packagecloud &&
- publication == publishing.publications.packagecloud &&
- rootProject.snapshotVersion == true)
- }
- }
- */
 
 afterEvaluate {
 
     tasks.withType(PublishToMavenRepository) {
         onlyIf {
-            ((repository == publishing.repositories.packagecloud) &&
-             (publication == publishing.publications.packagecloud) &&
-             (rootProject.snapshotVersion == false)) ||
+            ((repository == publishing.repositories.nexusSnapshots) &&
+                    (publication == publishing.publications.nexusSnapshots) &&
+                    (rootProject.snapshotVersion == false)) ||
 
-	    ((repository == publishing.repositories.nexusReleases) &&
-             (publication == publishing.publications.nexusReleases) &&
-             (rootProject.snapshotVersion == false)) ||
+                    ((repository == publishing.repositories.nexusReleases) &&
+                            (publication == publishing.publications.nexusReleases) &&
+                            (rootProject.snapshotVersion == false)) ||
 
-	    ((repository == publishing.repositories.nexusSnapshots) &&
-             (publication == publishing.publications.nexusSnapshots) &&
-             (rootProject.snapshotVersion == true))
+                    ((repository == publishing.repositories.packagecloud) &&
+                            (publication == publishing.publications.packagecloud) &&
+                            (rootProject.snapshotVersion == true))
         }
     }
     publishing {
         publications {
-            // Publish release to nexus/snapshots
             nexusSnapshots(MavenPublication) {
                 from components.release
                 groupId = 'com.payoneer'
                 artifactId = 'checkout-android'
                 version = versionName
             }
-            packagecloud(MavenPublication) {
+            nexusReleases(MavenPublication) {
                 from components.release
                 groupId = 'com.payoneer'
                 artifactId = 'checkout-android'
                 version = versionName
             }
-            nexusReleases(MavenPublication) {
+            packagecloud(MavenPublication) {
                 from components.release
                 groupId = 'com.payoneer'
                 artifactId = 'checkout-android'
@@ -160,19 +124,19 @@ afterEvaluate {
                 }
             }
             maven {
-                name = "packagecloud"
-                url = "https://packagecloud.io/optile/test/java/maven2/"
-                credentials {
-                    username = packageCloudMavenPassword
-                    password = ""
-                }
-            }
-	    maven {
                 name 'nexusReleases'
                 url "https://nexus.mgmt.oscato.com/repository/releases/"
                 credentials {
                     username = mavenUser
                     password = mavenPassword
+                }
+            }
+            maven {
+                name = "packagecloud"
+                url = "https://packagecloud.io/optile/test/java/maven2/"
+                credentials {
+                    username = packageCloudMavenPassword
+                    password = ""
                 }
             }
         }
