@@ -50,7 +50,7 @@ public final class RegistrationTests extends AbstractTest {
         PaymentListHelper.matchesPaymentCardTitle(cardIndex, "41 *** 1111");
     }
 
-    //@Test
+    @Test
     public void testRegistration_PROCEED_PENDING() {
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.UPDATE);
@@ -71,7 +71,7 @@ public final class RegistrationTests extends AbstractTest {
         PaymentListHelper.matchesPaymentDialogTitle("Payment method pending");
     }
 
-    //@Test
+    @Test
     public void testDeleteRegistration_success() {
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.UPDATE);

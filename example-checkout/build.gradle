@@ -35,6 +35,12 @@ android {
             keyPassword "$System.env.PLAYSTORE_UPLOAD_KEYPASSWORD"
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        ExampleCheckout {
+            dimension "version"
+        }
+    }
 
     buildTypes {
         debug {
@@ -42,9 +48,10 @@ android {
             buildConfigField 'String', 'baseurl', "\"$System.env.CHECKOUTANDROID_BASEURL\""
 
             testVariants.all { testVariant ->
-                testVariant.outputs.all { output ->
-                    outputFileName = "ExampleCheckout_${getCurrentBranch()}_debug-androidTest.apk"
-                }
+              testVariant.outputs.all { output ->
+                    //outputFileName = "ExampleDemo_${getCurrentBranch()}_demo_debug-androidTest.apk"
+                  outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}-androidTest.apk"
+              }
             }
         }
         release {
@@ -52,9 +59,11 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
         applicationVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "ExampleCheckout_${getCurrentBranch()}_${variant.buildType.name}.apk"
+                //outputFileName = "demo_${getCurrentBranch()}_demo_${variant.buildType.name}.apk"
+                outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}.apk"
             }
         }
     }
@@ -84,9 +93,9 @@ task uploadToAppLive {
         logger.warn('Missing Browserstack functional test environment variables')
         return
     }
-    dependsOn('uploadDebugToBrowserstackAppLive')
-    dependsOn('clean')
-    clean.mustRunAfter('uploadDebugToBrowserstackAppLive')
+    //dependsOn('uploadDemoDebugToBrowserstackAppLive')
+    //dependsOn('clean')
+    //clean.mustRunAfter('uploadDebugToBrowserstackAppLive')
 }
 
 task runFunctionalTest {
@@ -98,9 +107,9 @@ task runFunctionalTest {
         logger.warn('Missing Browserstack functional test environment variables')
         return
     }
-    dependsOn('executeDebugTestsOnBrowserstack')
+    dependsOn('executeExampleCheckoutDebugTestsOnBrowserstack')
     dependsOn('clean')
-    clean.mustRunAfter('executeDebugTestsOnBrowserstack')
+    clean.mustRunAfter('executeExampleCheckoutDebugTestsOnBrowserstack')
 }
 
 browserStackConfig {

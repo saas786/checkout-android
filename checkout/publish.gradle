@@ -3,15 +3,15 @@ afterEvaluate {
         onlyIf {
             ((repository == publishing.repositories.nexusSnapshots) &&
                     (publication == publishing.publications.nexusSnapshots) &&
-                    (rootProject.snapshotVersion == true)) ||
+                    (rootProject.isSnapshotVersion() == true)) ||
 
                     ((repository == publishing.repositories.nexusReleases) &&
                             (publication == publishing.publications.nexusReleases) &&
-                            (rootProject.snapshotVersion == false)) ||
+                            (rootProject.isSnapshotVersion() == false)) ||
 
                     ((repository == publishing.repositories.packagecloud) &&
                             (publication == publishing.publications.packagecloud) &&
-                            (rootProject.snapshotVersion == false))
+                            (rootProject.isSnapshotVersion() == false))
         }
     }
     publishing {

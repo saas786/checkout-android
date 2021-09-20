@@ -35,7 +35,12 @@ android {
             keyPassword "$System.env.PLAYSTORE_UPLOAD_KEYPASSWORD"
         }
     }
-
+    flavorDimensions "version"
+    productFlavors {
+        ExampleShop {
+            dimension "version"
+        }
+    }
     buildTypes {
         debug {
             buildConfigField 'String', 'authheader', "\"$System.env.CHECKOUTANDROID_AUTHHEADER\""
@@ -43,7 +48,7 @@ android {
 
             testVariants.all { testVariant ->
                 testVariant.outputs.all { output ->
-                    outputFileName = "ExampleShop_${getCurrentBranch()}_debug-androidTest.apk"
+                    outputFileName = "ExampleShop-debug-${getCurrentBranch()}-androidTest.apk"
                 }
             }
         }
@@ -54,7 +59,7 @@ android {
         }
         applicationVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "ExampleShop_${getCurrentBranch()}_${variant.buildType.name}.apk"
+                outputFileName = "ExampleShop-debug-${getCurrentBranch()}.apk"
             }
         }
     }
@@ -86,9 +91,9 @@ task uploadToAppLive {
         logger.warn('Missing Browserstack functional test environment variables')
         return
     }
-    dependsOn('uploadDebugToBrowserstackAppLive')
+    dependsOn('uploadExampleShopDebugToBrowserstackAppLive')
     dependsOn('clean')
-    clean.mustRunAfter('uploadDebugToBrowserstackAppLive')
+    clean.mustRunAfter('uploadExampleShopDebugToBrowserstackAppLive')
 }
 
 task runFunctionalTest {
@@ -100,9 +105,9 @@ task runFunctionalTest {
         logger.warn('Missing Browserstack functional test environment variables')
         return
     }
-    dependsOn('executeDebugTestsOnBrowserstack')
+    dependsOn('executeExampleShopDebugTestsOnBrowserstack')
     dependsOn('clean')
-    clean.mustRunAfter('executeDebugTestsOnBrowserstack')
+    clean.mustRunAfter('executeExampleShopDebugTestsOnBrowserstack')
 }
 
 browserStackConfig {
