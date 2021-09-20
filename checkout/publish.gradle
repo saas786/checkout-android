@@ -1,0 +1,65 @@
+afterEvaluate {
+    tasks.withType(PublishToMavenRepository) {
+        onlyIf {
+            ((repository == publishing.repositories.nexusSnapshots) &&
+                    (publication == publishing.publications.nexusSnapshots) &&
+                    (rootProject.snapshotVersion == false)) ||
+
+                    ((repository == publishing.repositories.nexusReleases) &&
+                            (publication == publishing.publications.nexusReleases) &&
+                            (rootProject.snapshotVersion == false)) ||
+
+                    ((repository == publishing.repositories.packagecloud) &&
+                            (publication == publishing.publications.packagecloud) &&
+                            (rootProject.snapshotVersion == true))
+        }
+    }
+    publishing {
+        publications {
+            nexusSnapshots(MavenPublication) {
+                from components.release
+                groupId = 'com.payoneer'
+                artifactId = 'checkout-android'
+                version = versionName
+            }
+            nexusReleases(MavenPublication) {
+                from components.release
+                groupId = 'com.payoneer'
+                artifactId = 'checkout-android'
+                version = versionName
+            }
+            packagecloud(MavenPublication) {
+                from components.release
+                groupId = 'com.payoneer'
+                artifactId = 'checkout-android'
+                version = versionName
+            }
+        }
+        repositories {
+            maven {
+                name 'nexusSnapshots'
+                url "https://nexus.mgmt.oscato.com/repository/snapshots/"
+                credentials {
+                    username = mavenUser
+                    password = mavenPassword
+                }
+            }
+            maven {
+                name 'nexusReleases'
+                url "https://nexus.mgmt.oscato.com/repository/releases/"
+                credentials {
+                    username = mavenUser
+                    password = mavenPassword
+                }
+            }
+            maven {
+                name = "packagecloud"
+                url = "https://packagecloud.io/optile/test/java/maven2/"
+                credentials {
+                    username = packageCloudMavenPassword
+                    password = ""
+                }
+            }
+        }
+    }
+}
