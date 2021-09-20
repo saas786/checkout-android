@@ -35,6 +35,9 @@ android {
             keyPassword "$System.env.PLAYSTORE_UPLOAD_KEYPASSWORD"
         }
     }
+
+    // Product flavor is required in order to upload both
+    // the ExampleCheckout and ExampleShop app to Browserstack
     flavorDimensions "version"
     productFlavors {
         ExampleCheckout {
@@ -49,7 +52,6 @@ android {
 
             testVariants.all { testVariant ->
               testVariant.outputs.all { output ->
-                    //outputFileName = "ExampleDemo_${getCurrentBranch()}_demo_debug-androidTest.apk"
                   outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}-androidTest.apk"
               }
             }
@@ -62,7 +64,6 @@ android {
 
         applicationVariants.all { variant ->
             variant.outputs.all {
-                //outputFileName = "demo_${getCurrentBranch()}_demo_${variant.buildType.name}.apk"
                 outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}.apk"
             }
         }
@@ -93,10 +94,8 @@ task uploadToAppLive {
         logger.warn('Missing Browserstack functional test environment variables')
         return
     }
-    //dependsOn('uploadDemoDebugToBrowserstackAppLive')
-    //dependsOn('clean')
-    //clean.mustRunAfter('uploadDebugToBrowserstackAppLive')
-}
+    dependsOn('uploadExampleCheckoutDebugToBrowserstackAppLive')
+ }
 
 task runFunctionalTest {
     if (System.getenv('CHECKOUTANDROID_BASEURL') == null || System.getenv('CHECKOUTANDROID_AUTHHEADER') == null) {
@@ -108,8 +107,6 @@ task runFunctionalTest {
         return
     }
     dependsOn('executeExampleCheckoutDebugTestsOnBrowserstack')
-    dependsOn('clean')
-    clean.mustRunAfter('executeExampleCheckoutDebugTestsOnBrowserstack')
 }
 
 browserStackConfig {

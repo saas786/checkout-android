@@ -81,14 +81,18 @@ task buildci() {
     dependsOn 'clean'
     dependsOn ':checkout:test'
     dependsOn ':checkout:assembleRelease'
+    dependsOn ':checkout:publish'
     dependsOn ':example-checkout:runFunctionalTest'
     dependsOn ':example-shop:runFunctionalTest'
-    //dependsOn ':checkout:publish'
 
+    // Run the tasks for the checkout library
     tasks.findByPath(':checkout:test').mustRunAfter(clean)
     tasks.findByPath(':checkout:assembleRelease').mustRunAfter(':checkout:test')
+    tasks.findByPath(':checkout:publish').mustRunAfter(':checkout:assembleRelease')
+
+    // Test ExampleCheckout and ExampleShop apps on browserstack
     tasks.findByPath(':example-checkout:runFunctionalTest').mustRunAfter(':checkout:assembleRelease')
-    tasks.findByPath(':example-shop:runFunctionalTest').mustRunAfter(':example-checkout:runFunctionalTest')
+    tasks.findByPath(':example-shop:runFunctionalTest').mustRunAfter(':checkout:assembleRelease')
 }
 
 static def getCurrentBranch() {

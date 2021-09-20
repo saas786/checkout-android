@@ -35,6 +35,8 @@ android {
             keyPassword "$System.env.PLAYSTORE_UPLOAD_KEYPASSWORD"
         }
     }
+    // Product flavor is required in order to upload both
+    // the ExampleCheckout and ExampleShop app to Browserstack
     flavorDimensions "version"
     productFlavors {
         ExampleShop {
@@ -92,8 +94,6 @@ task uploadToAppLive {
         return
     }
     dependsOn('uploadExampleShopDebugToBrowserstackAppLive')
-    dependsOn('clean')
-    clean.mustRunAfter('uploadExampleShopDebugToBrowserstackAppLive')
 }
 
 task runFunctionalTest {
@@ -106,8 +106,6 @@ task runFunctionalTest {
         return
     }
     dependsOn('executeExampleShopDebugTestsOnBrowserstack')
-    dependsOn('clean')
-    clean.mustRunAfter('executeExampleShopDebugTestsOnBrowserstack')
 }
 
 browserStackConfig {
