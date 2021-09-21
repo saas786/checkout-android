@@ -88,28 +88,4 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
 }
 
-task uploadToAppLive {
-    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
-        logger.warn('Missing Browserstack functional test environment variables')
-        return
-    }
-    dependsOn('uploadExampleShopDebugToBrowserstackAppLive')
-}
-
-task runFunctionalTest {
-    if (System.getenv('CHECKOUTANDROID_BASEURL') == null || System.getenv('CHECKOUTANDROID_AUTHHEADER') == null) {
-        logger.warn('Missing functional test environment variables')
-        return
-    }
-    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
-        logger.warn('Missing Browserstack functional test environment variables')
-        return
-    }
-    dependsOn('executeExampleShopDebugTestsOnBrowserstack')
-}
-
-browserStackConfig {
-    username = "$System.env.BROWSERSTACK_USER"
-    accessKey = "$System.env.BROWSERSTACK_KEY"
-    configFilePath = 'example-shop/browserstack.json'
-}
+apply from: 'browserstack.gradle'
