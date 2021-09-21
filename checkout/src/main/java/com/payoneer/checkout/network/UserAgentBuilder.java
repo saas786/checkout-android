@@ -65,6 +65,7 @@ final class UserAgentBuilder {
      * @param context used to construct the default UserAgent
      * @return the newly created UserAgent value or null when it could not be created
      */
+    @SuppressWarnings( "deprecation" )
     static String createFromContext(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");
