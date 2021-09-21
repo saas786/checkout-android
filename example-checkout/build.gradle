@@ -51,9 +51,9 @@ android {
             buildConfigField 'String', 'baseurl', "\"$System.env.CHECKOUTANDROID_BASEURL\""
 
             testVariants.all { testVariant ->
-              testVariant.outputs.all { output ->
-                  outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}-androidTest.apk"
-              }
+                testVariant.outputs.all { output ->
+                    outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}-androidTest.apk"
+                }
             }
         }
         release {
