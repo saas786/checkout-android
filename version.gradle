@@ -4,6 +4,10 @@
 ext.VERSIONCODE = file('VERSIONCODE').text.trim().toInteger()
 ext.VERSIONNAME = file('VERSIONNAME').text.trim()
 
+ext.isSnapshotVersion = { ->
+    return versionName.endsWith('SNAPSHOT')
+}
+
 ext.increaseVersionName = { index ->
     def curName = VERSIONNAME.split("-")
     def newName = curName[0].split("\\.")

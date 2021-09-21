@@ -1,0 +1,29 @@
+/*
+ * Gradle file with tasks for uploading the ExampleCheckout app to Browserstack
+ */
+
+task uploadToAppLive {
+    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
+        logger.warn('Missing Browserstack functional test environment variables')
+        return
+    }
+    dependsOn('uploadExampleCheckoutDebugToBrowserstackAppLive')
+}
+
+task runFunctionalTest {
+    if (System.getenv('CHECKOUTANDROID_BASEURL') == null || System.getenv('CHECKOUTANDROID_AUTHHEADER') == null) {
+        logger.warn('Missing functional test environment variables')
+        return
+    }
+    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
+        logger.warn('Missing Browserstack functional test environment variables')
+        return
+    }
+    dependsOn('executeExampleCheckoutDebugTestsOnBrowserstack')
+}
+
+browserStackConfig {
+    username = "$System.env.BROWSERSTACK_USER"
+    accessKey = "$System.env.BROWSERSTACK_KEY"
+    configFilePath = 'example-checkout/browserstack.json'
+}
