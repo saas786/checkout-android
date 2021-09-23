@@ -8,11 +8,9 @@
 
 package com.payoneer.checkout.ui;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.model.ErrorInfo;
 import com.payoneer.checkout.model.Interaction;
@@ -22,7 +20,6 @@ import com.payoneer.checkout.model.OperationResult;
 
 import android.os.Parcel;
 
-@RunWith(RobolectricTestRunner.class)
 public class PaymentResultTest {
 
     @Test

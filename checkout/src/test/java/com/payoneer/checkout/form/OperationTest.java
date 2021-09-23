@@ -14,11 +14,10 @@ import static io.github.jsonSnapshot.SnapshotMatcher.validateSnapshots;
 
 import java.net.URL;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.core.PaymentInputCategory;
@@ -26,45 +25,52 @@ import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.model.BrowserData;
 import com.payoneer.checkout.test.util.TestUtils;
 
-@RunWith(RobolectricTestRunner.class)
 public class OperationTest {
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAll() {
         start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterAll() {
         validateSnapshots();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void putValue_invalidCategory_exception() throws PaymentException {
-        URL url = TestUtils.createTestURL("http://localhost/charge");
-        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putStringValue(null, PaymentInputType.HOLDER_NAME, "Foo");
+    @Test
+    public void putValue_invalidCategory_exception() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            URL url = TestUtils.createTestURL("http://localhost/charge");
+            Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+            operation.putStringValue(null, PaymentInputType.HOLDER_NAME, "Foo");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void putValue_invalidName_exception() throws PaymentException {
-        URL url = TestUtils.createTestURL("http://localhost/charge");
-        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putStringValue(PaymentInputCategory.INPUTELEMENT, null, "Foo");
+    @Test
+    public void putValue_invalidName_exception() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            URL url = TestUtils.createTestURL("http://localhost/charge");
+            Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+            operation.putStringValue(PaymentInputCategory.INPUTELEMENT, null, "Foo");
+        });
     }
 
-    @Test(expected = PaymentException.class)
-    public void putValue_invalidRegistrationName_exception() throws PaymentException {
-        URL url = TestUtils.createTestURL("http://localhost/charge");
-        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putBooleanValue(PaymentInputCategory.REGISTRATION, PaymentInputType.HOLDER_NAME, true);
+    @Test
+    public void putValue_invalidRegistrationName_exception() {
+        Assertions.assertThrows(PaymentException.class, () -> {
+            URL url = TestUtils.createTestURL("http://localhost/charge");
+            Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+            operation.putBooleanValue(PaymentInputCategory.REGISTRATION, PaymentInputType.HOLDER_NAME, true);
+        });
     }
 
-    @Test(expected = PaymentException.class)
-    public void putValue_invalidInputElementName_exception() throws PaymentException {
-        URL url = TestUtils.createTestURL("http://localhost/charge");
-        Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
-        operation.putBooleanValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.ALLOW_RECURRENCE, true);
+    @Test
+    public void putValue_invalidInputElementName_exception() {
+        Assertions.assertThrows(PaymentException.class, () -> {
+            URL url = TestUtils.createTestURL("http://localhost/charge");
+            Operation operation = new Operation("VISA", "CREDIT_CARD", "CHARGE", url);
+            operation.putBooleanValue(PaymentInputCategory.INPUTELEMENT, PaymentInputType.ALLOW_RECURRENCE, true);
+        });
     }
 
     @Test

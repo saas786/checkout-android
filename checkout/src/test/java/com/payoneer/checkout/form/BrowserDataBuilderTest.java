@@ -8,24 +8,24 @@
 
 package com.payoneer.checkout.form;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.model.BrowserData;
 
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
-@RunWith(RobolectricTestRunner.class)
 public class BrowserDataBuilderTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createFromContext_IllegalArgumentException() {
-        BrowserDataBuilder.createFromContext(null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            BrowserDataBuilder.createFromContext(null);
+        });
     }
 
     @Test

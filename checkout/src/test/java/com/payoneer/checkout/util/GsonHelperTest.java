@@ -8,16 +8,14 @@
 
 package com.payoneer.checkout.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Test;
 
 import com.google.gson.reflect.TypeToken;
 import com.payoneer.checkout.core.PaymentInputType;
@@ -27,7 +25,6 @@ import com.payoneer.checkout.model.InputElementType;
 /**
  * Class for testing the GsonHelper methods
  */
-@RunWith(RobolectricTestRunner.class)
 public class GsonHelperTest {
 
     private final static String jsonArray =

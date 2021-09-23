@@ -8,16 +8,11 @@
 
 package com.payoneer.checkout.validation;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-
-@RunWith(DataProviderRunner.class)
 public class HolderNameValidatorTest {
 
     private static final String HOLDER_NAME_DATA_PROVIDER = "holder-name-data-provider";
@@ -31,14 +26,13 @@ public class HolderNameValidatorTest {
     private static final String VERY_LONG_INVALID_HOLDER_NAME_INPUT =
         "Aäsdfölkëdjf 123 Oijajsdf908 Asdf 1234 5678 9012 34 Aäsdfölkëdjf 123 Oijajsdf908 Asdf 1234567890 Aäsdfölkëdjf 123 Oijajsdf908 Asdf 12345678 Aäsdfölkëdjf 1231234123412342134 Oijajsdf908 Asdf 123456780 Aäsdfölkëdjf 123 Oijajsdf908 Asdf 1234567890 Aäsdfölkëdjf 123 Oijajsdf908 Asdf 1234567890 Aäsdfölkëdjf 123 Oijajsdf908 Asdf 1234567890";
 
-    @Test
-    @UseDataProvider("holderNameDataProvider")
+    @ParameterizedTest
+    @MethodSource("holderNameDataProvider")
     public void isValidHolderName(final String input, final boolean expectedValid) {
         boolean result = HolderNameValidator.isValidHolderName(input);
         assertEquals(result, expectedValid);
     }
 
-    @DataProvider
     public static Object[][] holderNameDataProvider() {
         return new Object[][] {
             // test input, is the test input valid
