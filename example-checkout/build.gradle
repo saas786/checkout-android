@@ -76,14 +76,13 @@ dependencies {
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
     implementation project(":checkout")
 
-    testImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.harmcrestVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
+    androidTestImplementation "androidx.test:core:${rootProject.androidxTestRunnerVersion}"
+    androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
+    androidTestImplementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
 
     androidTestImplementation project(":shared-test")
     androidTestImplementation "androidx.test.uiautomator:uiautomator:${rootProject.androidxTestUIAutomatorVersion}"
-    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
-    androidTestImplementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
