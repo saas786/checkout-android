@@ -75,14 +75,11 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxandroid:${rootProject.rxandroidVersion}"
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
 
-    testImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.harmcrestVersion}"
-
     androidTestImplementation project(":shared-test")
-    androidTestImplementation "androidx.test.uiautomator:uiautomator:${rootProject.androidxTestUIAutomatorVersion}"
-    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
     androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
     androidTestImplementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:${rootProject.androidxTestUIAutomatorVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
