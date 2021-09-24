@@ -49,8 +49,8 @@ android {
 
 dependencies {
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
-    implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "com.google.code.gson:gson:${rootProject.gsonVersion}"
+    implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${rootProject.androidxSwiperefreshlayoutVersion}"
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
 
@@ -60,9 +60,9 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:${rootProject.bumptechGlideVersion}") {
         exclude group: "com.android.support"
     }
+    testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.junitJupiterVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${rootProject.junitJupiterVersion}"
-    testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
     testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
 
