@@ -13,21 +13,21 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.InteractionReason;
 import com.payoneer.checkout.model.NetworkOperationType;
 
-@RunWith(RobolectricTestRunner.class)
 public class InteractionMessageTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromInteraction_invalidInteraction_IllegalArgumentException() {
-        InteractionMessage.fromInteraction(null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            InteractionMessage.fromInteraction(null);
+        });
     }
 
     @Test
@@ -39,9 +39,11 @@ public class InteractionMessageTest {
         assertNull(message.getFlow());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromDeleteFlow_invalidInteraction_IllegalArgumentException() {
-        InteractionMessage.fromDeleteFlow(null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            InteractionMessage.fromDeleteFlow(null);
+        });
     }
 
     @Test
@@ -53,16 +55,20 @@ public class InteractionMessageTest {
         assertEquals("DELETE", message.getFlow());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromOperationFlow_invalidInteraction_IllegalArgumentException() {
-        String operationType = NetworkOperationType.CHARGE;
-        InteractionMessage.fromOperationFlow(null, operationType);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            String operationType = NetworkOperationType.CHARGE;
+            InteractionMessage.fromOperationFlow(null, operationType);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromOperationFlow_invalidOperationType_IllegalArgumentException() {
-        Interaction interaction = new Interaction(InteractionCode.PROCEED, InteractionReason.OK);
-        InteractionMessage.fromOperationFlow(interaction, "");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            Interaction interaction = new Interaction(InteractionCode.PROCEED, InteractionReason.OK);
+            InteractionMessage.fromOperationFlow(interaction, "");
+        });
     }
 
     @Test

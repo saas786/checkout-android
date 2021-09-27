@@ -8,37 +8,39 @@
 
 package com.payoneer.checkout.ui.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.model.ListResult;
 import com.payoneer.checkout.resource.PaymentGroup;
 import com.payoneer.checkout.ui.model.PaymentSession;
 
-@RunWith(RobolectricTestRunner.class)
 public class PaymentSessionBuilderTest {
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void build_missingListResult() throws PaymentException {
-        Map<String, PaymentGroup> paymentGroups = new HashMap<>();
-        new PaymentSessionBuilder()
-            .setPaymentGroups(paymentGroups)
-            .build();
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            Map<String, PaymentGroup> paymentGroups = new HashMap<>();
+            new PaymentSessionBuilder()
+                .setPaymentGroups(paymentGroups)
+                .build();
+        });
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void build_missingPaymentGroups() throws PaymentException {
-        ListResult listResult = new ListResult();
-        new PaymentSessionBuilder()
-            .setListResult(listResult)
-            .build();
+    @Test
+    public void build_missingPaymentGroups() {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            ListResult listResult = new ListResult();
+            new PaymentSessionBuilder()
+                .setListResult(listResult)
+                .build();
+        });
     }
 
     @Test

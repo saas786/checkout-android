@@ -28,7 +28,7 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionName = rootProject.versionName
         versionCode = rootProject.versionCode
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
         buildConfigField('int', 'VERSION_CODE', "${versionCode}")
         buildConfigField('String', 'VERSION_NAME', "\"${versionName}\"")
     }
@@ -49,8 +49,8 @@ android {
 
 dependencies {
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
-    implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "com.google.code.gson:gson:${rootProject.gsonVersion}"
+    implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${rootProject.androidxSwiperefreshlayoutVersion}"
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
 
@@ -60,20 +60,10 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:${rootProject.bumptechGlideVersion}") {
         exclude group: "com.android.support"
     }
-    testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
-    testImplementation "org.mockito:mockito-core:${rootProject.mockitoCoreVersion}"
-    testImplementation "org.robolectric:robolectric:${rootProject.robolectricVersion}"
     testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
-    testImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.harmcrestVersion}"
-    testImplementation "com.tngtech.junit.dataprovider:junit4-dataprovider:${tngDataProviderVersion}"
-
-    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
-    androidTestImplementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.junitJupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${rootProject.junitJupiterVersion}"
+    testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
 
 // import the script for publishing release builds to Nexus and Packagecloud

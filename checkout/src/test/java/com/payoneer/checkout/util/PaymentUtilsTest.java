@@ -11,10 +11,10 @@ package com.payoneer.checkout.util;
 import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
 import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
 import static com.payoneer.checkout.model.PaymentMethod.WALLET;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,9 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentInputType;
@@ -37,7 +36,6 @@ import androidx.test.core.app.ApplicationProvider;
 /**
  * Class for testing the PaymentUtils class
  */
-@RunWith(RobolectricTestRunner.class)
 public class PaymentUtilsTest {
 
     @Test
@@ -111,10 +109,12 @@ public class PaymentUtilsTest {
         assertEquals(displayLabel, PaymentUtils.getAccountMaskLabel(accountMask, WALLET));
     }
 
-    @Test(expected = IOException.class)
+    @Test
     public void readRawResource_missing_resource() throws IOException {
-        Resources res = ApplicationProvider.getApplicationContext().getResources();
-        PaymentUtils.readRawResource(res, -1);
+        Assertions.assertThrows(IOException.class, () -> {
+            Resources res = ApplicationProvider.getApplicationContext().getResources();
+            PaymentUtils.readRawResource(res, -1);
+        });
     }
 
     @Test
