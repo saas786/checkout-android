@@ -28,7 +28,7 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionName = rootProject.versionName
         versionCode = rootProject.versionCode
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
         buildConfigField('int', 'VERSION_CODE', "${versionCode}")
         buildConfigField('String', 'VERSION_NAME', "\"${versionName}\"")
     }
