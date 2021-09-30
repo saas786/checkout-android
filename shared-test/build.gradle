@@ -8,8 +8,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode rootProject.versionCode
-        versionName rootProject.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,9 +27,6 @@ android {
 dependencies {
     implementation project(':checkout')
     implementation "androidx.test.uiautomator:uiautomator:${rootProject.androidxTestUIAutomatorVersion}"
-    implementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    implementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
-    implementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
     implementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
     implementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
     implementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"

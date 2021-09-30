@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: "com.browserstack.gradle"
+apply plugin: 'com.browserstack.gradle'
 
 assemble.dependsOn('lint')
 
@@ -19,12 +19,12 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.payoneer.checkout.examplecheckout"
+        applicationId 'com.payoneer.checkout.examplecheckout'
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     signingConfigs {
@@ -36,14 +36,23 @@ android {
         }
     }
 
+    // Product flavor is required in order to upload both
+    // the ExampleCheckout and ExampleShop app to Browserstack
+    flavorDimensions "version"
+    productFlavors {
+        ExampleCheckout {
+            dimension "version"
+        }
+    }
+
     buildTypes {
         debug {
-            buildConfigField "String", "authheader", "\"$System.env.CHECKOUTANDROID_AUTHHEADER\""
-            buildConfigField "String", "baseurl", "\"$System.env.CHECKOUTANDROID_BASEURL\""
+            buildConfigField 'String', 'authheader', "\"$System.env.CHECKOUTANDROID_AUTHHEADER\""
+            buildConfigField 'String', 'baseurl', "\"$System.env.CHECKOUTANDROID_BASEURL\""
 
             testVariants.all { testVariant ->
                 testVariant.outputs.all { output ->
-                    outputFileName = "ExampleCheckout_${getCurrentBranch()}_debug-androidTest.apk"
+                    outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}-androidTest.apk"
                 }
             }
         }
@@ -52,9 +61,10 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
         applicationVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "ExampleCheckout_${getCurrentBranch()}_${variant.buildType.name}.apk"
+                outputFileName = "ExampleCheckout-debug-${getCurrentBranch()}.apk"
             }
         }
     }
@@ -66,45 +76,15 @@ dependencies {
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
     implementation project(":checkout")
 
-    testImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.harmcrestVersion}"
-
     androidTestImplementation project(":shared-test")
-    androidTestImplementation "androidx.test.uiautomator:uiautomator:${rootProject.androidxTestUIAutomatorVersion}"
-    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
     androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
     androidTestImplementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:${rootProject.androidxTestUIAutomatorVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
 }
 
-task uploadToAppLive {
-    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
-        logger.warn('Missing Browserstack functional test environment variables')
-        return
-    }
-    dependsOn('uploadDebugToBrowserstackAppLive')
-    dependsOn('clean')
-    clean.mustRunAfter('uploadDebugToBrowserstackAppLive')
-}
+apply from: 'browserstack.gradle'
 
-task runFunctionalTest {
-    if (System.getenv('CHECKOUTANDROID_BASEURL') == null || System.getenv('CHECKOUTANDROID_AUTHHEADER') == null) {
-        logger.warn('Missing functional test environment variables')
-        return
-    }
-    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
-        logger.warn('Missing Browserstack functional test environment variables')
-        return
-    }
-    dependsOn('executeDebugTestsOnBrowserstack')
-    dependsOn('clean')
-    clean.mustRunAfter('executeDebugTestsOnBrowserstack')
-}
-
-browserStackConfig {
-    username = "$System.env.BROWSERSTACK_USER"
-    accessKey = "$System.env.BROWSERSTACK_KEY"
-    configFilePath = "example-checkout/browserstack.json"
-}

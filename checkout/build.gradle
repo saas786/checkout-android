@@ -1,14 +1,9 @@
-apply plugin: "com.android.library"
-apply plugin: "maven"
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 assemble.dependsOn('lint')
 
-configurations {
-    deployerJars
-}
-
 android {
-
     lintOptions {
         abortOnError true
         checkDependencies true
@@ -31,19 +26,20 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode rootProject.versionCode
-        versionName rootProject.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionName = rootProject.versionName
+        versionCode = rootProject.versionCode
+
+        buildConfigField('int', 'VERSION_CODE', "${versionCode}")
+        buildConfigField('String', 'VERSION_NAME', "\"${versionName}\"")
     }
 
     buildTypes {
         release {
             minifyEnabled false
         }
-
         libraryVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "PayoneerCheckout_${variant.name}_${defaultConfig.versionName}.aar"
+                outputFileName = "PayoneerCheckout_${variant.name}_${versionName}.aar"
             }
         }
         applicationVariants {
@@ -53,8 +49,8 @@ android {
 
 dependencies {
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
-    implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "com.google.code.gson:gson:${rootProject.gsonVersion}"
+    implementation "androidx.browser:browser:${rootProject.androidxBrowserVersion}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${rootProject.androidxSwiperefreshlayoutVersion}"
     implementation "androidx.test.espresso:espresso-idling-resource:${rootProject.androidxTestEspressoVersion}@aar"
 
@@ -64,73 +60,11 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:${rootProject.bumptechGlideVersion}") {
         exclude group: "com.android.support"
     }
-    testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
-    testImplementation "org.mockito:mockito-core:${rootProject.mockitoCoreVersion}"
-    testImplementation "org.robolectric:robolectric:${rootProject.robolectricVersion}"
     testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
-    testImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    testImplementation "org.hamcrest:hamcrest-library:${rootProject.harmcrestVersion}"
-    testImplementation "com.tngtech.junit.dataprovider:junit4-dataprovider:${tngDataProviderVersion}"
-
-    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidxTestJunitVersion}"
-    androidTestImplementation "androidx.test:runner:${rootProject.androidxTestRunnerVersion}"
-    androidTestImplementation "androidx.test:rules:${rootProject.androidxTestRulesVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.androidxTestEspressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.androidxTestEspressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.androidxTestEspressoVersion}"
-
-    deployerJars "io.packagecloud.maven.wagon:maven-packagecloud-wagon:${rootProject.packagecloudWagonVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.junitJupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${rootProject.junitJupiterVersion}"
+    testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
 
-//
-// This task contains the upload repositories for Nexus release & snapshot
-//
-uploadArchives {
-    if (!(project.hasProperty('mavenUser') && project.hasProperty('mavenPassword'))) {
-        logger.warn('Missing mavenUser and/or mavenPassword from ~/.gradle/gradle.properties in uploadArchives task')
-        return
-    }
-    repositories {
-        mavenDeployer {
-            repository(url: "https://nexus.mgmt.oscato.com/repository/releases/") {
-                authentication(userName: mavenUser, password: mavenPassword)
-                pom.version = versionName
-                pom.artifactId = "checkout-android"
-                pom.groupId = "com.payoneer"
-            }
-            snapshotRepository(url: "https://nexus.mgmt.oscato.com/repository/snapshots/") {
-                authentication(userName: mavenUser, password: mavenPassword)
-                pom.version = versionName
-                pom.artifactId = "checkout-android"
-                pom.groupId = "com.payoneer"
-            }
-        }
-    }
-}
-
-//
-// This contains an additional task to upload to external packagecloud.io.
-// Run using: gradle uploadExternal
-//
-// Documentation about packagecloud gradle at:
-// https://packagecloud.io/docs#gradle_deploy
-//
-task uploadExternal(type: Upload) {
-    if (!project.hasProperty('packageCloudMavenPassword')) {
-        logger.warn('Missing packageCloudMavenPassword from ~/.gradle/gradle.properties in uploadExternal task')
-        return
-    }
-    configuration = configurations.archives
-    uploadDescriptor = true
-
-    repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-
-        repository(url: "packagecloud+https://packagecloud.io/optile/android") {
-            authentication(password: packageCloudMavenPassword)
-            pom.version = versionName
-            pom.artifactId = "checkout-android"
-            pom.groupId = "com.payoneer"
-        }
-    }
-}
+// import the script for publishing release builds to Nexus and Packagecloud
+apply from: 'publish.gradle'
