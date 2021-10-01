@@ -96,7 +96,7 @@ public final class ListService {
         }
         String division = settings.getDivision();
         if (division != null) {
-            json.put("division", checkoutConfigurationName);
+            json.put("division", division);
         }
         return json.toString();
     }

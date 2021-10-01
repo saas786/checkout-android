@@ -58,7 +58,7 @@ public final class ListSettings {
         return this;
     }
 
-    public ListSettings setCheckoutConfigurationName() {
+    public ListSettings setCheckoutConfigurationName(final String checkoutConfigurationName) {
         this.checkoutConfigurationName = checkoutConfigurationName;
         return this;
     }

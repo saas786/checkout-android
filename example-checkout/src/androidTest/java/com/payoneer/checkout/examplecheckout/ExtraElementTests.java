@@ -10,6 +10,7 @@ package com.payoneer.checkout.examplecheckout;
 
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static com.payoneer.checkout.sharedtest.checkout.MagicNumbers.CHARGE_PROCEED_OK;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import com.payoneer.checkout.model.InteractionReason;
 import com.payoneer.checkout.sharedtest.checkout.ChargePaymentHelper;
 import com.payoneer.checkout.sharedtest.checkout.PaymentDialogHelper;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
+import com.payoneer.checkout.sharedtest.service.ListSettings;
 import com.payoneer.checkout.sharedtest.view.UiDeviceHelper;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
 
@@ -32,16 +34,20 @@ import androidx.test.rule.ActivityTestRule;
 @LargeTest
 public final class ExtraElementTests extends AbstractTest {
 
-    private final String LISTRESULT_BOTTOM = "https://raw.githubusercontent.com/optile/checkout-android/PCX-2004/shared-test/lists/listresult_extraelements_bottom.json";
-    private final String LISTRESULT_TOP = "https://raw.githubusercontent.com/optile/checkout-android/PCX-2004/shared-test/lists/listresult_extraelements_top.json";
-    private final String LISTRESULT_TOPBOTTOM = "https://raw.githubusercontent.com/optile/checkout-android/PCX-2004/shared-test/lists/listresult_extraelements_topbottom.json";
-
+    private final static String DIVISION = "ExtraElements";
+    private final static String EXTRAELEMENTS_BOTTOM_CONFIG = "UITests-ExtraElements-Bottom";
+    private final static String EXTRAELEMENTS_TOP_CONFIG = "UITests-ExtraElements-Top";
+    private final static String EXTRAELEMENTS_TOPBOTTOM_CONFIG = "UITests-ExtraElements-TopBottom";
+    
     @Rule
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
     public void testGroupedNetworks_topElement_clickLink() {
-        enterListUrl(LISTRESULT_TOP);
+        ListSettings settings = createDefaultListSettings();
+        settings.setDivision(DIVISION);
+        settings.setCheckoutConfigurationName(EXTRAELEMENTS_TOP_CONFIG);
+        enterListUrl(createListUrl(settings));
         clickActionButton();
 
         int networkCardIndex = 1;
@@ -54,36 +60,26 @@ public final class ExtraElementTests extends AbstractTest {
 
     @Test
     public void testSingleNetwork_bottomElement_clickLink() {
-        enterListUrl(LISTRESULT_BOTTOM);
+        ListSettings settings = createDefaultListSettings();
+        settings.setDivision(DIVISION);
+        settings.setCheckoutConfigurationName(EXTRAELEMENTS_BOTTOM_CONFIG);
+        enterListUrl(createListUrl(settings));
         clickActionButton();
 
         int networkCardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
         PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
 
-        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement2", "Number 2");
-        clickBrowserPageButton("two", CHROME_CLOSE_BUTTON);
-    }
-
-    @Test
-    public void testSingleNetwork_topBottomElements_clickTopBottomLinks() {
-        enterListUrl(LISTRESULT_TOPBOTTOM);
-        clickActionButton();
-
-        int networkCardIndex = 2;
-        PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
-
-        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.topelement1", "Number 1");
-        clickBrowserPageButton("one", CHROME_CLOSE_BUTTON);
-        waitForAppRelaunch();
         PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement2", "Number 2");
         clickBrowserPageButton("two", CHROME_CLOSE_BUTTON);
     }
 
     @Test
     public void testSingleNetwork_bottomElement_clickBothLinks() {
-        enterListUrl(LISTRESULT_BOTTOM);
+        ListSettings settings = createDefaultListSettings();
+        settings.setDivision(DIVISION);
+        settings.setCheckoutConfigurationName(EXTRAELEMENTS_BOTTOM_CONFIG);
+        enterListUrl(createListUrl(settings));
         clickActionButton();
 
         int networkCardIndex = 2;
@@ -95,5 +91,24 @@ public final class ExtraElementTests extends AbstractTest {
         waitForAppRelaunch();
         PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement3", "Number3B");
         clickBrowserPageButton("3B", CHROME_CLOSE_BUTTON);
+    }
+
+    @Test
+    public void testSingleNetwork_topBottomElements_clickTopBottomLinks() {
+        ListSettings settings = createDefaultListSettings();
+        settings.setDivision(DIVISION);
+        settings.setCheckoutConfigurationName(EXTRAELEMENTS_TOPBOTTOM_CONFIG);
+        enterListUrl(createListUrl(settings));
+        clickActionButton();
+
+        int networkCardIndex = 2;
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
+
+        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.topelement1", "Number 1");
+        clickBrowserPageButton("one", CHROME_CLOSE_BUTTON);
+        waitForAppRelaunch();
+        PaymentListHelper.clickExtraElementLinkWithText(networkCardIndex, "extraelement.bottomelement2", "Number 2");
+        clickBrowserPageButton("two", CHROME_CLOSE_BUTTON);
     }
 }
