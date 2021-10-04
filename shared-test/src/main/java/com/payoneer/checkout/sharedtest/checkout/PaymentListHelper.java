@@ -23,6 +23,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInPaymentCard;
 import static com.payoneer.checkout.sharedtest.view.PaymentActions.actionOnViewInWidget;
+import static com.payoneer.checkout.sharedtest.view.PaymentActions.clickClickableSpan;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.hasTextInputLayoutError;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.hasTextInputLayoutValue;
 import static com.payoneer.checkout.sharedtest.view.PaymentMatchers.isCardWithTestId;
@@ -90,6 +91,11 @@ public final class PaymentListHelper {
             onView(list).perform(actionOnViewInWidget(cardIndex, typeText(pair.getValue()), pair.getKey(),
                 R.id.textinputedittext), closeSoftKeyboard());
         }
+    }
+
+    public static void clickExtraElementLinkWithText(int cardIndex, String widgetName, String linkText) {
+        intended(hasComponent(PaymentListActivity.class.getName()));
+        onView(withId(R.id.recyclerview_paymentlist)).perform(actionOnViewInWidget(cardIndex, clickClickableSpan(linkText), widgetName, R.id.label_checkbox));
     }
 
     public static void clickPaymentListCardButton(int cardIndex) {
