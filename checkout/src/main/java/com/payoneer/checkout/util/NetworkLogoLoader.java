@@ -8,15 +8,13 @@
 
 package com.payoneer.checkout.util;
 
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.payoneer.checkout.R;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.widget.ImageView;
+import com.payoneer.checkout.R;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class for loading network logo images into an ImageView.
@@ -44,8 +42,8 @@ public final class NetworkLogoLoader {
     /**
      * Load the network logo given the networkCode and URL and store it into the ImageView.
      *
-     * @param view ImageView in which to place the Bitmap
-     * @param networkCode code of the payment network
+     * @param view           ImageView in which to place the Bitmap
+     * @param networkCode    code of the payment network
      * @param networkLogoUrl pointing to the remote image
      */
     public static void loadNetworkLogo(ImageView view, String networkCode, URL networkLogoUrl) {
