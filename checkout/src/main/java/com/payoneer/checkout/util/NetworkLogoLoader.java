@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.bumptech.glide.Glide;
 import com.payoneer.checkout.R;
 
 import android.content.Context;
@@ -63,7 +62,6 @@ public final class NetworkLogoLoader {
         } else {
             url = networkLogoUrl.toString();
         }
-        Glide.with(view.getContext()).asBitmap().load(url).into(view);
     }
 
     private void loadLocalNetworkLogos(Context context) {
