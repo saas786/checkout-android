@@ -46,7 +46,6 @@ ext {
     lombokVersion = '1.18.20'
 
     gsonVersion = '2.8.8'
-    bumptechGlideVersion = '4.12.0'
     junitJupiterVersion = '5.8.1'
     androidMaterialVersion = '1.4.0'
     androidxBrowserVersion = '1.3.0'

@@ -57,9 +57,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${rootProject.lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${rootProject.lombokVersion}"
 
-    implementation("com.github.bumptech.glide:glide:${rootProject.bumptechGlideVersion}") {
-        exclude group: "com.android.support"
-    }
     testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.junitJupiterVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${rootProject.junitJupiterVersion}"
