@@ -73,6 +73,13 @@ abstract class BaseConnection {
     }
 
     /**
+     * Just a default constructor for classes that do not need a context
+     */
+    BaseConnection() {
+        this.gson = new GsonBuilder().create();
+    }
+
+    /**
      * Get the user agent to be send with each request
      * param context used to construct the custom UserAgent value
      */
