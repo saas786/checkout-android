@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.widget.ImageView;
 import com.payoneer.checkout.R;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +24,9 @@ import java.util.Map;
  */
 public final class NetworkLogoLoader {
 
-    private final static String NETWORKLOGO_FOLDER = "file:///android_asset/networklogos/";
+    private final static String NETWORKLOGO_FOLDER = "networklogos/";
     private final Map<String, String> localNetworkLogos;
+    private final ImageHelper helper = ImageHelper.getInstance();
 
     private NetworkLogoLoader() {
         localNetworkLogos = new HashMap<>();
@@ -54,12 +56,23 @@ public final class NetworkLogoLoader {
         if (localNetworkLogos.size() == 0) {
             loadLocalNetworkLogos(view.getContext());
         }
-        String url;
         if (localNetworkLogos.containsKey(networkCode)) {
-            url = localNetworkLogos.get(networkCode);
+            String url = localNetworkLogos.get(networkCode);
+            helper.loadImageFromFile(view, url);
         } else {
-            url = networkLogoUrl.toString();
+            String url = networkLogoUrl.toString();
+            helper.loadImageFromNetwork(view, createUrl(url));
         }
+    }
+
+    private URL createUrl(String url) {
+        URL createdUrl = null;
+        try {
+            createdUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return createdUrl;
     }
 
     private void loadLocalNetworkLogos(Context context) {
