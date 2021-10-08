@@ -1,6 +1,5 @@
 package com.payoneer.checkout.network;
 
-import android.graphics.Bitmap;
 import com.payoneer.checkout.core.PaymentException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +19,6 @@ public class ImageConnectionTest {
     @Test(expected = IllegalArgumentException.class)
     public void loadBitmap_invalidUrl_IllegalArgumentException() throws PaymentException {
         ImageConnection conn = new ImageConnection();
-        Bitmap bitmap = conn.loadBitmap(null);
+        conn.loadBitmap(null);
     }
 }
