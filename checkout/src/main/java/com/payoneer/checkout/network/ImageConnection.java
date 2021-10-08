@@ -18,12 +18,6 @@ import java.net.URL;
 public final class ImageConnection extends BaseConnection {
 
     /**
-     * Construct a new ImageConnection with the empty constructor in super
-     */
-    public ImageConnection() {
-    }
-
-    /**
      * Load the Bitmap from the given URL
      *
      * @param url the pointing to the language entries
