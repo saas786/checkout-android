@@ -39,13 +39,16 @@ public final class NetworkLogoLoader {
     private final Map<String, String> localNetworkLogos = new HashMap<>();
     private final ImageConnection imageConnection = new ImageConnection();
 
+    private NetworkLogoLoader() {
+    }
+
     /**
      * Get the instance of this LogoLoader
      *
      * @return the instance of this LogoLoader
      */
-    public static NetworkLogoLoader getInstance() {
-        return InstanceHolder.INSTANCE;
+    private static NetworkLogoLoader getInstance() {
+        return new NetworkLogoLoader();
     }
 
     /**
@@ -135,9 +138,5 @@ public final class NetworkLogoLoader {
             hasImage = ((BitmapDrawable) drawable).getBitmap() != null;
         }
         return hasImage;
-    }
-
-    private static class InstanceHolder {
-        static final NetworkLogoLoader INSTANCE = new NetworkLogoLoader();
     }
 }
