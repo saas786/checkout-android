@@ -67,7 +67,7 @@ public final class NetworkLogoLoader {
         if (localNetworkLogos.size() == 0) {
             loadLocalNetworkLogos(view.getContext());
         }
-        if (hasImage(view)) {
+        if (viewHasImage(view)) {
             return;
         }
 
@@ -130,7 +130,7 @@ public final class NetworkLogoLoader {
         }
     }
 
-    private boolean hasImage(ImageView view) {
+    private boolean viewHasImage(ImageView view) {
         Drawable drawable = view.getDrawable();
         boolean hasImage = (drawable != null);
 
