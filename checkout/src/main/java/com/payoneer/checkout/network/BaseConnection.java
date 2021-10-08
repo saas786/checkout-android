@@ -55,29 +55,25 @@ abstract class BaseConnection {
     final Gson gson = new GsonBuilder().create();
 
     /**
+     * Just a default constructor for classes that do not need a context
+     */
+    BaseConnection() {
+        if (CookieHandler.getDefault() == null) {
+            CookieHandler.setDefault(new CookieManager());
+        }
+    }
+
+    /**
      * Construct a new BaseConnection
      *
      * @param context used to initialize the custom UserAgent
      */
     BaseConnection(Context context) {
+        this();
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");
         }
-        initCookies();
         initUserAgent(context);
-    }
-
-    /**
-     * Just a default constructor for classes that do not need a context
-     */
-    BaseConnection() {
-        initCookies();
-    }
-
-    private void initCookies() {
-        if (CookieHandler.getDefault() == null) {
-            CookieHandler.setDefault(new CookieManager());
-        }
     }
 
     /**
