@@ -39,6 +39,8 @@ public final class NetworkLogoLoader {
     private final Map<String, String> localNetworkLogos = new HashMap<>();
     private final ImageConnection imageConnection = new ImageConnection();
 
+    /*This is private because this class should never have an object created. The loading functionality
+     * will be accessed statically*/
     private NetworkLogoLoader() {
     }
 
