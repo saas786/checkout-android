@@ -36,12 +36,8 @@ import java.util.Map;
 public final class NetworkLogoLoader {
 
     private final static String NETWORKLOGO_FOLDER = "networklogos/";
-    private final Map<String, String> localNetworkLogos;
+    private final Map<String, String> localNetworkLogos = new HashMap<>();
     private final ImageConnection imageConnection = new ImageConnection();
-
-    private NetworkLogoLoader() {
-        localNetworkLogos = new HashMap<>();
-    }
 
     /**
      * Get the instance of this LogoLoader
