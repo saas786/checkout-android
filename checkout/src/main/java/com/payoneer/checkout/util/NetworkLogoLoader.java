@@ -10,9 +10,20 @@ package com.payoneer.checkout.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 import com.payoneer.checkout.R;
-import java.net.MalformedURLException;
+import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.core.WorkerSubscriber;
+import com.payoneer.checkout.core.WorkerTask;
+import com.payoneer.checkout.core.Workers;
+import com.payoneer.checkout.network.ImageConnection;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +37,7 @@ public final class NetworkLogoLoader {
 
     private final static String NETWORKLOGO_FOLDER = "networklogos/";
     private final Map<String, String> localNetworkLogos;
-    private final ImageHelper helper = ImageHelper.getInstance();
+    private final ImageConnection imageConnection = new ImageConnection();
 
     private NetworkLogoLoader() {
         localNetworkLogos = new HashMap<>();
@@ -49,30 +60,60 @@ public final class NetworkLogoLoader {
      * @param networkLogoUrl pointing to the remote image
      */
     public static void loadNetworkLogo(ImageView view, String networkCode, URL networkLogoUrl) {
-        getInstance().loadIntoView(view, networkCode, networkLogoUrl);
+        getInstance().loadImageIntoView(view, networkCode, networkLogoUrl);
     }
 
-    private void loadIntoView(ImageView view, String networkCode, URL networkLogoUrl) {
+    private void loadImageIntoView(ImageView view, String networkCode, URL networkLogoUrl) {
+        final Context context = view.getContext();
         if (localNetworkLogos.size() == 0) {
             loadLocalNetworkLogos(view.getContext());
         }
-        if (localNetworkLogos.containsKey(networkCode)) {
-            String url = localNetworkLogos.get(networkCode);
-            helper.loadImageFromFile(view, url);
-        } else {
-            String url = networkLogoUrl.toString();
-            helper.loadImageFromNetwork(view, createUrl(url));
+        if (hasImage(view)) {
+            return;
+        }
+
+        WorkerTask<Bitmap> task = WorkerTask.fromCallable(() -> loadLogo(context, networkCode, networkLogoUrl));
+        task.subscribe(new WorkerSubscriber<Bitmap>() {
+            @Override
+            public void onSuccess(Bitmap bitmap) {
+                onLoadBitmapSuccess(view, bitmap);
+            }
+
+            @Override
+            public void onError(Throwable cause) {
+                Log.w("sdk_ImageHelper", cause);
+                // we ignore image loading failures
+            }
+        });
+        Workers.getInstance().forImageTasks().execute(task);
+    }
+
+    private void onLoadBitmapSuccess(ImageView view, Bitmap bitmap) {
+        try {
+            view.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.w("checkout-sdk", e);
+            // we ignore image loading failures which may occur if the device is out of memory
         }
     }
 
-    private URL createUrl(String url) {
-        URL createdUrl = null;
-        try {
-            createdUrl = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    private Bitmap loadLogo(Context context, String networkCode, URL networkLogoUrl) throws PaymentException {
+        if (localNetworkLogos.containsKey(networkCode)) {
+            // Load this logo from the network
+            String fileName = localNetworkLogos.get(networkCode);
+            return loadBitmapFromFile(context, fileName);
+        } else {
+            return imageConnection.loadBitmap(networkLogoUrl);
         }
-        return createdUrl;
+    }
+
+    private Bitmap loadBitmapFromFile(Context context, String fileName) throws PaymentException {
+        try {
+            InputStream inputStream = context.getAssets().open(fileName);
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            throw new PaymentException(e);
+        }
     }
 
     private void loadLocalNetworkLogos(Context context) {
@@ -88,6 +129,16 @@ public final class NetworkLogoLoader {
                 localNetworkLogos.put(ts[0], NETWORKLOGO_FOLDER + ts[1]);
             }
         }
+    }
+
+    private boolean hasImage(ImageView view) {
+        Drawable drawable = view.getDrawable();
+        boolean hasImage = (drawable != null);
+
+        if (hasImage && (drawable instanceof BitmapDrawable)) {
+            hasImage = ((BitmapDrawable) drawable).getBitmap() != null;
+        }
+        return hasImage;
     }
 
     private static class InstanceHolder {
