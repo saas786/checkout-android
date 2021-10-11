@@ -53,8 +53,8 @@ public final class NetworkLogoLoader {
      *
      * @return the instance of this LogoLoader
      */
-    private static NetworkLogoLoader getInstance() {
-        return new NetworkLogoLoader();
+    public static NetworkLogoLoader getInstance() {
+        return InstanceHolder.INSTANCE;
     }
 
     /**
@@ -144,5 +144,9 @@ public final class NetworkLogoLoader {
             hasImage = ((BitmapDrawable) drawable).getBitmap() != null;
         }
         return hasImage;
+    }
+
+    private static class InstanceHolder {
+        static final NetworkLogoLoader INSTANCE = new NetworkLogoLoader();
     }
 }
