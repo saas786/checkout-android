@@ -8,6 +8,19 @@
 
 package com.payoneer.checkout.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.payoneer.checkout.R;
+import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.core.WorkerSubscriber;
+import com.payoneer.checkout.core.WorkerTask;
+import com.payoneer.checkout.core.Workers;
+import com.payoneer.checkout.network.ImageConnection;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,17 +29,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
-import com.payoneer.checkout.R;
-import com.payoneer.checkout.core.PaymentException;
-import com.payoneer.checkout.core.WorkerSubscriber;
-import com.payoneer.checkout.core.WorkerTask;
-import com.payoneer.checkout.core.Workers;
-import com.payoneer.checkout.network.ImageConnection;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Class for loading network logo images into an ImageView.
@@ -56,8 +58,8 @@ public final class NetworkLogoLoader {
     /**
      * Load the network logo given the networkCode and URL and store it into the ImageView.
      *
-     * @param view           ImageView in which to place the Bitmap
-     * @param networkCode    code of the payment network
+     * @param view ImageView in which to place the Bitmap
+     * @param networkCode code of the payment network
      * @param networkLogoUrl pointing to the remote image
      */
     public static void loadNetworkLogo(ImageView view, String networkCode, URL networkLogoUrl) {

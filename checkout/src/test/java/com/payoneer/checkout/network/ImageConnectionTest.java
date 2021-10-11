@@ -10,10 +10,11 @@
 
 package com.payoneer.checkout.network;
 
-import com.payoneer.checkout.core.PaymentException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+
+import com.payoneer.checkout.core.PaymentException;
 
 /**
  * Containing ImageConnection tests

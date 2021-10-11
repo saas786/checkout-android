@@ -10,13 +10,15 @@
 
 package com.payoneer.checkout.network;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import com.payoneer.checkout.core.PaymentException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import com.payoneer.checkout.core.PaymentException;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 /**
  * Class for loading images from the network
