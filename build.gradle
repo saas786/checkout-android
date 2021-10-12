@@ -1,3 +1,13 @@
+/*
+ *
+ *  * Copyright (c) 2021 Payoneer Germany GmbH
+ *  * https://www.payoneer.com
+ *  *
+ *  * This file is open source and available under the MIT license.
+ *  * See the LICENSE file for more information.
+ *  *
+ */
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: 'version.gradle'
 
@@ -60,7 +70,6 @@ ext {
     rxjavaVersion = '3.1.1'
     rxandroidVersion = '3.0.0'
     mockitoCoreVersion = '2.23.4'
-    robolectricVersion = '4.5.1'
     jsonsnapshotVersion = '1.0.17'
 }
 

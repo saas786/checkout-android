@@ -56,13 +56,21 @@ dependencies {
 
     compileOnly "org.projectlombok:lombok:${rootProject.lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${rootProject.lombokVersion}"
-    testImplementation "org.robolectric:robolectric:${rootProject.robolectricVersion}"
-
     testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.junitJupiterVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${rootProject.junitJupiterVersion}"
     testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
+
+/*
+ *
+ *  * Copyright (c) 2021 Payoneer Germany GmbH
+ *  * https://www.payoneer.com
+ *  *
+ *  * This file is open source and available under the MIT license.
+ *  * See the LICENSE file for more information.
+ *  *
+ */
 
 // import the script for publishing release builds to Nexus and Packagecloud
 apply from: 'publish.gradle'
