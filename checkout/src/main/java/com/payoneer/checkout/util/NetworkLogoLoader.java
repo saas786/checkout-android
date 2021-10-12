@@ -1,9 +1,11 @@
 /*
- * Copyright (c) 2020 Payoneer Germany GmbH
- * https://www.payoneer.com
  *
- * This file is open source and available under the MIT license.
- * See the LICENSE file for more information.
+ *  * Copyright (c) 2021 Payoneer Germany GmbH
+ *  * https://www.payoneer.com
+ *  *
+ *  * This file is open source and available under the MIT license.
+ *  * See the LICENSE file for more information.
+ *  *
  */
 
 package com.payoneer.checkout.util;
@@ -104,7 +106,6 @@ public final class NetworkLogoLoader {
 
     private Bitmap loadLogo(Context context, String networkCode, URL networkLogoUrl) throws PaymentException {
         if (localNetworkLogos.containsKey(networkCode)) {
-            // Load this logo from the network
             String fileName = localNetworkLogos.get(networkCode);
             return loadBitmapFromFile(context, fileName);
         } else {
