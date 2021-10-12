@@ -25,8 +25,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -72,9 +70,6 @@ public final class NetworkLogoLoader {
         final Context context = view.getContext();
         if (localNetworkLogos.size() == 0) {
             loadLocalNetworkLogos(view.getContext());
-        }
-        if (viewHasImage(view)) {
-            return;
         }
 
         WorkerTask<Bitmap> task = WorkerTask.fromCallable(() -> loadLogo(context, networkCode, networkLogoUrl));
@@ -133,16 +128,6 @@ public final class NetworkLogoLoader {
                 localNetworkLogos.put(ts[0], NETWORKLOGO_FOLDER + ts[1]);
             }
         }
-    }
-
-    private boolean viewHasImage(ImageView view) {
-        Drawable drawable = view.getDrawable();
-        boolean hasImage = (drawable != null);
-
-        if (hasImage && (drawable instanceof BitmapDrawable)) {
-            hasImage = ((BitmapDrawable) drawable).getBitmap() != null;
-        }
-        return hasImage;
     }
 
     private static class InstanceHolder {
