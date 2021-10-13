@@ -8,13 +8,11 @@
 
 package com.payoneer.checkout.redirect;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.model.HttpMethod;
 import com.payoneer.checkout.model.Redirect;
@@ -23,7 +21,6 @@ import com.payoneer.checkout.test.util.TestUtils;
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
-@RunWith(RobolectricTestRunner.class)
 public class RedirectServiceTest {
 
     @Test
@@ -33,7 +30,8 @@ public class RedirectServiceTest {
         redirect.setMethod(HttpMethod.GET);
 
         URL link = TestUtils.createDefaultURL();
-        RedirectRequest request = new RedirectRequest(redirect, link);
+        int requestType = 1;
+        RedirectRequest request = new RedirectRequest(requestType, redirect, link);
         assertTrue(RedirectService.supports(context, request));
 
         redirect.setMethod(HttpMethod.POST);

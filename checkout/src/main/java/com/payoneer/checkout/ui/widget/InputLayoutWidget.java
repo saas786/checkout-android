@@ -18,7 +18,9 @@ import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.ui.widget.input.EditTextInputMode;
 import com.payoneer.checkout.validation.ValidationResult;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,18 +37,10 @@ public abstract class InputLayoutWidget extends FormWidget {
     EditTextInputMode mode;
     private String helperText;
 
-    /**
-     * Construct a new InputLayoutWidget
-     *
-     * @param name name identifying this widget
-     */
-    InputLayoutWidget(String name) {
-        super(name);
+    InputLayoutWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_textinput);
@@ -69,6 +63,18 @@ public abstract class InputLayoutWidget extends FormWidget {
             }
         });
 
+        textInput.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onTextInputChanged();
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         textInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -88,26 +94,22 @@ public abstract class InputLayoutWidget extends FormWidget {
         this.helperText = helperText;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public boolean hasUserInputData() {
+        return !(TextUtils.isEmpty(textInput.getText()));
+    }
+
     @Override
     public boolean setLastImeOptionsWidget() {
         textInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean requestFocus() {
         return textInput.requestFocus();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void clearFocus() {
         if (textInput.hasFocus()) {
@@ -115,9 +117,6 @@ public abstract class InputLayoutWidget extends FormWidget {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setValidation() {
 
@@ -128,23 +127,17 @@ public abstract class InputLayoutWidget extends FormWidget {
         validate();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean validate() {
         ValidationResult result = presenter.validate(name, getValue(), null);
         return setValidationResult(result);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void putValue(Operation operation) throws PaymentException {
         String val = getValue();
         if (!TextUtils.isEmpty(val)) {
-            operation.putStringValue(name, val);
+            operation.putStringValue(category, name, val);
         }
     }
 
@@ -157,6 +150,10 @@ public abstract class InputLayoutWidget extends FormWidget {
                 handleOnEndIconClicked();
             }
         });
+    }
+
+    void onTextInputChanged() {
+        presenter.onTextInputChanged(name, getValue());
     }
 
     void removeEndIcon() {

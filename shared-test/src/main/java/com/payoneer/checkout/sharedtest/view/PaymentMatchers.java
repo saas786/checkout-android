@@ -20,6 +20,7 @@ import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.view.View;
+import android.widget.LinearLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.matcher.BoundedMatcher;
 
@@ -62,7 +63,7 @@ public final class PaymentMatchers {
      * @param viewResId resource ID of the view
      * @return newly created View Matcher
      */
-    public static Matcher<View> isViewInCard(int position, Matcher<View> viewMatcher, int viewResId) {
+    public static Matcher<View> isViewInPaymentCard(int position, Matcher<View> viewMatcher, int viewResId) {
         checkNotNull(viewMatcher);
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
@@ -122,6 +123,23 @@ public final class PaymentMatchers {
         };
     }
 
+    public static Matcher<View> linearLayoutWithChildCount(final int childCount) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof LinearLayout)) {
+                    return false;
+                }
+                int count = ((LinearLayout) view).getChildCount();
+                return count == childCount;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        };
+    }
+
     public static Matcher<View> hasTextInputLayoutHint(final String expectedHint) {
         return new TypeSafeMatcher<View>() {
             @Override
@@ -134,7 +152,24 @@ public final class PaymentMatchers {
                 if (hintSequence != null) {
                     inputHint = hintSequence.toString();
                 }
-                return expectedHint.equals(inputHint);
+                return inputHint.equals(expectedHint);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        };
+    }
+
+    public static Matcher<View> hasTextInputLayoutValue(final String expectedValue) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view instanceof TextInputLayout)) {
+                    return false;
+                }
+                String value = ((TextInputLayout) view).getEditText().getText().toString();
+                return value.equals(expectedValue);
             }
 
             @Override
@@ -155,7 +190,7 @@ public final class PaymentMatchers {
                 if (errorSequence != null) {
                     inputError = errorSequence.toString();
                 }
-                return expectedError.equals(inputError);
+                return inputError.equals(expectedError);
             }
 
             @Override

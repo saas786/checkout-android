@@ -8,13 +8,18 @@
 
 package com.payoneer.checkout.util;
 
+import static com.payoneer.checkout.model.PaymentMethod.CREDIT_CARD;
+import static com.payoneer.checkout.model.PaymentMethod.DEBIT_CARD;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.model.AccountMask;
@@ -32,11 +37,22 @@ public final class PaymentUtils {
     /**
      * Check if the Boolean object is true, the Boolean object may be null.
      *
-     * @param val the value to check
+     * @param value the value to check
      * @return true when the val is not null and true
      */
-    public static boolean isTrue(Boolean val) {
-        return val != null && val;
+    public static boolean isTrue(Boolean value) {
+        return value != null && value;
+    }
+
+    /**
+     * Return the boolean value given the Boolean Object.
+     * If the Object is null then return the default value.
+     *
+     * @param value the value to check
+     * @return defaultValue if value is null, else the boolean value
+     */
+    public static boolean toBoolean(Boolean value, boolean defaultValue) {
+        return (value == null) ? defaultValue : value.booleanValue();
     }
 
     /**
@@ -57,6 +73,16 @@ public final class PaymentUtils {
      */
     public static String format(String format, Object... args) {
         return String.format(Locale.getDefault(), format, args);
+    }
+
+    /**
+     * Check if the paymentMethod is a card payment method.
+     *
+     * @param paymentMethod to be checked if it is a card payment
+     * @return true when card payment, false otherwise
+     */
+    public static boolean isCardPaymentMethod(String paymentMethod) {
+        return DEBIT_CARD.equals(paymentMethod) || CREDIT_CARD.equals(paymentMethod);
     }
 
     /**
@@ -81,6 +107,18 @@ public final class PaymentUtils {
      */
     public static int toInt(Integer value) {
         return value == null ? 0 : value;
+    }
+
+    /**
+     * Get the label for this AccountMask, if the paymentMethod is a card then return the
+     * number from the mask. Else return the DisplayLabel from this mask.
+     *
+     * @param accountMask containing the label information
+     * @param paymentMethod to which this accountMask belongs to
+     * @return the label for this AccountMask
+     */
+    public static String getAccountMaskLabel(AccountMask accountMask, String paymentMethod) {
+        return isCardPaymentMethod(paymentMethod) ? accountMask.getNumber() : accountMask.getDisplayLabel();
     }
 
     /**
@@ -184,6 +222,26 @@ public final class PaymentUtils {
     }
 
     /**
+     * Return an empty list when the provided list is null.
+     *
+     * @param list to be checked if null
+     * @return the list if not null, else return an empty list
+     */
+    public static <T> List<T> emptyListIfNull(List<T> list) {
+        return list == null ? Collections.emptyList() : list;
+    }
+
+    /**
+     * Return an empty map when the provided map is null.
+     *
+     * @param map to be checked if null
+     * @return the map if not null, else return an empty map
+     */
+    public static <K, V> Map<K, V> emptyMapIfNull(Map<K, V> map) {
+        return map == null ? Collections.emptyMap() : map;
+    }
+
+    /**
      * Set the test Id to the view with the proper formatting understood by the automated UI tests.
      *
      * @param view in which the tag should be set
@@ -191,6 +249,6 @@ public final class PaymentUtils {
      * @param name the name of the view i.e. holderName
      */
     public static void setTestId(View view, String type, String name) {
-        view.setContentDescription(type + "_" + name);
+        view.setContentDescription(type + "." + name);
     }
 }

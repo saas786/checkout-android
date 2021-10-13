@@ -12,6 +12,7 @@ import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +26,38 @@ public abstract class FormWidget {
     final static int VALIDATION_ERROR = 0x01;
     final static int VALIDATION_OK = 0x02;
 
+    final String category;
     final String name;
     View widgetView;
 
     WidgetPresenter presenter;
     int state;
 
-    FormWidget(String name) {
+    /**
+     * Create a new FormWidget with the category and name values
+     *
+     * @param category defines the category this widget belongs to, e.g. INPUTELEMENT, EXTRAELEMENT, REGISTRATION
+     * @param name contains the name of the widget, e.g. number, holderName, verificationCode
+     */
+    FormWidget(String category, String name) {
+        if (TextUtils.isEmpty(category)) {
+            throw new IllegalArgumentException("Category cannot be null or empty");
+        }
+        if (TextUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+        this.category = category;
         this.name = name;
+    }
+
+    public static String createWidgetKey(String category, String name) {
+        if (TextUtils.isEmpty(category)) {
+            throw new IllegalArgumentException("Category cannot be null or empty");
+        }
+        if (TextUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+        return category + "." + name;
     }
 
     /**
@@ -61,9 +86,37 @@ public abstract class FormWidget {
     }
 
     /**
+     * Get the key of this widget, this key must be unique between all widgets in the same payment card
+     * and is constructed using the category and name
+     *
+     * @return unique key of this widget
+     */
+    public final String getKey() {
+        return createWidgetKey(category, name);
+    }
+
+    /**
+     * Get the input category of this widget, i.e. "extraelement", "inputelement" or "registration"
+     *
+     * @return input categhory of this widget
+     */
+    public final String getCategory() {
+        return category;
+    }
+
+    /**
+     * Does this FormWidget matches the provide category and name
+     *
+     * @return true when matches, false otherwise
+     */
+    public final boolean matches(String category, String name) {
+        return this.category.equals(category) && this.name.equals(name);
+    }
+
+    /**
      * Get the name of this widget, i.e. "number", "iban" or "bic"
      *
-     * @return name of this widget
+     * @return input name of this widget
      */
     public final String getName() {
         return name;
@@ -75,6 +128,15 @@ public abstract class FormWidget {
      * @return true when set, false otherwise
      */
     public boolean setLastImeOptionsWidget() {
+        return false;
+    }
+
+    /**
+     * Does this widget have any input data entered by the user
+     *
+     * @return true when data has been entered, false otherwise
+     */
+    public boolean hasUserInputData() {
         return false;
     }
 
@@ -126,7 +188,7 @@ public abstract class FormWidget {
     final void inflateWidgetView(ViewGroup parent, int layoutResId) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         widgetView = inflater.inflate(layoutResId, parent, false);
-        PaymentUtils.setTestId(widgetView, "widget", name);
+        PaymentUtils.setTestId(widgetView, "widget", getKey());
     }
 
     /**

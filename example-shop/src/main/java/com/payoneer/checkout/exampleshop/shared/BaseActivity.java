@@ -128,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         String error = getString(errorResId);
         String tag = "dialog_exampleshop";
         PaymentDialogFragment dialog = PaymentDialogHelper.createMessageDialog(title, error, tag, listener);
-        dialog.show(getSupportFragmentManager());
+        dialog.showDialog(getSupportFragmentManager(), null);
     }
 
     /**

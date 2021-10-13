@@ -26,13 +26,8 @@ import android.view.ViewGroup;
  */
 public final class TextInputWidget extends InputLayoutWidget {
 
-    /**
-     * Construct a new TextInputWidget
-     *
-     * @param name name identifying this widget
-     */
-    public TextInputWidget(String name) {
-        super(name);
+    public TextInputWidget(String category, String name) {
+        super(category, name);
     }
 
     /**
@@ -62,34 +57,28 @@ public final class TextInputWidget extends InputLayoutWidget {
      * @param element to be set in this widget
      */
     public void onBind(String code, InputElement element) {
-        int maxLength = presenter.getMaxLength(code, name);
+        int maxLength = presenter.getMaxInputLength(code, name);
         setTextInputMode(EditTextInputModeFactory.createMode(maxLength, element));
         setValidation();
         setLabel(Localization.translateAccountLabel(code, name));
         setHelperText(Localization.translateAccountPlaceholder(code, name));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     void handleOnFocusChange(boolean hasFocus) {
         super.handleOnFocusChange(hasFocus);
         setClearIcon(getValue(), hasFocus);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     void handleOnEndIconClicked() {
         textInput.getText().clear();
     }
 
-    private void onTextInputChanged() {
-        String value = getValue();
-        presenter.onTextInputChanged(name, value);
-        setClearIcon(value, textInput.hasFocus());
+    @Override
+    void onTextInputChanged() {
+        super.onTextInputChanged();
+        setClearIcon(getValue(), textInput.hasFocus());
     }
 
     private void setClearIcon(String value, boolean hasFocus) {

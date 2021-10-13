@@ -8,8 +8,13 @@
 
 package com.payoneer.checkout.ui.dialog;
 
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_DISPLAYLABEL;
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.ACCOUNTS_DELETE_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_CANCEL;
+import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_DELETE;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_OK;
+import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_REFRESH;
 import static com.payoneer.checkout.localization.LocalizationKey.BUTTON_RETRY;
 import static com.payoneer.checkout.localization.LocalizationKey.ERROR_CONNECTION_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.ERROR_CONNECTION_TITLE;
@@ -17,6 +22,8 @@ import static com.payoneer.checkout.localization.LocalizationKey.ERROR_DEFAULT_T
 import static com.payoneer.checkout.localization.LocalizationKey.ERROR_DEFAULT_TITLE;
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TITLE;
+import static com.payoneer.checkout.localization.LocalizationKey.MESSAGES_UNSAVED_TEXT;
+import static com.payoneer.checkout.localization.LocalizationKey.MESSAGES_UNSAVED_TITLE;
 
 import java.util.Objects;
 
@@ -24,8 +31,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.core.PaymentNetworkCodes;
+import com.payoneer.checkout.localization.InteractionMessage;
 import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.model.Interaction;
 
 import android.view.View;
 
@@ -74,10 +81,10 @@ public class PaymentDialogHelper {
         return createMessageDialog(title, message, "dialog_defaulterror", listener);
     }
 
-    public static PaymentDialogFragment createInteractionDialog(Interaction interaction,
+    public static PaymentDialogFragment createInteractionDialog(InteractionMessage interactionMessage,
         PaymentDialogFragment.PaymentDialogListener listener) {
-        String title = Localization.translateInteraction(interaction, LABEL_TITLE);
-        String message = Localization.translateInteraction(interaction, LABEL_TEXT);
+        String title = Localization.translateInteractionMessage(interactionMessage, LABEL_TITLE);
+        String message = Localization.translateInteractionMessage(interactionMessage, LABEL_TEXT);
         return createMessageDialog(title, message, "dialog_interaction", listener);
     }
 
@@ -89,6 +96,37 @@ public class PaymentDialogHelper {
         dialog.setNegativeButton(Localization.translate(BUTTON_CANCEL));
         dialog.setPositiveButton(Localization.translate(BUTTON_RETRY));
         dialog.setTag("dialog_connectionerror");
+        return dialog;
+    }
+
+    public static PaymentDialogFragment createRefreshAccountDialog(PaymentDialogFragment.PaymentDialogListener listener) {
+        PaymentDialogFragment dialog = new PaymentDialogFragment();
+        dialog.setListener(listener);
+        dialog.setTitle(Localization.translate(MESSAGES_UNSAVED_TITLE));
+
+        String message = Localization.translate(MESSAGES_UNSAVED_TEXT);
+        dialog.setMessage(message);
+
+        dialog.setNegativeButton(Localization.translate(BUTTON_CANCEL));
+        dialog.setPositiveButton(Localization.translate(BUTTON_REFRESH));
+        dialog.setTag("dialog_refresh");
+        return dialog;
+    }
+
+
+    public static PaymentDialogFragment createDeleteAccountDialog(PaymentDialogFragment.PaymentDialogListener listener,
+        String accountLabel) {
+        PaymentDialogFragment dialog = new PaymentDialogFragment();
+        dialog.setListener(listener);
+        dialog.setTitle(Localization.translate(ACCOUNTS_DELETE_TITLE));
+
+        String message = Localization.translate(ACCOUNTS_DELETE_TEXT);
+        message = message.replace(ACCOUNTS_DELETE_DISPLAYLABEL, accountLabel);
+        dialog.setMessage(message);
+
+        dialog.setNegativeButton(Localization.translate(BUTTON_CANCEL));
+        dialog.setPositiveButton(Localization.translate(BUTTON_DELETE));
+        dialog.setTag("dialog_delete");
         return dialog;
     }
 

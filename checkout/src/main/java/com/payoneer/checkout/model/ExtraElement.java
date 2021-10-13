@@ -10,15 +10,23 @@ package com.payoneer.checkout.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * This class is designed to hold information about extra element that is displayed on payment page.
+ * Represents a custom extra element that the merchant can define to be visualised on a payment page.
+ * The element could be a label or a checkbox.
  */
 @Getter
 @Setter
+@ToString
 public class ExtraElement {
-    /** Advanced API, optional */
-    private String text;
-    /** Advanced API, optional */
+
+    /** The name of the extra element. Required */
+    private String name;
+
+    /** The label text that should be visualised for this element. Required */
+    private String label;
+
+    /** Determines if this extra element is a checkbox, and its additional properties. Optional */
     private Checkbox checkbox;
 }

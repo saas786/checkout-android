@@ -24,25 +24,26 @@ import androidx.test.rule.ActivityTestRule;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public final class VisaDirectTests extends AbstractTest {
+public final class SepaPaymentTests extends AbstractTest {
 
     @Rule
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
-    public void testVisa_directCharge_success() {
+    public void testSepa_PROCEED_SCHEDULED() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         enterListUrl(createListUrl());
         clickActionButton();
 
-        int groupCardIndex = 1;
+        int cardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
-        PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
-        PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
+        PaymentListHelper.openPaymentListCard(cardIndex, "card.network");
+        PaymentListHelper.fillPaymentListCard(cardIndex, TestDataProvider.sepaTestData());
+        PaymentListHelper.clickPaymentListCardButton(cardIndex);
 
         register(resultIdlingResource);
-        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
+        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.SCHEDULED);
         unregister(resultIdlingResource);
     }
 }
+

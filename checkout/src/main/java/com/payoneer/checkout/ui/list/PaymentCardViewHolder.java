@@ -8,6 +8,8 @@
 
 package com.payoneer.checkout.ui.list;
 
+import static com.payoneer.checkout.core.PaymentInputCategory.EXTRAELEMENT;
+import static com.payoneer.checkout.core.PaymentInputCategory.INPUTELEMENT;
 import static com.payoneer.checkout.core.PaymentInputType.EXPIRY_DATE;
 import static com.payoneer.checkout.core.PaymentInputType.EXPIRY_MONTH;
 import static com.payoneer.checkout.core.PaymentInputType.EXPIRY_YEAR;
@@ -21,22 +23,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.model.AccountMask;
+import com.payoneer.checkout.model.ExtraElement;
 import com.payoneer.checkout.model.InputElement;
 import com.payoneer.checkout.model.InputElementType;
-import com.payoneer.checkout.model.PaymentMethod;
 import com.payoneer.checkout.ui.model.PaymentCard;
 import com.payoneer.checkout.ui.widget.ButtonWidget;
-import com.payoneer.checkout.ui.widget.CheckBoxWidget;
-import com.payoneer.checkout.ui.widget.DateWidget;
+import com.payoneer.checkout.ui.widget.ExpiryDateWidget;
+import com.payoneer.checkout.ui.widget.ExtraElementWidget;
 import com.payoneer.checkout.ui.widget.FormWidget;
 import com.payoneer.checkout.ui.widget.SelectWidget;
 import com.payoneer.checkout.ui.widget.TextInputWidget;
 import com.payoneer.checkout.ui.widget.VerificationCodeWidget;
-import com.payoneer.checkout.ui.widget.WidgetPresenter;
 import com.payoneer.checkout.util.NetworkLogoLoader;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,18 +50,29 @@ import androidx.recyclerview.widget.RecyclerView;
  * The PaymentCardViewHolder holding the header and input widgets
  */
 public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
+    final static String UIELEMENT = "uielement";
+    final static String NETWORKLOGOS = "networklogos";
+    final static String BUTTON = "button";
 
-    final static String BUTTON_WIDGET = "buttonWidget";
     final ViewGroup formLayout;
-    final ListAdapter adapter;
-    final WidgetPresenter presenter;
     final Map<String, FormWidget> widgets;
     final ImageView cardLogoView;
+    final PaymentCard paymentCard;
+    final CardEventHandler cardHandler;
+    final ListAdapter adapter;
 
-    PaymentCardViewHolder(ListAdapter adapter, View parent) {
+    /**
+     * Construct a new PaymentCardViewHolder, this is the base class for other card ViewHolder
+     *
+     * @param adapter maintaining the items in the payment list
+     * @param parent view of the list
+     * @param paymentCard to be shown and bind to this ViewHolder
+     */
+    PaymentCardViewHolder(ListAdapter adapter, View parent, PaymentCard paymentCard) {
         super(parent);
         this.adapter = adapter;
-        this.presenter = new CardWidgetPresenter(this, adapter);
+        this.paymentCard = paymentCard;
+        this.cardHandler = new CardEventHandler(this, adapter);
         this.formLayout = parent.findViewById(R.id.layout_form);
         this.widgets = new LinkedHashMap<>();
         this.cardLogoView = parent.findViewById(R.id.image_logo);
@@ -69,55 +81,49 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.onItemClicked(getAdapterPosition());
+                handleCardClicked(v);
             }
         });
     }
 
     /**
-     * Get the FormWidget given the name, i.e. cardNumber or holderName.
-     *
-     * @param name of the widget to be returned
-     * @return the widget or null if it could not be found
+     * Sub classes must implement this method and make sure that all FormWidgets are
+     * bound to the correct data elements.
      */
-    public FormWidget getFormWidget(String name) {
-        return widgets.get(name);
+    abstract void onBind();
+
+    PaymentCard getPaymentCard() {
+        return paymentCard;
     }
 
-    void addButtonWidget() {
-        if (!widgets.containsKey(BUTTON_WIDGET)) {
-            addWidget(new ButtonWidget(BUTTON_WIDGET));
+    boolean hasUserInputData() {
+        for (FormWidget widget : widgets.values()) {
+            if (widget.hasUserInputData()) {
+                return true;
+            }
         }
+        return false;
     }
 
-    void addVerificationCodeWidget() {
-        if (!widgets.containsKey(VERIFICATION_CODE)) {
-            addWidget(new VerificationCodeWidget(VERIFICATION_CODE));
-        }
+    public FormWidget getFormWidget(String key) {
+        return widgets.get(key);
     }
 
-    void addExpiryDateWidget() {
-        if (!widgets.containsKey(EXPIRY_DATE)) {
-            addWidget(new DateWidget(EXPIRY_DATE));
-        }
+    Map<String, FormWidget> getFormWidgets() {
+        return widgets;
     }
 
-    void addWidget(FormWidget widget) {
-        String name = widget.getName();
-        if (!widgets.containsKey(name)) {
-            widget.setPresenter(presenter);
-            widgets.put(name, widget);
-        }
+    boolean hasValidPosition() {
+        return adapter.validPosition(getAdapterPosition());
     }
 
-    void addElementWidgets(PaymentCard card) {
-        String code = card.getCode();
-        List<InputElement> elements = card.getInputElements();
-        boolean elementsContainExpiryDate = PaymentUtils.containsExpiryDate(elements);
+    void addInputElementWidgets(List<InputElement> inputElements) {
+        String code = paymentCard.getNetworkCode();
+        boolean elementsContainExpiryDate = PaymentUtils.containsExpiryDate(inputElements);
 
-        for (InputElement element : elements) {
+        for (InputElement element : inputElements) {
             String name = element.getName();
-            if (adapter.isHidden(code, name)) {
+            if (cardHandler.isInputTypeHidden(code, name)) {
                 continue;
             }
             switch (element.getName()) {
@@ -131,38 +137,74 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
                         break;
                     }
                 default:
-                    addElementWidget(element);
+                    addInputElementWidget(element);
             }
         }
     }
 
-    private void addElementWidget(InputElement element) {
+    void addInputElementWidget(InputElement element) {
+        String category = INPUTELEMENT;
         String name = element.getName();
         FormWidget widget;
         switch (element.getType()) {
             case InputElementType.SELECT:
-                widget = new SelectWidget(name);
-            case InputElementType.CHECKBOX:
-                widget = new CheckBoxWidget(name);
+                widget = new SelectWidget(category, name);
+                break;
             default:
-                widget = new TextInputWidget(name);
+                widget = new TextInputWidget(category, name);
+                break;
         }
-        addWidget(widget);
+        putFormWidget(widget);
     }
 
+    void addExtraElementWidgets(List<ExtraElement> extraElements) {
+        for (ExtraElement element : extraElements) {
+            addExtraElementWidget(element);
+        }
+    }
+
+    void addExtraElementWidget(ExtraElement extraElement) {
+        ExtraElementWidget widget = new ExtraElementWidget(EXTRAELEMENT, extraElement.getName());
+        putFormWidget(widget);
+    }
+
+    void addButtonWidget() {
+        ButtonWidget widget = new ButtonWidget(UIELEMENT, BUTTON);
+        putFormWidget(widget);
+    }
+
+    void addVerificationCodeWidget() {
+        VerificationCodeWidget widget = new VerificationCodeWidget(INPUTELEMENT, VERIFICATION_CODE);
+        putFormWidget(widget);
+    }
+
+    void addExpiryDateWidget() {
+        String category = INPUTELEMENT;
+        String name = EXPIRY_DATE;
+        String key = FormWidget.createWidgetKey(category, name);
+        if (!widgets.containsKey(key)) {
+            putFormWidget(new ExpiryDateWidget(category, name));
+        }
+    }
+
+    void putFormWidget(FormWidget widget) {
+        widget.setPresenter(cardHandler);
+        widgets.put(widget.getKey(), widget);
+    }
 
     void layoutWidgets() {
         ViewGroup rowLayout = null;
         boolean rowAdded = false;
+        String category = INPUTELEMENT;
 
-        if (checkLayoutWidgetsInRow(VERIFICATION_CODE, EXPIRY_DATE)) {
+        if (checkLayoutWidgetsInRow(category, VERIFICATION_CODE, EXPIRY_DATE)) {
             LayoutInflater inflater = LayoutInflater.from(formLayout.getContext());
             rowLayout = (ViewGroup) inflater.inflate(R.layout.layout_widget_row, formLayout, false);
         }
-        for (FormWidget widget : widgets.values()) {
-            String name = widget.getName();
 
-            if (rowLayout != null && (VERIFICATION_CODE.equals(name) || EXPIRY_DATE.equals(name))) {
+        for (FormWidget widget : widgets.values()) {
+
+            if (rowLayout != null && (widget.matches(category, VERIFICATION_CODE) || widget.matches(category, EXPIRY_DATE))) {
                 layoutWidgetInRow(widget, rowLayout);
                 if (!rowAdded) {
                     formLayout.addView(rowLayout);
@@ -181,30 +223,30 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         view.setLayoutParams(params);
         rowLayout.addView(view);
     }
-    
+
     /**
-     * Check if two widgets can be placed next to eachother in a row
+     * Check if two widgets can be placed next to each other in a row
      *
-     * @param name1 contains name of the first widget
-     * @param name2 contains name of the second widget
+     * @param category both widgets must belong to the same category
+     * @param name1 contains key of the first widget
+     * @param name2 contains keyey of the second widget
      * @return true when they can be combined into one row, false otherwise
      */
-    private boolean checkLayoutWidgetsInRow(String name1, String name2) {
+    private boolean checkLayoutWidgetsInRow(String category, String name1, String name2) {
         String nextName = null;
-        for (String name : widgets.keySet()) {
+        for (FormWidget widget : widgets.values()) {
             if (nextName != null) {
-                return name.equals(nextName);
+                return widget.matches(category, nextName);
             }
-            if (name.equals(name1)) {
+            if (widget.matches(category, name1)) {
                 nextName = name2;
-            }
-            else if (name.equals(name2)) {
+            } else if (widget.matches(category, name2)) {
                 nextName = name1;
             }
         }
         return false;
     }
-    
+
     boolean requestFocusNextWidget(FormWidget currentWidget) {
         boolean requestFocus = false;
         for (Map.Entry<String, FormWidget> entry : widgets.entrySet()) {
@@ -220,78 +262,84 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
         return false;
     }
 
+    void handleCardClicked(View view) {
+        if (!paymentCard.isDisabled()) {
+            cardHandler.onCardClicked();
+        }
+    }
+
     void expand(boolean expand) {
+        if (paymentCard.getHideInputForm()) {
+            formLayout.setVisibility(View.GONE);
+            return;
+        }
         formLayout.setVisibility(expand ? View.VISIBLE : View.GONE);
-        boolean focusRequested = false;
+    }
 
-        for (FormWidget widget : widgets.values()) {
-            widget.setValidation();
-            if (expand && !focusRequested) {
-                focusRequested = widget.requestFocus();
-            }
+    void bindFormWidget(FormWidget widget) {
+        String category = widget.getCategory();
+
+        if (widget.matches(UIELEMENT, BUTTON)) {
+            bindButtonWidget((ButtonWidget) widget);
+        } else if (EXTRAELEMENT.equals(category)) {
+            bindExtraElementWidget((ExtraElementWidget) widget);
+        } else if (INPUTELEMENT.equals(category)) {
+            bindInputElementWidget(widget);
+        } else {
+            throw new IllegalStateException("Bind error for FormWidget with category: " + category);
         }
     }
 
-    void onBind(PaymentCard paymentCard) {
-        for (Map.Entry<String, FormWidget> entry : widgets.entrySet()) {
-            FormWidget widget = entry.getValue();
-
-            switch (entry.getKey()) {
-                case BUTTON_WIDGET:
-                    bindButtonWidget((ButtonWidget) widget, paymentCard);
-                    break;
-                case VERIFICATION_CODE:
-                    bindVerificationCodeWidget((VerificationCodeWidget) widget, paymentCard);
-                    break;
-                case EXPIRY_DATE:
-                    bindDateWidget((DateWidget) widget, paymentCard);
-                    break;
-                default:
-                    bindElementWidget(widget, paymentCard);
-            }
-        }
-    }
-
-    void bindButtonWidget(ButtonWidget widget, PaymentCard card) {
-        widget.onBind(card.getCode(), card.getButton());
-    }
-
-    void bindVerificationCodeWidget(VerificationCodeWidget widget, PaymentCard card) {
-        InputElement element = card.getInputElement(VERIFICATION_CODE);
-        widget.onBind(card.getCode(), element);
-    }
-
-    void bindDateWidget(DateWidget widget, PaymentCard card) {
-        InputElement month = card.getInputElement(EXPIRY_MONTH);
-        InputElement year = card.getInputElement(EXPIRY_YEAR);
-        widget.onBind(card.getCode(), month, year);
-    }
-
-    void bindElementWidget(FormWidget widget, PaymentCard card) {
-        InputElement element = card.getInputElement(widget.getName());
-        String code = card.getCode();
-
-        if (widget instanceof SelectWidget) {
-            ((SelectWidget) widget).onBind(code, element);
+    void bindInputElementWidget(FormWidget widget) {
+        if (widget instanceof VerificationCodeWidget) {
+            bindVerificationCodeWidget((VerificationCodeWidget) widget);
+        } else if (widget instanceof ExpiryDateWidget) {
+            bindExpiryDateWidget((ExpiryDateWidget) widget);
+        } else if (widget instanceof SelectWidget) {
+            bindSelectWidget((SelectWidget) widget);
         } else if (widget instanceof TextInputWidget) {
-            ((TextInputWidget) widget).onBind(code, element);
+            bindTextInputWidget((TextInputWidget) widget);
+        } else {
+            throw new IllegalStateException("Bind error for InputElement widget with key: " + widget.getKey());
         }
     }
 
-    void bindAccountMask(TextView title, TextView subtitle, AccountMask mask, String method) {
-        switch (method) {
-            case PaymentMethod.CREDIT_CARD:
-            case PaymentMethod.DEBIT_CARD:
-                title.setText(mask.getNumber());
-                String date = PaymentUtils.getExpiryDateString(mask);
-                if (date != null) {
-                    subtitle.setVisibility(View.VISIBLE);
-                    subtitle.setText(date);
-                }
-                break;
-            default:
-                title.setText(mask.getDisplayLabel());
-        }
+    void bindButtonWidget(ButtonWidget widget) {
+        widget.onBind(paymentCard.getButton());
+    }
+
+    void bindVerificationCodeWidget(VerificationCodeWidget widget) {
+        InputElement element = paymentCard.getInputElement(VERIFICATION_CODE);
+        widget.onBind(paymentCard.getNetworkCode(), element);
+    }
+
+    void bindExpiryDateWidget(ExpiryDateWidget widget) {
+        InputElement month = paymentCard.getInputElement(EXPIRY_MONTH);
+        InputElement year = paymentCard.getInputElement(EXPIRY_YEAR);
+        widget.onBind(paymentCard.getNetworkCode(), month, year);
+    }
+
+    void bindSelectWidget(SelectWidget widget) {
+        InputElement element = paymentCard.getInputElement(widget.getName());
+        String code = paymentCard.getNetworkCode();
+        widget.onBind(code, element);
+    }
+
+    void bindTextInputWidget(TextInputWidget widget) {
+        InputElement element = paymentCard.getInputElement(widget.getName());
+        String code = paymentCard.getNetworkCode();
+        widget.onBind(code, element);
+    }
+
+    void bindExtraElementWidget(ExtraElementWidget widget) {
+        ExtraElement element = paymentCard.getExtraElement(widget.getName());
+        widget.onBind(element);
+    }
+
+    void bindLabel(TextView view, String label, boolean hideWhenEmpty) {
+        int visibility = (hideWhenEmpty && TextUtils.isEmpty(label)) ? View.GONE : View.VISIBLE;
+        view.setVisibility(visibility);
+        view.setText(label);
     }
 
     void bindCardLogo(int logoResId) {
@@ -315,5 +363,9 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
                 break;
             }
         }
+    }
+
+    String createWidgetKey(String inputCategory, String inputName) {
+        return inputCategory + "." + inputName;
     }
 }

@@ -8,34 +8,39 @@
 
 package com.payoneer.checkout.ui.model;
 
+import static com.payoneer.checkout.core.PaymentInputType.ACCOUNT_NUMBER;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.localization.Localization;
 import com.payoneer.checkout.localization.LocalizationKey;
+import com.payoneer.checkout.model.ExtraElements;
 import com.payoneer.checkout.model.InputElement;
-import com.payoneer.checkout.model.PaymentMethod;
+import com.payoneer.checkout.util.PaymentUtils;
 
 /**
  * Class for holding the data of a NetworkCard in the list
  */
-public final class NetworkCard implements PaymentCard {
+public final class NetworkCard extends PaymentCard {
     private final List<PaymentNetwork> networks;
     private final SmartSwitch smartSwitch;
 
-    /**
-     * Construct a new NetworkCard
-     */
-    public NetworkCard() {
+    public NetworkCard(ExtraElements extraElements) {
+        super(extraElements);
         this.networks = new ArrayList<>();
         this.smartSwitch = new SmartSwitch(networks);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void putLanguageLinks(Map<String, URL> links) {
+        for (PaymentNetwork network : networks) {
+            network.putLanguageLink(links);
+        }
+    }
+
     @Override
     public boolean containsLink(String name, URL url) {
         for (PaymentNetwork network : networks) {
@@ -46,73 +51,41 @@ public final class NetworkCard implements PaymentCard {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URL getOperationLink() {
-        return getVisibleNetwork().getLink("operation");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getOperationType() {
         return getVisibleNetwork().getOperationType();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getPaymentMethod() {
         return getVisibleNetwork().getPaymentMethod();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String getCode() {
-        return getVisibleNetwork().getCode();
+    public String getNetworkCode() {
+        return getVisibleNetwork().getNetworkCode();
     }
 
     @Override
-    public String getLabel() {
+    public String getTitle() {
         if (networks.size() == 1) {
-            return getVisibleNetwork().getLabel();
+            return getVisibleNetwork().getTitle();
         }
         return Localization.translate(LocalizationKey.LIST_GROUPEDCARDS_TITLE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public String getSubtitle() {
+        return null;
+    }
+
     @Override
     public List<InputElement> getInputElements() {
         return getVisibleNetwork().getInputElements();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public InputElement getInputElement(String name) {
-
-        for (InputElement element : getInputElements()) {
-            if (element.getName().equals(name)) {
-                return element;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean isPreselected() {
-
         for (PaymentNetwork network : networks) {
             if (network.isPreselected()) {
                 return true;
@@ -121,34 +94,33 @@ public final class NetworkCard implements PaymentCard {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getButton() {
-        return LocalizationKey.operationButtonKey(getOperationType());
+        return getVisibleNetwork().getButton();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
+    public void reset() {
+        super.reset();
+        smartSwitch.reset();
+    }
+
     @Override
     public boolean onTextInputChanged(String type, String text) {
-        if (networks.size() == 1) {
-            return false;
-        }
-        switch (getPaymentMethod()) {
-            case PaymentMethod.CREDIT_CARD:
-            case PaymentMethod.DEBIT_CARD:
-                if (PaymentInputType.ACCOUNT_NUMBER.equals(type)) {
-                    return smartSwitch.validate(text);
-                }
+        setUserInputData(type, text);
+
+        // Smartswitch works for 2 or more PaymentNetworks but only for debit/credit cards
+        // and if the input field is a "number"
+        if ((getPaymentNetworkCount() >= 2) && (PaymentUtils.isCardPaymentMethod(getPaymentMethod())) &&
+            (ACCOUNT_NUMBER.equals(type))) {
+            return smartSwitch.validate(text);
         }
         return false;
     }
 
-    public URL getLink(String name) {
-        return getVisibleNetwork().getLink(name);
+    @Override
+    public Map<String, URL> getLinks() {
+        return getVisibleNetwork().getLinks();
     }
 
     /**

@@ -6,7 +6,18 @@
     <string name="error_default_title">Oops!</string>
     <string name="error_default_text">An error occurred while handling your payment. Please try again.</string>
 
+    <string name="messages_unsaved_title">Unsaved changes</string>
+    <string name="messages_unsaved_text">Are you sure you want to refresh? Your unsaved changes will be lost.</string>
+
     <string name="button_cancel_label">Cancel</string>
     <string name="button_retry_label">Retry</string>
     <string name="button_ok_label">OK</string>
+    <string name="button_refresh_label">Refresh</string>
+    <string name="button_update_account_label">Update</string>
+
+    <string name="list_header_accounts_update">Edit your payment methods</string>
+    <string name="list_header_networks_update">Add a payment method</string>
+    <string name="networks_registration_label">I authorize saving this payment method for future purchases</string>
+
+
 </resources>

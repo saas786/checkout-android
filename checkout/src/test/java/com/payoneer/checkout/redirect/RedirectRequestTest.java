@@ -8,37 +8,41 @@
 
 package com.payoneer.checkout.redirect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.model.OperationResult;
 import com.payoneer.checkout.model.Redirect;
 import com.payoneer.checkout.test.util.TestUtils;
 
-@RunWith(RobolectricTestRunner.class)
 public class RedirectRequestTest {
 
-    @Test(expected = PaymentException.class)
-    public void fromOperationResult_missingRedirect() throws PaymentException {
-        OperationResult operationResult = new OperationResult();
-        operationResult.setLinks(createLinks());
-        RedirectRequest.fromOperationResult(operationResult);
+    @Test
+    public void fromOperationResult_missingRedirect() {
+        Assertions.assertThrows(PaymentException.class, () -> {
+            int requestCode = 1;
+            OperationResult operationResult = new OperationResult();
+            operationResult.setLinks(createLinks());
+            RedirectRequest.fromOperationResult(requestCode, operationResult);
+        });
     }
 
-    @Test(expected = PaymentException.class)
-    public void fromOperationResult_missingLink() throws PaymentException {
-        OperationResult operationResult = new OperationResult();
-        operationResult.setRedirect(new Redirect());
-        RedirectRequest.fromOperationResult(operationResult);
+    @Test
+    public void fromOperationResult_missingLink() {
+        Assertions.assertThrows(PaymentException.class, () -> {
+            int requestCode = 1;
+            OperationResult operationResult = new OperationResult();
+            operationResult.setRedirect(new Redirect());
+            RedirectRequest.fromOperationResult(requestCode, operationResult);
+        });
     }
 
     @Test
@@ -48,9 +52,11 @@ public class RedirectRequestTest {
         Map<String, URL> links = createLinks();
         operationResult.setRedirect(redirect);
         operationResult.setLinks(links);
+        int requestCode = 1;
 
-        RedirectRequest request = RedirectRequest.fromOperationResult(operationResult);
+        RedirectRequest request = RedirectRequest.fromOperationResult(requestCode, operationResult);
         assertNotNull(request);
+        assertEquals(requestCode, request.getRequestCode());
         assertEquals(redirect, request.getRedirect());
         assertEquals(links.get("redirect"), request.getLink());
     }

@@ -9,10 +9,12 @@
 package com.payoneer.checkout.ui.service;
 
 import static com.payoneer.checkout.model.IntegrationType.MOBILE_NATIVE;
+import static com.payoneer.checkout.model.NetworkOperationType.CHARGE;
+import static com.payoneer.checkout.model.NetworkOperationType.PRESET;
+import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -21,33 +23,35 @@ import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.core.WorkerSubscriber;
 import com.payoneer.checkout.core.WorkerTask;
 import com.payoneer.checkout.core.Workers;
-import com.payoneer.checkout.model.AccountRegistration;
-import com.payoneer.checkout.model.ApplicableNetwork;
+import com.payoneer.checkout.localization.LocalLocalizationHolder;
+import com.payoneer.checkout.localization.Localization;
+import com.payoneer.checkout.localization.LocalizationCache;
+import com.payoneer.checkout.localization.LocalizationHolder;
+import com.payoneer.checkout.localization.MultiLocalizationHolder;
 import com.payoneer.checkout.model.ListResult;
-import com.payoneer.checkout.model.NetworkOperationType;
-import com.payoneer.checkout.model.Networks;
-import com.payoneer.checkout.model.PresetAccount;
 import com.payoneer.checkout.network.ListConnection;
+import com.payoneer.checkout.network.LocalizationConnection;
 import com.payoneer.checkout.resource.PaymentGroup;
 import com.payoneer.checkout.resource.ResourceLoader;
-import com.payoneer.checkout.ui.model.AccountCard;
-import com.payoneer.checkout.ui.model.NetworkCard;
-import com.payoneer.checkout.ui.model.PaymentNetwork;
 import com.payoneer.checkout.ui.model.PaymentSession;
-import com.payoneer.checkout.ui.model.PresetCard;
 import com.payoneer.checkout.validation.Validator;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 /**
- * The PaymentSessionService providing asynchronous loading of the PaymentSession.
+ * The PaymentSessionService providing asynchronous loading of the PaymentSession, validator and localizations.
  * This service makes callbacks in the listener to notify of request completions.
  */
 public final class PaymentSessionService {
+
     private final ListConnection listConnection;
+    private final LocalizationConnection locConnection;
+
     private PaymentSessionListener listener;
     private WorkerTask<PaymentSession> sessionTask;
+
+    /** Memory cache of localizations */
+    private static final LocalizationCache cache = new LocalizationCache();
 
     /**
      * Create a new PaymentSessionService, this service is used to load the PaymentSession.
@@ -56,6 +60,7 @@ public final class PaymentSessionService {
      */
     public PaymentSessionService(Context context) {
         this.listConnection = new ListConnection(context);
+        this.locConnection = new LocalizationConnection(context);
     }
 
     /**
@@ -132,7 +137,17 @@ public final class PaymentSessionService {
      * @return true when supported, false otherwise
      */
     public boolean isSupportedNetworkOperationType(String operationType) {
-        return NetworkOperationType.CHARGE.equals(operationType) || NetworkOperationType.PRESET.equals(operationType);
+        if (operationType == null) {
+            return false;
+        }
+        switch (operationType) {
+            case CHARGE:
+            case PRESET:
+            case UPDATE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private PaymentSession asyncLoadPaymentSession(String listUrl, Context context) throws PaymentException {
@@ -142,114 +157,56 @@ public final class PaymentSessionService {
         if (!MOBILE_NATIVE.equals(integrationType)) {
             throw new PaymentException("Integration type is not supported: " + integrationType);
         }
-
         String operationType = listResult.getOperationType();
         if (!isSupportedNetworkOperationType(operationType)) {
             throw new PaymentException("List operationType is not supported: " + operationType);
         }
-        Map<String, PaymentNetwork> networks = loadPaymentNetworks(listResult);
-        Map<String, PaymentGroup> groups = loadPaymentGroups(context);
+        PaymentSession session = new PaymentSessionBuilder()
+            .setListResult(listResult)
+            .setPaymentGroups(loadPaymentGroups(context))
+            .build();
 
-        Validator validator = loadValidator(context);
-
-        PresetCard presetCard = createPresetCard(listResult);
-        List<AccountCard> accountCards = createAccountCards(listResult, networks);
-        List<NetworkCard> networkCards = createNetworkCards(networks, groups);
-
-        return new PaymentSession(listResult, presetCard, accountCards, networkCards, validator);
-    }
-
-    private Map<String, PaymentNetwork> loadPaymentNetworks(ListResult listResult) {
-        LinkedHashMap<String, PaymentNetwork> items = new LinkedHashMap<>();
-        Networks nw = listResult.getNetworks();
-
-        if (nw == null) {
-            return items;
-        }
-        List<ApplicableNetwork> an = nw.getApplicable();
-        if (an == null || an.size() == 0) {
-            return items;
-        }
-        for (ApplicableNetwork network : an) {
-            String code = network.getCode();
-            if (NetworkServiceLookup.supports(code, network.getMethod())) {
-                items.put(code, new PaymentNetwork(network));
-            }
-        }
-        return items;
-    }
-
-    private List<NetworkCard> createNetworkCards(Map<String, PaymentNetwork> networks, Map<String, PaymentGroup> groups)
-        throws PaymentException {
-        Map<String, NetworkCard> cards = new LinkedHashMap<>();
-        PaymentGroup group;
-
-        for (PaymentNetwork network : networks.values()) {
-            group = groups.get(network.getCode());
-
-            if (group == null) {
-                addNetwork2SingleCard(cards, network);
-            } else {
-                addNetwork2GroupCard(cards, network, group);
-            }
-        }
-        return new ArrayList<>(cards.values());
-    }
-
-    private void addNetwork2SingleCard(Map<String, NetworkCard> cards, PaymentNetwork network) {
-        NetworkCard card = new NetworkCard();
-        card.addPaymentNetwork(network);
-        cards.put(network.getCode(), card);
-    }
-
-    private void addNetwork2GroupCard(Map<String, NetworkCard> cards, PaymentNetwork network, PaymentGroup group) throws PaymentException {
-        String code = network.getCode();
-        String groupId = group.getId();
-        String regex = group.getSmartSelectionRegex(code);
-
-        if (TextUtils.isEmpty(regex)) {
-            throw new PaymentException("Missing regex for network: " + code + " in group: " + groupId);
-        }
-        NetworkCard card = cards.get(groupId);
-        if (card == null) {
-            card = new NetworkCard();
-            cards.put(groupId, card);
-        }
-        // a network can always be added to an empty card
-        if (!card.addPaymentNetwork(network)) {
-            addNetwork2SingleCard(cards, network);
-            return;
-        }
-        card.getSmartSwitch().addSelectionRegex(code, regex);
-    }
-
-    private List<AccountCard> createAccountCards(ListResult listResult, Map<String, PaymentNetwork> networks) {
-        List<AccountCard> cards = new ArrayList<>();
-        List<AccountRegistration> accounts = listResult.getAccounts();
-
-        if (accounts == null || accounts.size() == 0) {
-            return cards;
-        }
-
-        for (AccountRegistration account : accounts) {
-            cards.add(new AccountCard(account));
-        }
-        return cards;
-    }
-
-    private PresetCard createPresetCard(ListResult listResult) {
-        PresetAccount account = listResult.getPresetAccount();
-        if (account == null) {
-            return null;
-        }
-        return new PresetCard(account);
+        loadValidator(context);
+        loadLocalizations(context, session);
+        return session;
     }
 
     private Map<String, PaymentGroup> loadPaymentGroups(Context context) throws PaymentException {
         return ResourceLoader.loadPaymentGroups(context.getResources(), R.raw.groups);
     }
 
-    private Validator loadValidator(Context context) throws PaymentException {
-        return new Validator(ResourceLoader.loadValidations(context.getResources(), R.raw.validations));
+    private void loadValidator(Context context) throws PaymentException {
+        if (Validator.getInstance() == null) {
+            Validator validator = new Validator(ResourceLoader.loadValidations(context.getResources(), R.raw.validations));
+            Validator.setInstance(validator);
+        }
+    }
+
+    private void loadLocalizations(Context context, PaymentSession session) throws PaymentException {
+        String listUrl = session.getListSelfUrl();
+        if (!listUrl.equals(cache.getCacheId())) {
+            cache.clear();
+            cache.setCacheId(listUrl);
+        }
+        LocalizationHolder localHolder = new LocalLocalizationHolder(context);
+        LocalizationHolder sharedHolder = loadLocalizationHolder(session.getListLanguageLink(), localHolder);
+
+        Map<String, LocalizationHolder> holders = new HashMap<>();
+        Map<String, URL> links = session.getLanguageLinks();
+        for (Map.Entry<String, URL> entry : links.entrySet()) {
+            holders.put(entry.getKey(), loadLocalizationHolder(entry.getValue(), sharedHolder));
+        }
+        Localization.setInstance(new Localization(sharedHolder, holders));
+    }
+
+    private LocalizationHolder loadLocalizationHolder(URL url, LocalizationHolder fallback) throws PaymentException {
+        String langUrl = url.toString();
+        LocalizationHolder holder = cache.get(langUrl);
+
+        if (holder == null) {
+            holder = new MultiLocalizationHolder(locConnection.loadLocalization(url), fallback);
+            cache.put(langUrl, holder);
+        }
+        return holder;
     }
 }

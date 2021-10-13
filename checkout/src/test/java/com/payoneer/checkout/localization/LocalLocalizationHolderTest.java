@@ -8,16 +8,13 @@
 
 package com.payoneer.checkout.localization;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Test;
 
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
-@RunWith(RobolectricTestRunner.class)
 public class LocalLocalizationHolderTest {
 
     @Test
@@ -27,8 +24,14 @@ public class LocalLocalizationHolderTest {
         assertNotNull(holder.translate(LocalizationKey.BUTTON_OK));
         assertNotNull(holder.translate(LocalizationKey.BUTTON_CANCEL));
         assertNotNull(holder.translate(LocalizationKey.BUTTON_RETRY));
+        assertNotNull(holder.translate(LocalizationKey.BUTTON_UPDATE_ACCOUNT));
 
         assertNotNull(holder.translate(LocalizationKey.ERROR_CONNECTION_TEXT));
         assertNotNull(holder.translate(LocalizationKey.ERROR_DEFAULT_TEXT));
+
+        assertNotNull(holder.translate(LocalizationKey.LIST_HEADER_ACCOUNTS_UPDATE));
+        assertNotNull(holder.translate(LocalizationKey.LIST_HEADER_NETWORKS_UPDATE));
+
+        assertNotNull(holder.translate(LocalizationKey.NETWORKS_REGISTRATION_LABEL));
     }
 }

@@ -28,7 +28,6 @@ import android.widget.EditText;
  */
 public final class SettingsActivity extends BaseActivity {
 
-    private Button button;
     private EditText listInput;
 
     /**
@@ -53,13 +52,12 @@ public final class SettingsActivity extends BaseActivity {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        this.button = findViewById(R.id.button_settings);
         this.listInput = findViewById(R.id.input_listurl);
 
         if (listUrl != null) {
             listInput.setText(listUrl);
         }
+        Button button = findViewById(R.id.button_settings);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onButtonClicked();

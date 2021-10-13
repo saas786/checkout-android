@@ -16,6 +16,20 @@ import com.payoneer.checkout.model.OperationResult;
 public interface OperationListener {
 
     /**
+     * Called when the account was successfully deleted.
+     *
+     * @param operationResult containing the result of the deletion request.
+     */
+    void onDeleteAccountSuccess(OperationResult operationResult);
+
+    /**
+     * Called when an error occurred while deleting the account.
+     *
+     * @param cause describing the reason of failure
+     */
+    void onDeleteAccountError(Throwable cause);
+
+    /**
      * Called when the operation was successfully posted.
      *
      * @param operationResult containing the result of the performed operation

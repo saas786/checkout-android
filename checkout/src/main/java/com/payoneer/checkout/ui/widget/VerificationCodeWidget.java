@@ -24,18 +24,10 @@ import android.view.ViewGroup;
  */
 public final class VerificationCodeWidget extends InputLayoutWidget {
 
-    /**
-     * Construct a new VerificationCodeWidget
-     *
-     * @param name name identifying this widget
-     */
-    public VerificationCodeWidget(String name) {
-        super(name);
+    public VerificationCodeWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         super.inflate(parent);
@@ -50,7 +42,7 @@ public final class VerificationCodeWidget extends InputLayoutWidget {
      * @param element to bind this widget to
      */
     public void onBind(String code, InputElement element) {
-        int maxLength = presenter.getMaxLength(code, name);
+        int maxLength = presenter.getMaxInputLength(code, name);
         setTextInputMode(EditTextInputModeFactory.createMode(maxLength, element));
         setValidation();
         setLabel(Localization.translate(code, LocalizationKey.VERIFICATIONCODE_GENERIC_PLACEHOLDER));

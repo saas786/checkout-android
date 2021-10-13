@@ -9,114 +9,103 @@
 package com.payoneer.checkout.ui.model;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.payoneer.checkout.model.ListResult;
-import com.payoneer.checkout.validation.Validator;
 
 /**
- * Class for storing the ListResult and the list of supported PaymentMethods
+ * Class for storing the ListResult and the payment sections. The following sections
+ * are supported: preset accounts, saved accounts and payment networks.
  */
 public final class PaymentSession {
+
+    public final static String LINK_SELF = "self";
+    public final static String LINK_OPERATION = "operation";
+    public final static String LINK_LOGO = "logo";
+    public final static String LINK_LANGUAGE = "lang";
+
     private final ListResult listResult;
-    private final PresetCard presetCard;
-    private final List<AccountCard> accounts;
-    private final List<NetworkCard> networks;
-    private final Validator validator;
+    private final List<PaymentSection> paymentSections;
+    private final boolean swipeRefresh;
 
     /**
      * Construct a new PaymentSession object
      *
      * @param listResult Object holding the current list session data
-     * @param presetCard the optional PresetCard with the PresetAccount
-     * @param accounts list of AccountCards supported by this PaymentSession
-     * @param networks list of NetworkCards supported by this PaymentSession
-     * @param validator used to validate input values for this payment session
+     * @param paymentSections the list of sections containing PaymentCards
+     * @param swipeRefresh can this PaymentSession be refreshed by the user
      */
-    public PaymentSession(ListResult listResult, PresetCard presetCard, List<AccountCard> accounts, List<NetworkCard> networks,
-        Validator validator) {
+    public PaymentSession(ListResult listResult, List<PaymentSection> paymentSections, boolean swipeRefresh) {
         this.listResult = listResult;
-        this.presetCard = presetCard;
-        this.accounts = accounts;
-        this.networks = networks;
-        this.validator = validator;
+        this.paymentSections = paymentSections;
+        this.swipeRefresh = swipeRefresh;
     }
 
     public ListResult getListResult() {
         return listResult;
     }
 
-    public PresetCard getPresetCard() {
-        return presetCard;
+    public List<PaymentSection> getPaymentSections() {
+        return paymentSections;
     }
 
-    public List<AccountCard> getAccountCards() {
-        return accounts;
+    public boolean swipeRefresh() {
+        return swipeRefresh;
     }
 
-    public List<NetworkCard> getNetworkCards() {
-        return networks;
+    public URL getListLanguageLink() {
+        return getListLink(LINK_LANGUAGE);
     }
 
-    public List<PaymentNetwork> getPaymentNetworks() {
-        List<PaymentNetwork> list = new ArrayList<>();
-        for (NetworkCard card : networks) {
-            list.addAll(card.getPaymentNetworks());
-        }
-        return list;
+    public String getListSelfUrl() {
+        URL url = getListLink(LINK_SELF);
+        return url != null ? url.toString() : null;
     }
 
-    public Validator getValidator() {
-        return validator;
+    public String getListOperationType() {
+        return listResult.getOperationType();
     }
 
-    public URL getLink(String name) {
+    public URL getListLink(String name) {
         Map<String, URL> links = listResult.getLinks();
         return links != null ? links.get(name) : null;
     }
 
-    public String getListUrl() {
-        URL url = getLink("self");
-        return url != null ? url.toString() : null;
-    }
-
-    public boolean isListUrl(String listUrl) {
-        URL url = getLink("self");
-        return url != null && url.toString().equals(listUrl);
-    }
-
-    public boolean isEmpty() {
-        return !hasPresetCard() && (getNetworkCardSize() == 0) && (getAccountCardSize() == 0);
-    }
-
-    public boolean hasPresetCard() {
-        return presetCard != null;
-    }
-
-    public int getNetworkCardSize() {
-        return networks != null ? networks.size() : 0;
-    }
-
-    public int getAccountCardSize() {
-        return accounts != null ? accounts.size() : 0;
-    }
-
-    public boolean containsLink(String name, URL url) {
-        if (presetCard != null && presetCard.containsLink(name, url)) {
-            return true;
+    public void reset() {
+        for (PaymentSection section : paymentSections) {
+            section.reset();
         }
-        for (AccountCard card : accounts) {
-            if (card.containsLink(name, url)) {
-                return true;
-            }
-        }
-        for (NetworkCard card : networks) {
-            if (card.containsLink(name, url)) {
+    }
+
+    public boolean hasUserInputData() {
+        for (PaymentSection section : paymentSections) {
+            if (section.hasUserInputData()) {
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean isEmpty() {
+        return paymentSections.size() == 0;
+    }
+
+    public boolean containsOperationLink(URL url) {
+        for (PaymentSection section : paymentSections) {
+            if (section.containsLink(LINK_OPERATION, url)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Map<String, URL> getLanguageLinks() {
+        Map<String, URL> links = new HashMap<>();
+        for (PaymentSection section : paymentSections) {
+            section.putLanguageLinks(links);
+        }
+        return links;
     }
 }

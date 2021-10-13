@@ -8,14 +8,13 @@
 
 package com.payoneer.checkout.resource;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentException;
@@ -23,13 +22,14 @@ import com.payoneer.checkout.core.PaymentException;
 import android.content.res.Resources;
 import androidx.test.core.app.ApplicationProvider;
 
-@RunWith(RobolectricTestRunner.class)
 public class ResourceLoaderTest {
 
-    @Test(expected = PaymentException.class)
-    public void loadPaymentGroups_invalidResourceId() throws PaymentException {
-        Resources res = ApplicationProvider.getApplicationContext().getResources();
-        ResourceLoader.loadPaymentGroups(res, 0);
+    @Test
+    public void loadPaymentGroups_invalidResourceId() {
+        Assertions.assertThrows(PaymentException.class, () -> {
+            Resources res = ApplicationProvider.getApplicationContext().getResources();
+            ResourceLoader.loadPaymentGroups(res, 0);
+        });
     }
 
     @Test
@@ -41,10 +41,12 @@ public class ResourceLoaderTest {
         assertNotNull(groups.get("AMEX"));
     }
 
-    @Test(expected = PaymentException.class)
-    public void loadValidations_invalidResourceId() throws PaymentException {
-        Resources res = ApplicationProvider.getApplicationContext().getResources();
-        ResourceLoader.loadValidations(res, 0);
+    @Test
+    public void loadValidations_invalidResourceId() {
+        Assertions.assertThrows(PaymentException.class, () -> {
+            Resources res = ApplicationProvider.getApplicationContext().getResources();
+            ResourceLoader.loadValidations(res, 0);
+        });
     }
 
     @Test
@@ -65,10 +67,12 @@ public class ResourceLoaderTest {
         validateGroup(validations, "MAESTROUK");
     }
 
-    @Test(expected = IOException.class)
-    public void readRawResource_invalidResourceId() throws IOException {
-        Resources res = ApplicationProvider.getApplicationContext().getResources();
-        ResourceLoader.readRawResource(res, 0);
+    @Test
+    public void readRawResource_invalidResourceId() {
+        Assertions.assertThrows(IOException.class, () -> {
+            Resources res = ApplicationProvider.getApplicationContext().getResources();
+            ResourceLoader.readRawResource(res, 0);
+        });
     }
 
     @Test

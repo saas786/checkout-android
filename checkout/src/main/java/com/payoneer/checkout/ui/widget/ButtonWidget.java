@@ -9,7 +9,6 @@
 package com.payoneer.checkout.ui.widget;
 
 import com.payoneer.checkout.R;
-import com.payoneer.checkout.localization.Localization;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +21,10 @@ public final class ButtonWidget extends FormWidget {
 
     private Button button;
 
-    /**
-     * Construct a new ButtonWidget
-     *
-     * @param name the name of this widget
-     */
-    public ButtonWidget(String name) {
-        super(name);
+    public ButtonWidget(String category, String name) {
+        super(category, name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public View inflate(ViewGroup parent) {
         inflateWidgetView(parent, R.layout.widget_button);
@@ -48,8 +39,7 @@ public final class ButtonWidget extends FormWidget {
         return widgetView;
     }
 
-    public void onBind(String code, String buttonKey) {
-        String label = Localization.translate(code, buttonKey);
+    public void onBind(String label) {
         button.setText(label);
     }
 

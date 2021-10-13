@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import com.payoneer.checkout.exampleshop.checkout.CheckoutActivity;
 import com.payoneer.checkout.exampleshop.settings.SettingsActivity;
 import com.payoneer.checkout.exampleshop.summary.SummaryActivity;
+import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
 
@@ -32,12 +33,12 @@ public final class GroupedCardsTests extends AbstractTest {
     @Test
     public void testVisa_directCharge_success() {
         int groupCardIndex = 1;
-        CheckoutActivity checkoutActivity = openCheckoutActivity(false);
+        CheckoutActivity checkoutActivity = openCheckoutActivity(NetworkOperationType.CHARGE);
         IdlingResource resultHandledIdlingResource = checkoutActivity.getResultHandledIdlingResource();
         clickCheckoutButton();
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 
@@ -48,12 +49,12 @@ public final class GroupedCardsTests extends AbstractTest {
     @Test
     public void testVisa_presetFlow_success() {
         int groupCardIndex = 1;
-        CheckoutActivity checkoutActivity = openCheckoutActivity(true);
+        CheckoutActivity checkoutActivity = openCheckoutActivity(NetworkOperationType.PRESET);
         IdlingResource checkoutPaymentResultIdlingResource = checkoutActivity.getResultHandledIdlingResource();
         clickCheckoutButton();
 
         PaymentListHelper.waitForPaymentListLoaded(1);
-        PaymentListHelper.openPaymentListCard(groupCardIndex, "card_group");
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.visaCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
 

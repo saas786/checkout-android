@@ -1,0 +1,36 @@
+/*
+ * Gradle file containing the task to build, testing and publish the Android Checkout SDK
+ * from a CI system
+ */
+
+task buildci() {
+    if (!(project.hasProperty('mavenUser') && project.hasProperty('mavenPassword'))) {
+        logger.warn('Missing mavenUser and/or mavenPassword from ~/.gradle/gradle.properties')
+        return
+    }
+    if (!project.hasProperty('packageCloudMavenPassword')) {
+        logger.warn('Missing packageCloudMavenPassword from ~/.gradle/gradle.properties')
+        return
+    }
+    def testCheckout = tasks.findByPath(':checkout:test')
+    def assembleCheckout = tasks.findByPath(':checkout:assembleRelease')
+    def publishCheckout = tasks.findByPath(':checkout:publish')
+    def testExampleCheckout = tasks.findByPath(':example-checkout:runFunctionalTest')
+    def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
+
+    dependsOn clean
+    dependsOn testCheckout
+    dependsOn assembleCheckout
+    dependsOn publishCheckout
+    dependsOn testExampleCheckout
+    dependsOn testExampleShop
+
+    // Run tasks for the Checkout library
+    testCheckout.mustRunAfter(clean)
+    assembleCheckout.mustRunAfter(testCheckout)
+    publishCheckout.mustRunAfter(assembleCheckout)
+
+    // Test ExampleCheckout and ExampleShop apps on Browserstack
+    testExampleCheckout.mustRunAfter(assembleCheckout)
+    testExampleShop.mustRunAfter(assembleCheckout)
+}

@@ -8,21 +8,14 @@
 
 package com.payoneer.checkout.ui.list;
 
-import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_ACCOUNTS;
-import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_NETWORKS;
-import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_NETWORKS_OTHER;
-import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_PRESET;
+import java.util.Map;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.ui.model.AccountCard;
-import com.payoneer.checkout.ui.model.NetworkCard;
 import com.payoneer.checkout.ui.model.PaymentCard;
+import com.payoneer.checkout.ui.model.PaymentSection;
 import com.payoneer.checkout.ui.model.PaymentSession;
-import com.payoneer.checkout.ui.page.PaymentListActivity;
+import com.payoneer.checkout.ui.widget.FormWidget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.IBinder;
 import android.view.View;
@@ -36,21 +29,30 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
  * The PaymentList showing available payment methods and accounts in a list
  */
 public final class PaymentList {
-
-    private final PaymentListActivity activity;
-    private final ListAdapter adapter;
+    private final Activity activity;
+    private final PaymentListListener listener;
     private final RecyclerView recyclerView;
-    private final List<ListItem> items;
+    private final ListAdapter adapter;
+    private final PaymentItemList itemList;
 
     private PaymentSession session;
-    private int selIndex;
-    private int viewType;
+    private int nextViewType;
 
-    public PaymentList(PaymentListActivity activity, RecyclerView recyclerView) {
+    /**
+     * Construct a new PaymentList handling the RecyclerView
+     *
+     * @param activity that contains this PaymentList
+     * @param listener notified about events from this PaymentList
+     * @param recyclerView for showing the list of payment options
+     */
+    public PaymentList(Activity activity, PaymentListListener listener, RecyclerView recyclerView) {
         this.activity = activity;
-        this.items = new ArrayList<>();
-        this.adapter = new ListAdapter(this, items);
+        this.listener = listener;
         this.recyclerView = recyclerView;
+
+        this.itemList = new PaymentItemList();
+        this.adapter = new ListAdapter(createCardListener(), itemList);
+
         this.recyclerView.setAdapter(adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         RecyclerView.ItemAnimator animator = recyclerView.getItemAnimator();
@@ -60,43 +62,78 @@ public final class PaymentList {
         }
     }
 
-    public int getSelected() {
-        return selIndex;
-    }
-
     public void onStop() {
         hideKeyboard();
     }
 
     public void clear() {
-        this.session = null;
-        this.selIndex = -1;
-        this.items.clear();
+        if (session != null) {
+            session.reset();
+            session = null;
+        }
+        itemList.clear();
         adapter.notifyDataSetChanged();
     }
 
-    public void showPaymentSession(PaymentSession session) {
+    public boolean hasUserInputData() {
+        return session != null && session.hasUserInputData();
+    }
 
+    public void showPaymentSession(PaymentSession session) {
         if (this.session == session) {
             setVisible(true);
             return;
         }
+        clear();
         this.session = session;
-        setPaymentListItems(session);
+        setPaymentSessionItems(session);
 
         setVisible(true);
         adapter.notifyDataSetChanged();
-        int startIndex = session.hasPresetCard() ? 0 : selIndex;
-        recyclerView.scrollToPosition(startIndex);
+
+        recyclerView.scrollToPosition(itemList.getSelectedIndex());
     }
 
     public void setVisible(boolean visible) {
         recyclerView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+    private PaymentCardListener createCardListener() {
+        return new PaymentCardListener() {
+            @Override
+            public void onHideKeyboard() {
+                hideKeyboard();
+            }
 
+            @Override
+            public void onShowKeyboard(View view) {
+                showKeyboard(view);
+            }
+
+            @Override
+            public void onDeleteClicked(PaymentCard paymentCard) {
+                handleDeleteClicked(paymentCard);
+            }
+
+            @Override
+            public void onHintClicked(String networkCode, String type) {
+                handleHintClicked(networkCode, type);
+            }
+
+            @Override
+            public void onActionClicked(PaymentCard paymentCard, Map<String, FormWidget> widgets) {
+                handleActionClicked(paymentCard, widgets);
+            }
+
+            @Override
+            public void onCardClicked(int position) {
+                handleCardClicked(position);
+            }
+        };
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             View curFocus = activity.getCurrentFocus();
             IBinder binder = curFocus != null ? curFocus.getWindowToken() : recyclerView.getWindowToken();
@@ -104,109 +141,51 @@ public final class PaymentList {
         }
     }
 
-    public void showKeyboard(View view) {
+    private void showKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.showSoftInput(view, 0);
         }
     }
 
-    Context getContext() {
-        return activity;
-    }
-
-    PaymentSession getPaymentSession() {
-        return this.session;
-    }
-
-    void onHintClicked(int position, String type) {
-        ListItem item = items.get(position);
-        PaymentCard card = item.getPaymentCard();
-
-        if (card != null) {
-            activity.showHintDialog(card.getCode(), type, null);
-        }
-    }
-
-    void onActionClicked(int position) {
-        ListItem item = items.get(position);
-        PaymentCardViewHolder holder = (PaymentCardViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-
-        if (holder != null && item.hasPaymentCard()) {
-            hideKeyboard();
-            activity.onActionClicked(item.getPaymentCard(), holder.widgets);
-        }
-    }
-
-    void onItemClicked(int position) {
-        ListItem item = items.get(position);
-
-        if (!item.hasPaymentCard()) {
-            return;
-        }
+    private void handleDeleteClicked(PaymentCard paymentCard) {
         hideKeyboard();
-        if (position == this.selIndex) {
-            this.selIndex = -1;
-            collapseViewHolder(position);
+        listener.onDeleteClicked(paymentCard);
+    }
+
+    private void handleHintClicked(String networkCode, String type) {
+        listener.onHintClicked(networkCode, type);
+    }
+
+    private void handleActionClicked(PaymentCard paymentCard, Map<String, FormWidget> widgets) {
+        hideKeyboard();
+        listener.onActionClicked(paymentCard, widgets);
+    }
+
+    private void handleCardClicked(int position) {
+        int curIndex = itemList.getSelectedIndex();
+        if (position == curIndex) {
+            itemList.setSelectedIndex(-1);
+            adapter.notifyItemChanged(position);
+            hideKeyboard();
         } else {
-            int curIndex = this.selIndex;
-            this.selIndex = position;
-            collapseViewHolder(curIndex);
-            expandViewHolder(position);
+            itemList.setSelectedIndex(position);
+            adapter.notifyItemChanged(curIndex);
+            adapter.notifyItemChanged(position);
+            scrollAndCloseKeyboard(position);
         }
     }
 
-    private int nextViewType() {
-        return viewType++;
-    }
-
-    private void setPaymentListItems(PaymentSession session) {
-        items.clear();
-        this.selIndex = -1;
-        int accountSize = session.getAccountCardSize();
-        int networkSize = session.getNetworkCardSize();
-
-        if (session.hasPresetCard()) {
-            items.add(new HeaderItem(nextViewType(), Localization.translate(LIST_HEADER_PRESET)));
-            items.add(new PaymentCardItem(nextViewType(), session.getPresetCard()));
-            this.selIndex = 1;
-        }
-
-        if (accountSize > 0) {
-            items.add(new HeaderItem(nextViewType(), Localization.translate(LIST_HEADER_ACCOUNTS)));
-        }
-        for (AccountCard card : session.getAccountCards()) {
-            items.add(new PaymentCardItem(nextViewType(), card));
-            if (this.selIndex == -1 && card.isPreselected()) {
-                this.selIndex = items.size() - 1;
-            }
-        }
-        if (networkSize > 0) {
-            String key = accountSize == 0 ? LIST_HEADER_NETWORKS : LIST_HEADER_NETWORKS_OTHER;
-            items.add(new HeaderItem(nextViewType(), Localization.translate(key)));
-        }
-        for (NetworkCard card : session.getNetworkCards()) {
-            items.add(new PaymentCardItem(nextViewType(), card));
-            if (this.selIndex == -1 && card.isPreselected()) {
-                this.selIndex = items.size() - 1;
-            }
-        }
-    }
-
-    private void collapseViewHolder(int position) {
-        adapter.notifyItemChanged(position);
-    }
-
-    private void expandViewHolder(int position) {
-        adapter.notifyItemChanged(position);
-        smoothScrollToPosition(position);
-    }
-
-    private void smoothScrollToPosition(int position) {
+    private void scrollAndCloseKeyboard(int position) {
         RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(activity) {
             @Override
             protected int getVerticalSnapPreference() {
                 return LinearSmoothScroller.SNAP_TO_START;
+            }
+
+            @Override
+            protected void onStop() {
+                hideKeyboard();
             }
         };
         smoothScroller.setTargetPosition(position);
@@ -215,5 +194,23 @@ public final class PaymentList {
         if (manager != null) {
             manager.startSmoothScroll(smoothScroller);
         }
+    }
+
+    private void setPaymentSessionItems(PaymentSession paymentSession) {
+        for (PaymentSection section : paymentSession.getPaymentSections()) {
+            addPaymentSectionItems(section);
+        }
+    }
+
+    private void addPaymentSectionItems(PaymentSection section) {
+        itemList.addItem(new HeaderItem(nextViewType(), section.getLabel()), false);
+        for (PaymentCard card : section.getPaymentCards()) {
+            PaymentCardItem item = new PaymentCardItem(nextViewType(), card);
+            itemList.addItem(item, card.isPreselected());
+        }
+    }
+
+    private int nextViewType() {
+        return nextViewType++;
     }
 }

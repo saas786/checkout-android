@@ -1,0 +1,238 @@
+{
+    "links": {
+        "self": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2",
+        "lang": "https://resources.integration.oscato.com/resource/lang/ANDROID_TESTING/en_US/checkout.json"
+    },
+    "timestamp": "2021-09-14T14:20:17.385+0000",
+    "operation": "LIST",
+    "resultCode": "00000.11.000",
+    "resultInfo": "5 applicable and 0 registered networks are found",
+    "returnCode": {
+        "name": "OK",
+        "source": "GATEWAY"
+    },
+    "status": {
+        "code": "listed",
+        "reason": "listed"
+    },
+    "interaction": {
+        "code": "PROCEED",
+        "reason": "OK"
+    },
+    "identification": {
+        "longId": "6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2",
+        "shortId": "02403-57111",
+        "transactionId": "22328"
+    },
+    "extraElements": {
+        "top": [
+            {
+                "name": "topelement1",
+                "label": "Top Element [Number 1](https://en.wikipedia.org/wiki/1) with invalid link"
+            },
+            {
+                "name": "topelement2",
+                "label": "Top Element [Number 2](https://en.wikipedia.org/wiki/2) with a [Checkbox](https://en.wikipedia.org/wiki/Checkbox) view",
+                "checkbox": {
+                    "mode": "REQUIRED",
+                    "requiredMessage": "top element 2 is required"
+                }
+            }
+        ]
+    },
+    "networks": {
+        "applicable": [
+            {
+                "code": "VISA",
+                "label": "Visa",
+                "method": "CREDIT_CARD",
+                "grouping": "CREDIT_CARD",
+                "registration": "OPTIONAL",
+                "recurrence": "NONE",
+                "redirect": false,
+                "links": {
+                    "logo": "https://resources.integration.oscato.com/resource/network/ANDROID_TESTING/en_US/VISA/logo3x.png",
+                    "self": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/VISA",
+                    "lang": "https://resources.integration.oscato.com/resource/lang/ANDROID_TESTING/en_US/VISA.json",
+                    "operation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/VISA/charge",
+                    "validation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/ANDROID_TESTING/en_US/VISA/standard/validate"
+                },
+                "selected": false,
+                "inputElements": [
+                    {
+                        "name": "number",
+                        "type": "numeric"
+                    },
+                    {
+                        "name": "expiryMonth",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "expiryYear",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "verificationCode",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "holderName",
+                        "type": "string"
+                    }
+                ],
+                "operationType": "CHARGE",
+                "deferral": "NON_DEFERRED"
+            },
+            {
+                "code": "AMEX",
+                "label": "American Express",
+                "method": "CREDIT_CARD",
+                "grouping": "CREDIT_CARD",
+                "registration": "OPTIONAL",
+                "recurrence": "NONE",
+                "redirect": false,
+                "links": {
+                    "logo": "https://resources.integration.oscato.com/resource/network/ANDROID_TESTING/en_US/AMEX/logo3x.png",
+                    "self": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/AMEX",
+                    "lang": "https://resources.integration.oscato.com/resource/lang/ANDROID_TESTING/en_US/AMEX.json",
+                    "operation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/AMEX/charge",
+                    "validation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/ANDROID_TESTING/en_US/AMEX/standard/validate"
+                },
+                "selected": false,
+                "inputElements": [
+                    {
+                        "name": "number",
+                        "type": "numeric"
+                    },
+                    {
+                        "name": "expiryMonth",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "expiryYear",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "verificationCode",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "holderName",
+                        "type": "string"
+                    }
+                ],
+                "operationType": "CHARGE",
+                "deferral": "NON_DEFERRED"
+            },
+            {
+                "code": "MASTERCARD",
+                "label": "Mastercard",
+                "method": "CREDIT_CARD",
+                "grouping": "CREDIT_CARD",
+                "registration": "OPTIONAL",
+                "recurrence": "NONE",
+                "redirect": false,
+                "links": {
+                    "logo": "https://resources.integration.oscato.com/resource/network/ANDROID_TESTING/en_US/MASTERCARD/logo3x.png",
+                    "self": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/MASTERCARD",
+                    "lang": "https://resources.integration.oscato.com/resource/lang/ANDROID_TESTING/en_US/MASTERCARD.json",
+                    "operation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/MASTERCARD/charge",
+                    "validation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/ANDROID_TESTING/en_US/MASTERCARD/standard/validate"
+                },
+                "selected": false,
+                "inputElements": [
+                    {
+                        "name": "number",
+                        "type": "numeric"
+                    },
+                    {
+                        "name": "expiryMonth",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "expiryYear",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "verificationCode",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "holderName",
+                        "type": "string"
+                    }
+                ],
+                "operationType": "CHARGE",
+                "deferral": "NON_DEFERRED"
+            },
+            {
+                "code": "SEPADD",
+                "label": "SEPA",
+                "method": "DIRECT_DEBIT",
+                "grouping": "DIRECT_DEBIT",
+                "registration": "OPTIONAL",
+                "recurrence": "NONE",
+                "redirect": false,
+                "links": {
+                    "logo": "https://resources.integration.oscato.com/resource/network/ANDROID_TESTING/en_US/SEPADD/logo3x.png",
+                    "self": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/SEPADD",
+                    "lang": "https://resources.integration.oscato.com/resource/lang/ANDROID_TESTING/en_US/SEPADD.json",
+                    "operation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/SEPADD/charge",
+                    "validation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/ANDROID_TESTING/en_US/SEPADD/standard/validate"
+                },
+                "selected": false,
+                "inputElements": [
+                    {
+                        "name": "holderName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "iban",
+                        "type": "string"
+                    },
+                    {
+                        "name": "bic",
+                        "type": "string"
+                    }
+                ],
+                "operationType": "CHARGE",
+                "deferral": "NON_DEFERRED"
+            },
+            {
+                "code": "PAYPAL",
+                "label": "PayPal",
+                "method": "WALLET",
+                "grouping": "WALLET",
+                "registration": "OPTIONAL",
+                "recurrence": "NONE",
+                "redirect": true,
+                "links": {
+                    "logo": "https://resources.integration.oscato.com/resource/network/ANDROID_TESTING/en_US/PAYPAL/logo3x.png",
+                    "self": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/PAYPAL",
+                    "lang": "https://resources.integration.oscato.com/resource/lang/ANDROID_TESTING/en_US/PAYPAL.json",
+                    "operation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/PAYPAL/charge",
+                    "validation": "https://api.integration.oscato.com/pci/v1/6140afa1cd6887052d02c200l62mor9bihq2bslqck7f0ev6r2/ANDROID_TESTING/en_US/PAYPAL/standard/validate"
+                },
+                "selected": false,
+                "contractData": {
+                    "PAGE_ENVIRONMENT": "sandbox",
+                    "JAVASCRIPT_INTEGRATION": "false",
+                    "PAGE_BUTTON_LOCALE": "en_US"
+                },
+                "operationType": "CHARGE",
+                "deferral": "NON_DEFERRED"
+            }
+        ]
+    },
+    "operationType": "CHARGE",
+    "allowDelete": true,
+    "style": {
+        "language": "en_US"
+    },
+    "payment": {
+        "reference": "PM Checkout Example",
+        "amount": 15,
+        "currency": "EUR"
+    },
+    "integrationType": "MOBILE_NATIVE"
+}

@@ -8,8 +8,10 @@
 
 package com.payoneer.checkout.form;
 
+import static com.payoneer.checkout.core.PaymentInputCategory.INPUTELEMENT;
+import static com.payoneer.checkout.core.PaymentInputCategory.REGISTRATION;
+
 import java.net.URL;
-import java.util.Objects;
 
 import com.google.gson.JsonSyntaxException;
 import com.payoneer.checkout.core.PaymentException;
@@ -22,7 +24,6 @@ import com.payoneer.checkout.util.GsonHelper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Class holding Operation form values
@@ -70,7 +71,6 @@ public class Operation implements Parcelable {
         } catch (JsonSyntaxException e) {
             // this should never happen since we use the same GsonHelper
             // to produce these Json strings
-            Log.w("Checkout", e);
             throw new RuntimeException(e);
         }
     }
@@ -99,45 +99,72 @@ public class Operation implements Parcelable {
 
     /**
      * Put a boolean value into this Operation form.
-     * Depending on the name of the value it will be added to the correct place in the Operation Json Object.
+     * Depending on the category and name of the value it will be added to the correct place in the Operation Json Object.
      *
-     * @param name the name of the value
-     * @param value containing the value
+     * @param category category the input value belongs to
+     * @param name name identifying the value
+     * @param value containing the value of the input
      */
-    public void putBooleanValue(String name, boolean value) throws PaymentException {
+    public void putBooleanValue(String category, String name, boolean value) throws PaymentException {
 
+        if (TextUtils.isEmpty(category)) {
+            throw new IllegalArgumentException("Category cannot be null or empty");
+        }
         if (TextUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
-        AccountInputData account = operationData.getAccount();
-        switch (name) {
-            case PaymentInputType.OPTIN:
-                account.setOptIn(value);
+        switch (category) {
+            case INPUTELEMENT:
+                putInputElementBooleanValue(name, value);
                 break;
-            case PaymentInputType.ALLOW_RECURRENCE:
-                operationData.setAllowRecurrence(value);
-                break;
-            case PaymentInputType.AUTO_REGISTRATION:
-                operationData.setAutoRegistration(value);
+            case REGISTRATION:
+                putRegistrationBooleanValue(name, value);
                 break;
             default:
-                String msg = "Operation.putBooleanValue failed for name: " + name;
+                String msg = "Operation.putBooleanValue failed for category: " + category;
                 throw new PaymentException(msg);
         }
     }
 
     /**
      * Put a String value into this Operation form.
-     * Depending on the name of the value it will be added to the correct place in the Operation Json Object.
+     * Depending on the category and name of the value it will be added to the correct place in the Operation Json Object.
      *
-     * @param name the name of the value
-     * @param value containing the value
+     * @param category category the input value belongs to
+     * @param name name identifying the value
+     * @param value containing the value of the input
      */
-    public void putStringValue(String name, String value) throws PaymentException {
+    public void putStringValue(String category, String name, String value) throws PaymentException {
 
+        if (TextUtils.isEmpty(category)) {
+            throw new IllegalArgumentException("Category cannot be null or empty");
+        }
         if (TextUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
+        switch (category) {
+            case INPUTELEMENT:
+                putInputElementStringValue(name, value);
+                break;
+            default:
+                String msg = "Operation.putStringValue failed for category: " + category;
+                throw new PaymentException(msg);
+        }
+    }
+
+    private void putInputElementBooleanValue(String name, boolean value) throws PaymentException {
+        AccountInputData account = operationData.getAccount();
+        switch (name) {
+            case PaymentInputType.OPTIN:
+                account.setOptIn(value);
+                break;
+            default:
+                String msg = "Operation.Account.putBooleanValue failed for name: " + name;
+                throw new PaymentException(msg);
+        }
+    }
+
+    private void putInputElementStringValue(String name, String value) throws PaymentException {
         AccountInputData account = operationData.getAccount();
         switch (name) {
             case PaymentInputType.HOLDER_NAME:
@@ -192,29 +219,32 @@ public class Operation implements Parcelable {
                 account.setInstallmentPlanId(value);
                 break;
             default:
-                String msg = "Operation.putStringValue failed for name: " + name;
+                String msg = "Operation.Account.putStringValue failed for name: " + name;
+                throw new PaymentException(msg);
+        }
+    }
+
+    private void putRegistrationBooleanValue(String name, boolean value) throws PaymentException {
+        switch (name) {
+            case PaymentInputType.ALLOW_RECURRENCE:
+                operationData.setAllowRecurrence(value);
+                break;
+            case PaymentInputType.AUTO_REGISTRATION:
+                operationData.setAutoRegistration(value);
+                break;
+            default:
+                String msg = "Operation.Registration.setBooleanValue failed for name: " + name;
                 throw new PaymentException(msg);
         }
     }
 
     /**
      * Get the type of this operation, this will either be PRESET, CHARGE, UPDATE, ACTIVATION or PAYOUT.
-     * If the type cannot be determined from the URl then null will be returned.
      *
-     * @return the type of the operation or null if it cannot be determined.
+     * @return the type of the operation.
      */
     public String getOperationType() {
         return operationType;
-    }
-
-    /**
-     * Check if the type of this operation matches the given type.
-     *
-     * @param operationType to match with the type of this operation.
-     * @return true when the types matches, false otherwise.
-     */
-    public boolean isOperationType(String operationType) {
-        return Objects.equals(operationType, getOperationType());
     }
 
     public String getNetworkCode() {

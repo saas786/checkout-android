@@ -56,8 +56,8 @@ public final class BrowserDataBuilder {
             setLanguage(Locale.getDefault().toLanguageTag()).
             setTimeZone(TimeZone.getDefault().getID()).
             setColorDepth(COLOR_DEPTH).
-            setBrowserScreenHeight((int) config.screenHeightDp).
-            setBrowserScreenWidth((int) config.screenWidthDp).build();
+            setBrowserScreenHeight(config.screenHeightDp).
+            setBrowserScreenWidth(config.screenWidthDp).build();
     }
 
     public BrowserDataBuilder setJavaEnabled(Boolean javaEnabled) {
