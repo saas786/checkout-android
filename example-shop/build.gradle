@@ -29,10 +29,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("$System.env.PLAYSTORE_UPLOAD_STOREFILE")
-            storePassword "$System.env.PLAYSTORE_UPLOAD_STOREPASSWORD"
-            keyAlias "$System.env.PLAYSTORE_UPLOAD_KEYALIAS"
-            keyPassword "$System.env.PLAYSTORE_UPLOAD_KEYPASSWORD"
+            storeFile file("${rootProject.playstoreStoreFile}")
+            storePassword "${rootProject.playstoreStorePassword}"
+            keyAlias "${rootProject.playstoreKeyAlias}"
+            keyPassword "${rootProject.playstoreKeyPassword}"
         }
     }
     // Product flavor is required in order to upload both

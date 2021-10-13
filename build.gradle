@@ -42,11 +42,19 @@ ext {
 
     nexusMavenUser = System.getenv('NEXUS_MAVEN_USER')
     nexusMavenPassword = System.getenv('NEXUS_MAVEN_PASSWORD')
+
     packageCloudMavenPassword = System.getenv('PACKAGECLOUD_MAVEN_PASSWORD')
+
     browserStackUser = System.getenv('BROWSERSTACK_USER')
     browserStackKey = System.getenv('BROWSERSTACK_KEY')
+
     checkoutAuthHeader = System.getenv('CHECKOUTANDROID_AUTHHEADER')
     checkoutBaseUrl = System.getenv('CHECKOUTANDROID_BASEURL')
+
+    playstoreStoreFile = System.getenv('PLAYSTORE_UPLOAD_STOREFILE')
+    playstoreStorePassword = System.getenv('PLAYSTORE_UPLOAD_STOREPASSWORD')
+    playstoreKeyAlias = System.getenv('PLAYSTORE_UPLOAD_KEYALIAS')
+    playstoreKeyPassword = System.getenv('PLAYSTORE_UPLOAD_KEYPASSWORD')
 
     minSdkVersion = 21
     compileSdkVersion = 30
