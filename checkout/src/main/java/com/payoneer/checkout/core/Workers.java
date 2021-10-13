@@ -18,8 +18,11 @@ public final class Workers {
 
     private final ExecutorService networkService;
 
+    private final ExecutorService imageService;
+
     private Workers() {
         this.networkService = Executors.newCachedThreadPool();
+        this.imageService = Executors.newCachedThreadPool();
     }
 
     /**
@@ -38,6 +41,15 @@ public final class Workers {
      */
     public ExecutorService forNetworkTasks() {
         return networkService;
+    }
+
+    /**
+     * Get the WorkerExecutor for image tasks
+     *
+     * @return the image executor for image tasks
+     */
+    public ExecutorService forImageTasks() {
+        return imageService;
     }
 
     private static class InstanceHolder {

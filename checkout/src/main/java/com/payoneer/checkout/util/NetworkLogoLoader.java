@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Payoneer Germany GmbH
+ *  Copyright (c) 2020 Payoneer Germany GmbH
  * https://www.payoneer.com
  *
  * This file is open source and available under the MIT license.
@@ -8,15 +8,24 @@
 
 package com.payoneer.checkout.util;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.bumptech.glide.Glide;
 import com.payoneer.checkout.R;
+import com.payoneer.checkout.core.PaymentException;
+import com.payoneer.checkout.core.WorkerSubscriber;
+import com.payoneer.checkout.core.WorkerTask;
+import com.payoneer.checkout.core.Workers;
+import com.payoneer.checkout.network.ImageConnection;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -26,11 +35,15 @@ import android.widget.ImageView;
  */
 public final class NetworkLogoLoader {
 
-    private final static String NETWORKLOGO_FOLDER = "file:///android_asset/networklogos/";
-    private final Map<String, String> localNetworkLogos;
+    private final static String NETWORKLOGO_FOLDER = "networklogos/";
+    private final Map<String, String> localNetworkLogos = new HashMap<>();
+    private final ImageConnection imageConnection = new ImageConnection();
 
+    /*
+     * This is private because this class should never have an object created. The loading functionality
+     * will be accessed statically
+     */
     private NetworkLogoLoader() {
-        localNetworkLogos = new HashMap<>();
     }
 
     /**
@@ -50,20 +63,56 @@ public final class NetworkLogoLoader {
      * @param networkLogoUrl pointing to the remote image
      */
     public static void loadNetworkLogo(ImageView view, String networkCode, URL networkLogoUrl) {
-        getInstance().loadIntoView(view, networkCode, networkLogoUrl);
+        getInstance().loadImageIntoView(view, networkCode, networkLogoUrl);
     }
 
-    private void loadIntoView(ImageView view, String networkCode, URL networkLogoUrl) {
+    private void loadImageIntoView(ImageView view, String networkCode, URL networkLogoUrl) {
+        final Context context = view.getContext();
         if (localNetworkLogos.size() == 0) {
             loadLocalNetworkLogos(view.getContext());
         }
-        String url;
-        if (localNetworkLogos.containsKey(networkCode)) {
-            url = localNetworkLogos.get(networkCode);
-        } else {
-            url = networkLogoUrl.toString();
+
+        WorkerTask<Bitmap> task = WorkerTask.fromCallable(() -> loadLogo(context, networkCode, networkLogoUrl));
+        task.subscribe(new WorkerSubscriber<Bitmap>() {
+            @Override
+            public void onSuccess(Bitmap bitmap) {
+                onLoadBitmapSuccess(view, bitmap);
+            }
+
+            @Override
+            public void onError(Throwable cause) {
+                Log.w("sdk_ImageHelper", cause);
+                // we ignore image loading failures
+            }
+        });
+        Workers.getInstance().forImageTasks().execute(task);
+    }
+
+    private void onLoadBitmapSuccess(ImageView view, Bitmap bitmap) {
+        try {
+            view.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.w("checkout-sdk", e);
+            // we ignore image loading failures which may occur if the device is out of memory
         }
-        Glide.with(view.getContext()).asBitmap().load(url).into(view);
+    }
+
+    private Bitmap loadLogo(Context context, String networkCode, URL networkLogoUrl) throws PaymentException {
+        if (localNetworkLogos.containsKey(networkCode)) {
+            String fileName = localNetworkLogos.get(networkCode);
+            return loadBitmapFromFile(context, fileName);
+        } else {
+            return imageConnection.loadBitmap(networkLogoUrl);
+        }
+    }
+
+    private Bitmap loadBitmapFromFile(Context context, String fileName) throws PaymentException {
+        try {
+            InputStream inputStream = context.getAssets().open(fileName);
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            throw new PaymentException(e);
+        }
     }
 
     private void loadLocalNetworkLogos(Context context) {
