@@ -3,27 +3,27 @@
  */
 
 task uploadToAppLive {
-    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
-        logger.warn('Missing Browserstack functional test environment variables')
+    if (!(rootProject.browserStackUser && rootProject.browserStackKey)) {
+        logger.warn('[BROWSERSTACK] Missing credentials')
         return
     }
     dependsOn('uploadExampleShopDebugToBrowserstackAppLive')
 }
 
 task runFunctionalTest {
-    if (System.getenv('CHECKOUTANDROID_BASEURL') == null || System.getenv('CHECKOUTANDROID_AUTHHEADER') == null) {
-        logger.warn('Missing functional test environment variables')
+    if (!(rootProject.checkoutBaseUrl && rootProject.checkoutAuthHeader)) {
+        logger.warn('[BROWSERSTACK] Missing functional test settings')
         return
     }
-    if (System.getenv('BROWSERSTACK_USER') == null || System.getenv('BROWSERSTACK_KEY') == null) {
-        logger.warn('Missing Browserstack functional test environment variables')
+    if (!(rootProject.browserStackUser && rootProject.browserStackKey)) {
+        logger.warn('[BROWSERSTACK] Missing credentials')
         return
     }
     dependsOn('executeExampleShopDebugTestsOnBrowserstack')
 }
 
 browserStackConfig {
-    username = "$System.env.BROWSERSTACK_USER"
-    accessKey = "$System.env.BROWSERSTACK_KEY"
+    username = rootProject.browserStackUser
+    accessKey = rootProject.browserStackKey
     configFilePath = 'example-shop/browserstack.json'
 }

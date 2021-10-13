@@ -40,23 +40,23 @@ afterEvaluate {
                 name 'nexusSnapshots'
                 url 'https://nexus.mgmt.oscato.com/repository/snapshots/'
                 credentials {
-                    username = mavenUser
-                    password = mavenPassword
+                    username = rootProject.nexusMavenUser
+                    password = rootProject.nexusMavenPassword
                 }
             }
             maven {
                 name 'nexusReleases'
                 url 'https://nexus.mgmt.oscato.com/repository/releases/'
                 credentials {
-                    username = mavenUser
-                    password = mavenPassword
+                    username = rootProject.nexusMavenUser
+                    password = rootProject.nexusMavenPassword
                 }
             }
             maven {
                 name = 'packagecloud'
                 url = 'https://packagecloud.io/optile/android/java/maven2/'
                 credentials {
-                    username = packageCloudMavenPassword
+                    username = rootProject.packageCloudMavenPassword
                     password = ''
                 }
             }

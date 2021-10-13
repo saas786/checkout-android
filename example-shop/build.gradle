@@ -45,8 +45,8 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField 'String', 'authheader', "\"$System.env.CHECKOUTANDROID_AUTHHEADER\""
-            buildConfigField 'String', 'baseurl', "\"$System.env.CHECKOUTANDROID_BASEURL\""
+            buildConfigField 'String', 'authheader', "\"${rootProject.checkoutAuthHeader}\""
+            buildConfigField 'String', 'baseurl', "\"${rootProject.checkoutBaseUrl}\""
 
             testVariants.all { testVariant ->
                 testVariant.outputs.all { output ->
