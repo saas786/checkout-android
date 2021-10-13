@@ -4,11 +4,11 @@
  */
 
 task buildci() {
-    if (!(nexusMavenUser && nexusMavenPassword)) {
+    if (nexusMavenUser == null || nexusMavenPassword == null) {
         logger.warn('[BUILDCI] Missing mavenUser and/or mavenPassword environment variables')
         return
     }
-    if (!packageCloudMavenPassword) {
+    if (packageCloudMavenPassword == null) {
         logger.warn('[BUILDCI] Missing packageCloudMavenPassword environment variable')
         return
     }
@@ -19,11 +19,11 @@ task buildci() {
     def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
 
     dependsOn clean
-    //dependsOn testCheckout
-    //dependsOn assembleCheckout
-    //dependsOn publishCheckout
-    //dependsOn testExampleCheckout
-    //dependsOn testExampleShop
+    dependsOn testCheckout
+    dependsOn assembleCheckout
+    dependsOn publishCheckout
+    dependsOn testExampleCheckout
+    dependsOn testExampleShop
 
     // Run tasks for the Checkout library
     testCheckout.mustRunAfter(clean)
