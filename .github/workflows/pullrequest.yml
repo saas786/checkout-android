@@ -8,7 +8,7 @@ name: Pull Request
 on:
   push:
     branches:
-      - PCX-2120-github-actions
+      - PCX-1662
   pull_request:
     types: [ opened, reopened, labeled, synchronize ]
 
