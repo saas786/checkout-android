@@ -63,7 +63,6 @@ ext {
     lombokVersion = '1.18.20'
 
     gsonVersion = '2.8.8'
-    junitJupiterVersion = '5.8.1'
     androidMaterialVersion = '1.4.0'
     androidxBrowserVersion = '1.3.0'
     androidxSwiperefreshlayoutVersion = '1.1.0'
@@ -74,10 +73,13 @@ ext {
     androidxTestJunitVersion = '1.1.3'
     androidxTestUIAutomatorVersion = '2.2.0'
 
+    junitVersion = '4.13.2'
     rxjavaVersion = '3.1.1'
     rxandroidVersion = '3.0.0'
     mockitoCoreVersion = '2.23.4'
+    robolectricVersion = '4.5.1'
     jsonsnapshotVersion = '1.0.17'
+    tngDataProviderVersion = '2.8'
 }
 
 static def getCurrentBranch() {

@@ -10,14 +10,16 @@ package com.payoneer.checkout.localization;
 
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.LABEL_TITLE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.InteractionCode;
@@ -27,6 +29,7 @@ import com.payoneer.checkout.model.NetworkOperationType;
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
+@RunWith(RobolectricTestRunner.class)
 public final class LocalizationTest {
 
     @Test

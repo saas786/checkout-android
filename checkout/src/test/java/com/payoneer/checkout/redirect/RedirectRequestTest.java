@@ -8,41 +8,39 @@
 
 package com.payoneer.checkout.redirect;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.model.OperationResult;
 import com.payoneer.checkout.model.Redirect;
 import com.payoneer.checkout.test.util.TestUtils;
 
+@RunWith(RobolectricTestRunner.class)
 public class RedirectRequestTest {
 
-    @Test
-    public void fromOperationResult_missingRedirect() {
-        Assertions.assertThrows(PaymentException.class, () -> {
-            int requestCode = 1;
-            OperationResult operationResult = new OperationResult();
-            operationResult.setLinks(createLinks());
-            RedirectRequest.fromOperationResult(requestCode, operationResult);
-        });
+    @Test(expected = PaymentException.class)
+    public void fromOperationResult_missingRedirect() throws PaymentException {
+        int requestCode = 1;
+        OperationResult operationResult = new OperationResult();
+        operationResult.setLinks(createLinks());
+        RedirectRequest.fromOperationResult(requestCode, operationResult);
     }
 
-    @Test
-    public void fromOperationResult_missingLink() {
-        Assertions.assertThrows(PaymentException.class, () -> {
-            int requestCode = 1;
-            OperationResult operationResult = new OperationResult();
-            operationResult.setRedirect(new Redirect());
-            RedirectRequest.fromOperationResult(requestCode, operationResult);
-        });
+    @Test(expected = PaymentException.class)
+    public void fromOperationResult_missingLink() throws PaymentException {
+        int requestCode = 1;
+        OperationResult operationResult = new OperationResult();
+        operationResult.setRedirect(new Redirect());
+        RedirectRequest.fromOperationResult(requestCode, operationResult);
     }
 
     @Test

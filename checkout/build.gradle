@@ -56,9 +56,10 @@ dependencies {
 
     compileOnly "org.projectlombok:lombok:${rootProject.lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${rootProject.lombokVersion}"
+    testImplementation "org.robolectric:robolectric:${rootProject.robolectricVersion}"
     testImplementation "androidx.test:core:${rootProject.androidxTestCoreVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter:${rootProject.junitJupiterVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:${rootProject.junitJupiterVersion}"
+    testImplementation "junit:junit:${rootProject.junitVersion}"
+    testImplementation "com.tngtech.junit.dataprovider:junit4-dataprovider:${tngDataProviderVersion}"
     testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
 

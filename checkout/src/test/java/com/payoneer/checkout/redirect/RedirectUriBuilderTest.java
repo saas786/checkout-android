@@ -8,13 +8,15 @@
 
 package com.payoneer.checkout.redirect;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.model.Parameter;
 import com.payoneer.checkout.model.Redirect;
@@ -22,6 +24,7 @@ import com.payoneer.checkout.test.util.TestUtils;
 
 import android.net.Uri;
 
+@RunWith(RobolectricTestRunner.class)
 public class RedirectUriBuilderTest {
 
     @Test

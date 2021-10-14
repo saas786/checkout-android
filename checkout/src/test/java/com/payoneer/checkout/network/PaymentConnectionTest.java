@@ -8,18 +8,28 @@
 
 package com.payoneer.checkout.network;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import com.payoneer.checkout.core.PaymentException;
 
 import androidx.test.core.app.ApplicationProvider;
 
+/**
+ * The type Operation connection test.
+ */
+@RunWith(RobolectricTestRunner.class)
 public class PaymentConnectionTest {
 
-    @Test
-    public void createOperation_invalidData_exception() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            PaymentConnection conn = new PaymentConnection(ApplicationProvider.getApplicationContext());
-            conn.postOperation(null);
-        });
+    /**
+     * Post operation invalid data invalid value error.
+     *
+     * @throws PaymentException the network exception
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void createOperation_invalidData_exception() throws PaymentException {
+        PaymentConnection conn = new PaymentConnection(ApplicationProvider.getApplicationContext());
+        conn.postOperation(null);
     }
 }

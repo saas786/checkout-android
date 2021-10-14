@@ -8,16 +8,17 @@
 
 package com.payoneer.checkout.validation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.core.PaymentException;
@@ -29,20 +30,17 @@ import com.payoneer.checkout.resource.ResourceLoader;
 import android.content.res.Resources;
 import androidx.test.core.app.ApplicationProvider;
 
+@RunWith(RobolectricTestRunner.class)
 public class ValidatorTest {
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void createInstance_invalidContext() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new Validator(null);
-        });
+        new Validator(null);
     }
 
-    @Test
-    public void createInstance_invalidResource() {
-        Assertions.assertThrows(PaymentException.class, () -> {
-            createValidator(0);
-        });
+    @Test(expected = PaymentException.class)
+    public void createInstance_invalidResource() throws PaymentException {
+        createValidator(0);
     }
 
     @Test
@@ -75,20 +73,17 @@ public class ValidatorTest {
         assertFalse(validator.isHidden(PaymentNetworkCodes.VISA, PaymentInputType.HOLDER_NAME));
     }
 
-    @Test
-    public void validate_invalidMethod() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            final Validator validator = createValidator(R.raw.validations);
-            validator.validate(null, PaymentNetworkCodes.VISA, PaymentInputType.ACCOUNT_NUMBER, "4111111111111111", null);
-        });
+
+    @Test(expected = IllegalArgumentException.class)
+    public void validate_invalidMethod() throws PaymentException {
+        final Validator validator = createValidator(R.raw.validations);
+        validator.validate(null, PaymentNetworkCodes.VISA, PaymentInputType.ACCOUNT_NUMBER, "4111111111111111", null);
     }
 
-    @Test
-    public void validate_invalidType() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            final Validator validator = createValidator(R.raw.validations);
-            validator.validate(PaymentMethod.CREDIT_CARD, PaymentNetworkCodes.VISA, null, "4111111111111111", null);
-        });
+    @Test(expected = IllegalArgumentException.class)
+    public void validate_invalidType() throws PaymentException {
+        final Validator validator = createValidator(R.raw.validations);
+        validator.validate(PaymentMethod.CREDIT_CARD, PaymentNetworkCodes.VISA, null, "4111111111111111", null);
     }
 
     @Test
