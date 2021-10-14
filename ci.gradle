@@ -3,14 +3,25 @@
  * from a CI system
  */
 
+task testci() {
+    def testCheckout = tasks.findByPath(':checkout:test')
+    def assembleCheckout = tasks.findByPath(':checkout:assembleRelease')
+
+    dependsOn clean
+    dependsOn testCheckout
+    dependsOn assembleCheckout
+
+    // Run tasks for the Checkout library
+    testCheckout.mustRunAfter(clean)
+    assembleCheckout.mustRunAfter(testCheckout)
+}
+
 task buildci() {
     if (nexusMavenUser == null || nexusMavenPassword == null) {
         logger.warn('[BUILDCI] Missing mavenUser and/or mavenPassword environment variables')
-        return
     }
     if (packageCloudMavenPassword == null) {
         logger.warn('[BUILDCI] Missing packageCloudMavenPassword environment variable')
-        return
     }
     def testCheckout = tasks.findByPath(':checkout:test')
     def assembleCheckout = tasks.findByPath(':checkout:assembleRelease')
