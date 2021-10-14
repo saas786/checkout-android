@@ -44,5 +44,5 @@ task buildci() {
 
     // Test ExampleCheckout and ExampleShop apps on Browserstack
     testExampleCheckout.mustRunAfter(testCheckout)
-    testExampleShop.mustRunAfter(testCheckout)
+    //testExampleShop.mustRunAfter(testCheckout)
 }

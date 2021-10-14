@@ -23,4 +23,10 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Build with Gradle
+        env:
+          MOBILE_MERCHANT_CODE: ${{ secrets.MOBILE_MERCHANT_CODE }}
+          MOBILE_MERCHANT_PAYMENT_TOKEN: ${{ secrets.MOBILE_MERCHANT_PAYMENT_TOKEN }}
+          PAYMENTAPI_LISTURL: https:/\$()/api.integration.oscato.com/api/lists
+          BROWSERSTACK_USER: mobiledevaccount1
+          BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}
         run: ./gradlew buildci
