@@ -22,7 +22,7 @@ public class PaymentInputTypeTest {
 
     @Test
     public void isPaymentInputType_validValue_true() {
-        assertTrue(PaymentInputType.isValid(PaymentInputType.HOLDER_NAME));
+        assertFalse(PaymentInputType.isValid(PaymentInputType.HOLDER_NAME));
         assertTrue(PaymentInputType.isValid(PaymentInputType.ACCOUNT_NUMBER));
         assertTrue(PaymentInputType.isValid(PaymentInputType.BANK_CODE));
         assertTrue(PaymentInputType.isValid(PaymentInputType.BANK_NAME));
