@@ -43,11 +43,9 @@ ext {
     versionName = VERSIONNAME
     javaCompatVersion = JavaVersion.VERSION_1_8
 
-    nexusMavenUser = System.getenv('NEXUS_MAVEN_USER')
-    nexusMavenPassword = System.getenv('NEXUS_MAVEN_PASSWORD')
-
-    packageCloudMavenPassword = System.getenv('PACKAGECLOUD_MAVEN_PASSWORD')
-
+    nexusUser = System.getenv('NEXUS_USER')
+    nexusPassword = System.getenv('NEXUS_PASSWORD')
+    packageCloudToken = System.getenv('PACKAGECLOUD_TOKEN')
     browserStackUser = System.getenv('BROWSERSTACK_USER')
     browserStackKey = System.getenv('BROWSERSTACK_KEY')
 
