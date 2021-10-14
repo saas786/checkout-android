@@ -10,8 +10,9 @@ package com.payoneer.checkout.ui.widget.input;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import android.content.Context;
 import android.text.Editable;
@@ -20,22 +21,19 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import androidx.test.core.app.ApplicationProvider;
 
+@RunWith(RobolectricTestRunner.class)
 public class GroupingTextWatcherTest {
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void createGroupingTextWatcher_invalid_EditText() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            new GroupingTextWatcher(4, null);
-        });
+        new GroupingTextWatcher(4, null);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void createGroupingTextWatcher_invalid_Grouping() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Context context = ApplicationProvider.getApplicationContext();
-            EditText editText = new EditText(context);
-            new GroupingTextWatcher(0, editText);
-        });
+        Context context = ApplicationProvider.getApplicationContext();
+        EditText editText = new EditText(context);
+        new GroupingTextWatcher(0, editText);
     }
 
     @Test

@@ -8,26 +8,26 @@
 
 package com.payoneer.checkout.localization;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.InteractionReason;
 import com.payoneer.checkout.model.NetworkOperationType;
 
+@RunWith(RobolectricTestRunner.class)
 public class InteractionMessageTest {
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void fromInteraction_invalidInteraction_IllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            InteractionMessage.fromInteraction(null);
-        });
+        InteractionMessage.fromInteraction(null);
     }
 
     @Test
@@ -39,11 +39,9 @@ public class InteractionMessageTest {
         assertNull(message.getFlow());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void fromDeleteFlow_invalidInteraction_IllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            InteractionMessage.fromDeleteFlow(null);
-        });
+        InteractionMessage.fromDeleteFlow(null);
     }
 
     @Test
@@ -55,20 +53,16 @@ public class InteractionMessageTest {
         assertEquals("DELETE", message.getFlow());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void fromOperationFlow_invalidInteraction_IllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            String operationType = NetworkOperationType.CHARGE;
-            InteractionMessage.fromOperationFlow(null, operationType);
-        });
+        String operationType = NetworkOperationType.CHARGE;
+        InteractionMessage.fromOperationFlow(null, operationType);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void fromOperationFlow_invalidOperationType_IllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Interaction interaction = new Interaction(InteractionCode.PROCEED, InteractionReason.OK);
-            InteractionMessage.fromOperationFlow(interaction, "");
-        });
+        Interaction interaction = new Interaction(InteractionCode.PROCEED, InteractionReason.OK);
+        InteractionMessage.fromOperationFlow(interaction, "");
     }
 
     @Test

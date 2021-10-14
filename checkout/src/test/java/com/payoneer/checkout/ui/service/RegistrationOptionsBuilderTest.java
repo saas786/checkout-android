@@ -15,12 +15,13 @@ import static com.payoneer.checkout.model.RegistrationType.FORCED_DISPLAYED;
 import static com.payoneer.checkout.model.RegistrationType.NONE;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL;
 import static com.payoneer.checkout.model.RegistrationType.OPTIONAL_PRESELECTED;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import com.payoneer.checkout.core.PaymentException;
 import com.payoneer.checkout.localization.LocalizationKey;
@@ -30,6 +31,7 @@ import com.payoneer.checkout.model.RegistrationType;
 import com.payoneer.checkout.ui.model.RegistrationOptions;
 import com.payoneer.checkout.ui.model.RegistrationOptions.RegistrationOption;
 
+@RunWith(RobolectricTestRunner.class)
 public class RegistrationOptionsBuilderTest {
 
     // First value is the autoRegistration type and second value is the allowRecurrence type
@@ -73,32 +75,26 @@ public class RegistrationOptionsBuilderTest {
         { FORCED, FORCED, CheckboxMode.NONE }
     };
 
-    @Test
-    public void buildRegistrationOptions_missingOperationType() {
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
-            builder.setRegistrationOptions(RegistrationType.OPTIONAL, RegistrationType.OPTIONAL);
-            builder.buildRegistrationOptions();
-        });
+    @Test(expected = IllegalStateException.class)
+    public void buildRegistrationOptions_missingOperationType() throws PaymentException {
+        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
+        builder.setRegistrationOptions(RegistrationType.OPTIONAL, RegistrationType.OPTIONAL);
+        builder.buildRegistrationOptions();
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void buildRegistrationOptions_missingRegistrationOptions() throws PaymentException {
-        Assertions.assertThrows(IllegalStateException.class, () -> {
-            RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
-            builder.setOperationType(NetworkOperationType.UPDATE);
-            builder.buildRegistrationOptions();
-        });
+        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
+        builder.setOperationType(NetworkOperationType.UPDATE);
+        builder.buildRegistrationOptions();
     }
 
-    @Test
+    @Test(expected = PaymentException.class)
     public void buildRegistrationOptions_invalidRegistrationOptions() throws PaymentException {
-        Assertions.assertThrows(PaymentException.class, () -> {
-            RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
-            builder.setOperationType(NetworkOperationType.UPDATE);
-            builder.setRegistrationOptions(RegistrationType.NONE, RegistrationType.OPTIONAL);
-            builder.buildRegistrationOptions();
-        });
+        RegistrationOptionsBuilder builder = new RegistrationOptionsBuilder();
+        builder.setOperationType(NetworkOperationType.UPDATE);
+        builder.setRegistrationOptions(RegistrationType.NONE, RegistrationType.OPTIONAL);
+        builder.buildRegistrationOptions();
     }
 
     @Test

@@ -8,12 +8,15 @@
 
 package com.payoneer.checkout.markdown;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import android.text.SpannableStringBuilder;
 
+@RunWith(RobolectricTestRunner.class)
 public class MarkdownSpannableStringBuilderTest {
 
     @Test
@@ -32,7 +35,8 @@ public class MarkdownSpannableStringBuilderTest {
 
     @Test
     public void testParse_whenInputContainsLinks_shouldReturnStringContainingLinkText() {
-        final String input = "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/) and [Privacy Policy](https://www.google.com/).";
+        final String input =
+            "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/) and [Privacy Policy](https://www.google.com/).";
         SpannableStringBuilder result = MarkdownSpannableStringBuilder.createFromText(input);
         assertEquals("By clicking the button, you agree to the Terms of Service and Privacy Policy.", result.toString());
     }
@@ -64,7 +68,8 @@ public class MarkdownSpannableStringBuilderTest {
 
     @Test
     public void testParseLinks_whenInputContains2Links_shouldReturnAttributedStringWith2Links() {
-        final String input = "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/) and [Privacy Policy](https://www.google.com/).";
+        final String input =
+            "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/) and [Privacy Policy](https://www.google.com/).";
         SpannableStringBuilder result = MarkdownSpannableStringBuilder.createFromText(input);
         MarkdownLinkSpan[] spans = result.getSpans(0, result.length(), MarkdownLinkSpan.class);
         assertEquals(2, spans.length);
@@ -74,7 +79,8 @@ public class MarkdownSpannableStringBuilderTest {
 
     @Test
     public void testParseLinks_whenInputContains2LinksTogether_shouldReturnAttributedStringWith2Links() {
-        final String input = "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/)[Privacy Policy](https://www.google.com/).";
+        final String input =
+            "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/)[Privacy Policy](https://www.google.com/).";
         SpannableStringBuilder result = MarkdownSpannableStringBuilder.createFromText(input);
         MarkdownLinkSpan[] spans = result.getSpans(0, result.length(), MarkdownLinkSpan.class);
         assertEquals(2, spans.length);
@@ -84,7 +90,8 @@ public class MarkdownSpannableStringBuilderTest {
 
     @Test
     public void testParseLinks_whenInputContains2LinksWithoutWhitespace_shouldReturnAttributedStringWith2Links() {
-        final String input = "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/)and[Privacy Policy](https://www.google.com/).";
+        final String input =
+            "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/)and[Privacy Policy](https://www.google.com/).";
         SpannableStringBuilder result = MarkdownSpannableStringBuilder.createFromText(input);
         MarkdownLinkSpan[] spans = result.getSpans(0, result.length(), MarkdownLinkSpan.class);
         assertEquals(2, spans.length);
@@ -103,7 +110,8 @@ public class MarkdownSpannableStringBuilderTest {
 
     @Test
     public void testParseLinks_whenInputContains2LinksWithOptionalTitle_shouldReturn2Links() {
-        final String input = "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/ \"optional title\") and [Privacy Policy](https://www.google.com/ \"optionaltitle\").";
+        final String input =
+            "By clicking the button, you agree to the [Terms of Service](https://www.apple.com/ \"optional title\") and [Privacy Policy](https://www.google.com/ \"optionaltitle\").";
         SpannableStringBuilder result = MarkdownSpannableStringBuilder.createFromText(input);
         MarkdownLinkSpan[] spans = result.getSpans(0, result.length(), MarkdownLinkSpan.class);
         assertEquals(2, spans.length);
@@ -121,7 +129,8 @@ public class MarkdownSpannableStringBuilderTest {
 
     @Test
     public void testParseLinks_whenInputContains2LinksWithNoSpaces_shouldReturn2LinksWithLinkTexts() {
-        final String input = "Byclickingthebutton,youagreetothe[TermsofService](https://www.apple.com/ \"optionaltitle\")and[PrivacyPolicy](https://www.google.com/ \"optionaltitle\").";
+        final String input =
+            "Byclickingthebutton,youagreetothe[TermsofService](https://www.apple.com/ \"optionaltitle\")and[PrivacyPolicy](https://www.google.com/ \"optionaltitle\").";
         SpannableStringBuilder result = MarkdownSpannableStringBuilder.createFromText(input);
         MarkdownLinkSpan[] spans = result.getSpans(0, result.length(), MarkdownLinkSpan.class);
         assertEquals(2, spans.length);
