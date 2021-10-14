@@ -37,8 +37,6 @@ abstract class BaseConnection {
     final static String HEADER_AUTHORIZATION = "Authorization";
     final static String HEADER_ACCEPT = "Accept";
     final static String HEADER_CONTENT_TYPE = "Content-Type";
-    final static String URI_PATH_API = "api";
-    final static String URI_PATH_LISTS = "lists";
     final static String VALUE_APP_JSON = "application/json;charset=UTF-8";
     private final static int TIMEOUT_CONNECT = 5000;
     private final static int TIMEOUT_READ = 30000;

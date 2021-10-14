@@ -72,9 +72,10 @@ class AbstractTest {
     }
 
     String createListUrl(ListSettings settings) {
-        String baseUrl = BuildConfig.baseurl;
-        String authHeader = BuildConfig.authheader;
-        return ListService.createListWithSettings(baseUrl, authHeader, settings);
+        String paymentApiListUrl = BuildConfig.paymentApiListUrl;
+        String merchantCode = BuildConfig.merchantCode;
+        String merchantPaymentToken = BuildConfig.merchantPaymentToken;
+        return ListService.createListWithSettings(paymentApiListUrl, merchantCode, merchantPaymentToken, settings);
     }
 
     void clickActionButton() {

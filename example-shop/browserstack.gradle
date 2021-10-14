@@ -3,7 +3,7 @@
  */
 
 task uploadToAppLive {
-    if (!(rootProject.browserStackUser && rootProject.browserStackKey)) {
+    if (rootProject.browserStackUser == null || rootProject.browserStackKey == null) {
         logger.warn('[BROWSERSTACK] Missing credentials')
         return
     }
@@ -11,11 +11,12 @@ task uploadToAppLive {
 }
 
 task runFunctionalTest {
-    if (!(rootProject.checkoutBaseUrl && rootProject.checkoutAuthHeader)) {
+    if ((rootProject.merchantCode == null) || (rootProject.merchantPaymentToken == null) ||
+            (rootProject.paymentApiListUrl == null)) {
         logger.warn('[BROWSERSTACK] Missing functional test settings')
         return
     }
-    if (!(rootProject.browserStackUser && rootProject.browserStackKey)) {
+    if (rootProject.browserStackUser == null || rootProject.browserStackKey == null) {
         logger.warn('[BROWSERSTACK] Missing credentials')
         return
     }

@@ -48,8 +48,9 @@ ext {
     browserStackUser = System.getenv('BROWSERSTACK_USER')
     browserStackKey = System.getenv('BROWSERSTACK_KEY')
 
-    checkoutAuthHeader = System.getenv('CHECKOUTANDROID_AUTHHEADER')
-    checkoutBaseUrl = System.getenv('CHECKOUTANDROID_BASEURL')
+    merchantCode = System.getenv('MOBILE_MERCHANT_CODE')
+    merchantPaymentToken = System.getenv('MOBILE_MERCHANT_PAYMENT_TOKEN')
+    paymentApiListUrl = System.getenv('PAYMENTAPI_LISTURL')
 
     playstoreStoreFile = System.getenv('PLAYSTORE_UPLOAD_STOREFILE')
     playstoreStorePassword = System.getenv('PLAYSTORE_UPLOAD_STOREPASSWORD')

@@ -47,8 +47,9 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField 'String', 'authheader', "\"${rootProject.checkoutAuthHeader}\""
-            buildConfigField 'String', 'baseurl', "\"${rootProject.checkoutBaseUrl}\""
+            buildConfigField 'String', 'merchantCode', "\"${rootProject.merchantCode}\""
+            buildConfigField 'String', 'merchantPaymentToken', "\"${rootProject.merchantPaymentToken}\""
+            buildConfigField 'String', 'paymentApiListUrl', "\"${rootProject.paymentApiListUrl}\""
 
             testVariants.all { testVariant ->
                 testVariant.outputs.all { output ->

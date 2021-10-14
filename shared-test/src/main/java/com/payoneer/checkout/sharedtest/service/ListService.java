@@ -11,6 +11,7 @@ package com.payoneer.checkout.sharedtest.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -22,6 +23,8 @@ import com.payoneer.checkout.network.ListConnection;
 import com.payoneer.checkout.util.PaymentUtils;
 
 import android.content.Context;
+import android.util.Base64;
+import android.util.Log;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 /**
@@ -29,34 +32,39 @@ import androidx.test.platform.app.InstrumentationRegistry;
  */
 public final class ListService {
 
-    private final String url;
-    private final String auth;
+    private final String listUrl;
+    private final String merchantCode;
+    private final String merchantPaymentToken;
     private final ListConnection conn;
 
-    private ListService(Context context, String url, String auth) {
-        this.url = url;
-        this.auth = auth;
+    private ListService(final Context context, final String listUrl, final String merchantCode, final String merchantPaymentToken) {
+        this.listUrl = listUrl;
+        this.merchantCode = merchantCode;
+        this.merchantPaymentToken = merchantPaymentToken;
         this.conn = new ListConnection(context);
     }
 
     /**
      * Helper method to create list with the provided settings
      *
-     * @param baseUrl url pointing to the Payment API Backend
-     * @param authHeader containing the authentication header value
+     * @param listUrl url pointing to the Payment API Backend
+     * @param merchantCode containing the code of the merchant
+     * @param merchantPaymentToken unique token used to make payments
      * @param settings used to create the list
      * @return the self url of the newly created list
      */
-    public static String createListWithSettings(String baseUrl, String authHeader, ListSettings settings) throws ListServiceException {
+    public static String createListWithSettings(String listUrl, String merchantCode, String merchantPaymentToken, ListSettings settings) throws ListServiceException {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        ListService service = new ListService(context, baseUrl, authHeader);
-        return service.createListUrl(baseUrl, authHeader, settings);
+        ListService service = new ListService(context, listUrl, merchantCode, merchantPaymentToken);
+        return service.createListUrl(settings);
     }
 
-    private String createListUrl(String baseUrl, String authHeader, ListSettings settings) throws ListServiceException {
+    private String createListUrl(ListSettings settings) throws ListServiceException {
         try {
             String listBody = createListRequestBody(settings);
-            ListResult result = conn.createPaymentSession(baseUrl, authHeader, listBody);
+            String authHeader = createAuthHeader();
+            Log.i("AAAAA", "autheader: " + authHeader);
+            ListResult result = conn.createPaymentSession(listUrl, authHeader, listBody);
             Map<String, URL> links = result.getLinks();
             URL selfUrl = links != null ? links.get("self") : null;
 
@@ -105,5 +113,11 @@ public final class ListService {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         String fileContent = PaymentUtils.readRawResource(context.getResources(), jsonResId);
         return new JSONObject(fileContent);
+    }
+
+    private String createAuthHeader() {
+        String header = merchantCode + "/" + merchantPaymentToken;
+        byte[] data = header.getBytes(StandardCharsets.UTF_8);
+        return Base64.encodeToString(data, Base64.DEFAULT);
     }
 }

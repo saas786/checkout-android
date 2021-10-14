@@ -44,15 +44,15 @@ public final class ListConnection extends BaseConnection {
      * a request mobile apps should be making as this call is normally executed
      * Merchant Server-side. This request will be removed later.
      *
-     * @param baseUrl the base url of the Payment API
+     * @param listUrl the listUrl of the Payment API
      * @param authorization the authorization header data
      * @param listData the data containing the request body for the list request
      * @return the ListResult
      */
-    public ListResult createPaymentSession(final String baseUrl, final String authorization, final String listData)
+    public ListResult createPaymentSession(final String listUrl, final String authorization, final String listData)
         throws PaymentException {
-        if (TextUtils.isEmpty(baseUrl)) {
-            throw new IllegalArgumentException("baseUrl cannot be null or empty");
+        if (TextUtils.isEmpty(listUrl)) {
+            throw new IllegalArgumentException("listUrl cannot be null or empty");
         }
         if (TextUtils.isEmpty(authorization)) {
             throw new IllegalArgumentException("authorization cannot be null or empty");
@@ -63,12 +63,7 @@ public final class ListConnection extends BaseConnection {
 
         HttpURLConnection conn = null;
         try {
-            final String requestUrl = Uri.parse(baseUrl).buildUpon()
-                .appendPath(URI_PATH_API)
-                .appendPath(URI_PATH_LISTS)
-                .build().toString();
-
-            conn = createPostConnection(requestUrl);
+            conn = createPostConnection(listUrl);
             conn.setRequestProperty(HEADER_AUTHORIZATION, authorization);
             conn.setRequestProperty(HEADER_CONTENT_TYPE, VALUE_APP_JSON);
             conn.setRequestProperty(HEADER_ACCEPT, VALUE_APP_JSON);

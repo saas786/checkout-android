@@ -11,7 +11,8 @@ task uploadToAppLive {
 }
 
 task runFunctionalTest {
-    if (rootProject.checkoutBaseUrl == null || rootProject.checkoutAuthHeader == null) {
+    if ((rootProject.merchantCode == null) || (rootProject.merchantPaymentToken == null) ||
+            (rootProject.paymentApiListUrl == null)) {
         logger.warn('[BROWSERSTACK] Missing functional test settings')
         return
     }
