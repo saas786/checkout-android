@@ -32,7 +32,10 @@ allprojects {
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+    dependsOn(":checkout:clean")
+    dependsOn(":example-checkout:clean")
+    dependsOn(":example-shop:clean")
+    dependsOn(":shared-test:clean")
 }
 
 ext {
