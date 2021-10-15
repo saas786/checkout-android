@@ -8,20 +8,28 @@
 
 package com.payoneer.checkout.network;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import com.payoneer.checkout.core.PaymentException;
 
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
+/**
+ * The type Localization connection test.
+ */
+@RunWith(RobolectricTestRunner.class)
 public class LocalizationConnectionTest {
 
-    @Test
-    public void loadLocalizationHolder_invalidURL_IllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            Context context = ApplicationProvider.getApplicationContext();
-            LocalizationConnection conn = new LocalizationConnection(context);
-            conn.loadLocalization(null);
-        });
+    /**
+     * Gets LocalizationHolder with invalid URL
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void loadLocalizationHolder_invalidURL_IllegalArgumentException() throws PaymentException {
+        Context context = ApplicationProvider.getApplicationContext();
+        LocalizationConnection conn = new LocalizationConnection(context);
+        conn.loadLocalization(null);
     }
 }

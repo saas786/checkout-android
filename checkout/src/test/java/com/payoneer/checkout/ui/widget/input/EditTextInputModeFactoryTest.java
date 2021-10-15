@@ -8,9 +8,9 @@
 
 package com.payoneer.checkout.ui.widget.input;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.model.InputElement;

@@ -10,8 +10,9 @@ package com.payoneer.checkout.ui.widget.input;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import android.content.Context;
 import android.text.Editable;
@@ -20,13 +21,12 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import androidx.test.core.app.ApplicationProvider;
 
+@RunWith(RobolectricTestRunner.class)
 public class ExpiryDateTextWatcherTest {
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void createExpiryDateTextWatcher_invalid_EditText() {
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            new ExpiryDateTextWatcher(null);
-        });
+        new ExpiryDateTextWatcher(null);
     }
 
     @Test

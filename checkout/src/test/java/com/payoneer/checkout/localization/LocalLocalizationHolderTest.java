@@ -8,13 +8,16 @@
 
 package com.payoneer.checkout.localization;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 
+@RunWith(RobolectricTestRunner.class)
 public class LocalLocalizationHolderTest {
 
     @Test
