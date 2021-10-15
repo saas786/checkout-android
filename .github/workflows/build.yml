@@ -26,7 +26,9 @@ jobs:
         env:
           MOBILE_MERCHANT_CODE: ${{ secrets.MOBILE_MERCHANT_CODE }}
           MOBILE_MERCHANT_PAYMENT_TOKEN: ${{ secrets.MOBILE_MERCHANT_PAYMENT_TOKEN }}
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           PAYMENTAPI_LISTURL: https:/\$()/api.integration.oscato.com/api/lists
-          BROWSERSTACK_USER: mobiledevaccount1
+          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
           BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}
         run: ./gradlew buildci
