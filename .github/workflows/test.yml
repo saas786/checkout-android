@@ -1,9 +1,6 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# Workflow for running tests triggered by pull requests in the Android Checkout SDK
 
-name: Pull Request
+name: Test workflow
 
 on:
   pull_request:
@@ -22,5 +19,5 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-      - name: Run checkout unit tests
-        run: ./gradlew testci
+      - name: Run Checkout SDK unit tests
+        run: ./gradlew citest
