@@ -24,7 +24,6 @@ import com.payoneer.checkout.util.PaymentUtils;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 /**
@@ -53,7 +52,8 @@ public final class ListService {
      * @param settings used to create the list
      * @return the self url of the newly created list
      */
-    public static String createListWithSettings(String listUrl, String merchantCode, String merchantPaymentToken, ListSettings settings) throws ListServiceException {
+    public static String createListWithSettings(String listUrl, String merchantCode, String merchantPaymentToken, ListSettings settings)
+        throws ListServiceException {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         ListService service = new ListService(context, listUrl, merchantCode, merchantPaymentToken);
         return service.createListUrl(settings);
@@ -63,7 +63,6 @@ public final class ListService {
         try {
             String listBody = createListRequestBody(settings);
             String authHeader = createAuthHeader();
-            Log.i("AAAAA", "autheader: " + authHeader);
             ListResult result = conn.createPaymentSession(listUrl, authHeader, listBody);
             Map<String, URL> links = result.getLinks();
             URL selfUrl = links != null ? links.get("self") : null;
