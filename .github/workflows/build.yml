@@ -23,12 +23,10 @@ jobs:
         run: ./gradlew clean
       - name: Build checkout module
         run: ./gradlew buildCheckout
-      - name: Test checkout module
-        run: ./gradlew testCheckout
 
-  uitest:
+  test:
     needs: build
-    name: "UITests"
+    name: "Test"
     environment: Browserstack
     runs-on: ubuntu-latest
     steps:
@@ -40,18 +38,21 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
+      - name: Run unit tests
+        run: ./gradlew testCheckout
       - name: Test example-checkout and example-shop modules
         env:
-          MOBILE_MERCHANT_CODE: ${{ secrets.MOBILE_MERCHANT_CODE }}
-          MOBILE_MERCHANT_PAYMENT_TOKEN: ${{ secrets.MOBILE_MERCHANT_PAYMENT_TOKEN }}
-          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
-          BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}
-          PAYMENTAPI_LISTURL: ${{ secrets.PAYMENTAPI_LISTURL }}
+          MOBILE_MERCHANT_CODE: ${{ secrets.MOBILEDEV_MERCHANT_CODE }}
+          MOBILE_MERCHANT_PAYMENT_TOKEN: ${{ secrets.MOBILEDEV_MERCHANT_PAYMENT_TOKEN }}
+          BROWSERSTACK_USER: ${{ secrets.MOBILEDEV_BROWSERSTACK_USER }}
+          BROWSERSTACK_KEY: ${{ secrets.MOBILEDEV_BROWSERSTACK_KEY }}
+          PAYMENTAPI_LISTURL: ${{ secrets.MOBILEDEV_PAYMENTAPI_LISTURL }}
         run: ./gradlew testExampleApps
 
   publish:
-    needs: build
+    needs: test
     name: "Publish"
+    environment: Publish
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -64,7 +65,7 @@ jobs:
       uses: gradle/wrapper-validation-action@v1
     - name: Publish checkout module
       env:
-        NEXUS_USER: ${{ secrets.NEXUS_USER }}
-        NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-        PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
+        NEXUS_USER: ${{ secrets.MOBILEDEV_NEXUS_USER }}
+        NEXUS_PASSWORD: ${{ secrets.MOBILEDEV_NEXUS_PASSWORD }}
+        PACKAGECLOUD_TOKEN: ${{ secrets.MOBILEDEV_PACKAGECLOUD_TOKEN }}
       run: ./gradlew publishCheckout
