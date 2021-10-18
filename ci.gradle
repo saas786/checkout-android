@@ -1,0 +1,25 @@
+/*
+ * Gradle file containing the task to build, testing and publish the Android Checkout SDK
+ * from a CI system
+ */
+
+task ciTestCheckout() {
+    def testCheckout = tasks.findByPath(':checkout:test')
+    dependsOn testCheckout
+}
+
+task ciTestExampleApps() {
+    def testExampleCheckout = tasks.findByPath(':example-checkout:runFunctionalTest')
+    def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
+    dependsOn testExampleCheckout
+    dependsOn testExampleShop
+    testExampleShop.mustRunAfter(testExampleCheckout)
+}
+
+task ciPublishCheckout() {
+    def assembleCheckout = tasks.findByPath(':checkout:assembleRelease')
+    def publishCheckout = tasks.findByPath(':checkout:publishCheckout')
+    dependsOn assembleCheckout
+    dependsOn publishCheckout
+    publishCheckout.mustRunAfter(assembleCheckout)
+}

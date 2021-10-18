@@ -92,6 +92,4 @@ static def getCurrentBranch() {
     branch
 }
 
-apply from: 'citest.gradle'
-apply from: 'cibuild.gradle'
-apply from: 'cirelease.gradle'
+apply from: 'ci.gradle'

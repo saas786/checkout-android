@@ -1,3 +1,7 @@
+/*
+ *
+ */
+
 afterEvaluate {
     tasks.withType(PublishToMavenRepository) {
         onlyIf {

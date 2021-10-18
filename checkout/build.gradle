@@ -63,5 +63,20 @@ dependencies {
     testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
 
+
+task publishCheckout {
+    if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
+        logger.warn('[PUBLISH] Missing nexusUser and/or nexusPassword environment variables')
+        return
+    }
+    if (rootProject.packageCloudToken == null) {
+        logger.warn('[PUBLISH] Missing packageCloudMavenPassword environment variable')
+        return
+    }
+    dependsOn 'assembleRelease'
+    dependsOn 'publish'
+    publish.mustRunAfter('assembleRelease')
+}
+
 // import the script for publishing release builds to Nexus and Packagecloud
 apply from: 'publish.gradle'
