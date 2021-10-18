@@ -16,7 +16,7 @@ import androidx.annotation.StringDef;
 /**
  * Class containing the different payment input types i.e. number, iban, bic, allowRecurrence etc.
  */
-ublic class PaymentInputType {
+public class PaymentInputType {
     public final static String HOLDER_NAME = "holderName";
     public final static String ACCOUNT_NUMBER = "number";
     public final static String BANK_CODE = "bankCode";
