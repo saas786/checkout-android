@@ -34,5 +34,6 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.version }}
           release_name: v${{ steps.version.outputs.version }}
+          body_path: CHANGELOG.rst
           draft: false
           prerelease: false
