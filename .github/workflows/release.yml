@@ -4,7 +4,7 @@ name: Release
 on:
   push:
     branches:
-      - "PCX-1662"
+      - "master"
 jobs:
   build:
     runs-on: ubuntu-latest
