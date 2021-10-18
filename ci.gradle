@@ -11,13 +11,11 @@ task buildCheckout() {
 }
 
 task testCheckout() {
-    def testCheckout = tasks.findByPath(':checkout:test')
-    dependsOn testCheckout
+    dependsOn ':checkout:test'
 }
 
 task publishCheckout() {
-    def publishCheckout = tasks.findByPath(':checkout:publishCheckout')
-    dependsOn publishCheckout
+    dependsOn ':checkout:publishCheckout'
 }
 
 task testExampleApps() {
