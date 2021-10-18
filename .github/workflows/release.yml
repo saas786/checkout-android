@@ -1,7 +1,6 @@
-# Workflow for building snapshot versions of the Android Checkout SDK.
+# Workflow for releasing the Android Checkout SDK
 
-name: Build workflow
-
+name: Release
 on:
   push:
     branches:
