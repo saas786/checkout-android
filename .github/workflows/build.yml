@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: "Build"
 
     steps:
       - uses: actions/checkout@v2
@@ -18,12 +19,14 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+        uses: gradle/wrapper-validation-action@v1
       - name: Build Android Checkout SDK
         run: ./gradlew ciBuild
 
   test:
     needs: build
+    name: "Test"
+    environment: Browserstack
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +36,8 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
       - name: Test checkout module
         run: ./gradlew ciTestCheckout
       - name: Test example-checkout and example-shop modules
