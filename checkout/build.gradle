@@ -66,16 +66,14 @@ dependencies {
 
 task publishCheckout {
     if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
-        logger.warn('[PUBLISH] Missing nexusUser and/or nexusPassword environment variables')
+        logger.lifecycle('[PUBLISH] Missing nexusUser and/or nexusPassword environment variables')
         return
     }
     if (rootProject.packageCloudToken == null) {
-        logger.warn('[PUBLISH] Missing packageCloudMavenPassword environment variable')
+        logger.lifecycle('[PUBLISH] Missing packageCloudMavenPassword environment variable')
         return
     }
-    dependsOn 'assembleRelease'
     dependsOn 'publish'
-    publish.mustRunAfter('assembleRelease')
 }
 
 // import the script for publishing release builds to Nexus and Packagecloud

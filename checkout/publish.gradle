@@ -7,7 +7,7 @@ afterEvaluate {
         onlyIf {
             ((repository == publishing.repositories.nexusSnapshots) &&
                     (publication == publishing.publications.nexusSnapshots) &&
-                    (rootProject.isSnapshotVersion() == true)) ||
+                    (rootProject.isSnapshotVersion() == false)) ||
 
                     ((repository == publishing.repositories.nexusReleases) &&
                             (publication == publishing.publications.nexusReleases) &&
@@ -15,7 +15,7 @@ afterEvaluate {
 
                     ((repository == publishing.repositories.packagecloud) &&
                             (publication == publishing.publications.packagecloud) &&
-                            (rootProject.isSnapshotVersion() == false))
+                            (rootProject.isSnapshotVersion() == true))
         }
     }
     publishing {

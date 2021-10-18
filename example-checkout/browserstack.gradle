@@ -4,7 +4,7 @@
 
 task uploadToAppLive {
     if (rootProject.browserStackUser == null || rootProject.browserStackKey == null) {
-        logger.warn('[BROWSERSTACK] Missing credentials')
+        logger.lifecycle('[BROWSERSTACK] Missing credentials')
         return
     }
     dependsOn('uploadExampleCheckoutDebugToBrowserstackAppLive')
@@ -13,11 +13,11 @@ task uploadToAppLive {
 task runFunctionalTest {
     if ((rootProject.merchantCode == null) || (rootProject.merchantPaymentToken == null) ||
             (rootProject.paymentApiListUrl == null)) {
-        logger.warn('[BROWSERSTACK] Missing functional test settings')
+        logger.lifecycle('[BROWSERSTACK] Missing functional test settings')
         return
     }
     if (rootProject.browserStackUser == null || rootProject.browserStackKey == null) {
-        logger.warn('[BROWSERSTACK] Missing credentials')
+        logger.lifecycle('[BROWSERSTACK] Missing credentials')
         return
     }
     dependsOn('executeExampleCheckoutDebugTestsOnBrowserstack')
