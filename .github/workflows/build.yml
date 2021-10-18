@@ -4,7 +4,7 @@ name: Build
 on:
   push:
     branches:
-      - "PCX-1662"
+      - "develop"
 
 jobs:
   build:
