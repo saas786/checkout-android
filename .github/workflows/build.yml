@@ -5,7 +5,6 @@ name: Build workflow
 on:
   push:
     branches:
-      - "PCX-1662"
       - "develop"
       - "master"
 jobs:
