@@ -63,33 +63,5 @@ dependencies {
     testImplementation "io.github.json-snapshot:json-snapshot:${rootProject.jsonsnapshotVersion}"
 }
 
-task publishSnapshot {
-    if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
-        logger.lifecycle('[PUBLISH-SNAPSHOT] Missing nexusUser and/or nexusPassword environment variables')
-        return
-    }
-    if (rootProject.isSnapshotVersion() == false) {
-        logger.lifecycle('[PUBLISH-SNAPSHOT] Only Snapshot artifacts can be published')
-        return
-    }
-    dependsOn 'publish'
-}
-
-task publishRelease {
-    if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
-        logger.lifecycle('[PUBLISH-RELEASE] Missing nexusUser and/or nexusPassword environment variables')
-        return
-    }
-    if (rootProject.packageCloudToken == null) {
-        logger.lifecycle('[PUBLISH-RELEASE] Missing packageCloudToken environment variable')
-        return
-    }
-    if (rootProject.isSnapshotVersion() == true) {
-        logger.lifecycle('[SNAPSHOT-RELEASE] Only Release artifacts may be published')
-    }
-    dependsOn 'publish'
-}
-
-
 // import the script for publishing release builds to Nexus and Packagecloud
 apply from: 'publish.gradle'

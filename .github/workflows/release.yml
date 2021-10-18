@@ -81,7 +81,7 @@ jobs:
   publish:
     needs: release
     name: "Publish"
-    environment: PackageCloud
+    environment: Packagecloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
