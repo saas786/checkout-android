@@ -16,8 +16,8 @@ task ciBuild() {
 }
 
 task ciTestExampleApps() {
-    def testExampleCheckout = tasks.findByPath(':example-checkout:runFunctionalTest')
-    def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
+    def testExampleCheckout = tasks.findByPath(':example-checkout:uploadToAppLive')
+    def testExampleShop = tasks.findByPath(':example-shop:uploadToAppLive')
     dependsOn testExampleCheckout
     dependsOn testExampleShop
     testExampleShop.mustRunAfter(testExampleCheckout)
