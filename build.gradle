@@ -21,7 +21,8 @@ buildscript {
 allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
-            options.compilerArgs.add("-Xlint:deprecation")
+            // Uncomment to see details deprecation warnings
+            //options.compilerArgs.add("-Xlint:deprecation")
         }
     }
     repositories {
