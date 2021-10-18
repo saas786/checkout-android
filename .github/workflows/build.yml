@@ -19,10 +19,17 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-      - name: Clean entire project
-        run: ./gradlew clean
+      - name: Clean Android Checkout SDK
+        run: ./gradlew ciBuild
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
       - name: Test checkout module
-        run: ./gradlew ciTestCheckout
+      run: ./gradlew ciTestCheckout
       - name: Test example-checkout and example-shop modules
         env:
           MOBILE_MERCHANT_CODE: ${{ secrets.MOBILE_MERCHANT_CODE }}
@@ -30,4 +37,4 @@ jobs:
           BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
           BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}
           PAYMENTAPI_LISTURL: ${{ secrets.PAYMENTAPI_LISTURL }}
-        run: ./gradlew ciTestExampleApps
+      run: ./gradlew ciTestExampleApps

@@ -8,6 +8,13 @@ task ciTestCheckout() {
     dependsOn testCheckout
 }
 
+task ciBuild() {
+    def buildCheckout = tasks.findByPath(':checkout:assembleRelease')
+    dependsOn clean
+    dependsOn buildCheckout
+    buildCheckout.mustRunAfter(clean)
+}
+
 task ciTestExampleApps() {
     def testExampleCheckout = tasks.findByPath(':example-checkout:runFunctionalTest')
     def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
@@ -17,9 +24,6 @@ task ciTestExampleApps() {
 }
 
 task ciPublishCheckout() {
-    def assembleCheckout = tasks.findByPath(':checkout:assembleRelease')
     def publishCheckout = tasks.findByPath(':checkout:publishCheckout')
-    dependsOn assembleCheckout
     dependsOn publishCheckout
-    publishCheckout.mustRunAfter(assembleCheckout)
 }
