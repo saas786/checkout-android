@@ -3,27 +3,27 @@
  * from a CI system
  */
 
-task ciBuildCheckout() {
+task buildCheckout() {
     def buildCheckout = tasks.findByPath(':checkout:assembleRelease')
     dependsOn clean
     dependsOn buildCheckout
     buildCheckout.mustRunAfter(clean)
 }
 
-task ciTestCheckout() {
+task testCheckout() {
     def testCheckout = tasks.findByPath(':checkout:test')
     dependsOn testCheckout
 }
 
-task ciPublishCheckout() {
+task publishCheckout() {
     def publishCheckout = tasks.findByPath(':checkout:publishCheckout')
     dependsOn publishCheckout
 }
 
-task ciTestExampleApps() {
+task testExampleApps() {
     def testExampleCheckout = tasks.findByPath(':example-checkout:uploadToAppLive')
     def testExampleShop = tasks.findByPath(':example-shop:uploadToAppLive')
     dependsOn testExampleCheckout
-    //dependsOn testExampleShop
-    //testExampleShop.mustRunAfter(testExampleCheckout)
+    dependsOn testExampleShop
+    testExampleShop.mustRunAfter(testExampleCheckout)
 }
