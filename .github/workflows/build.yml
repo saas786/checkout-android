@@ -65,7 +65,7 @@ jobs:
       uses: gradle/wrapper-validation-action@v1
     - name: Publish checkout module
       env:
-        NEXUS_USER: ${{ secrets.MOBILEDEV_NEXUS_USER }}
-        NEXUS_PASSWORD: ${{ secrets.MOBILEDEV_NEXUS_PASSWORD }}
+        NEXUS_USER: ${{ secrets.NEXUS_USER }}
+        NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         PACKAGECLOUD_TOKEN: ${{ secrets.MOBILEDEV_PACKAGECLOUD_TOKEN }}
       run: ./gradlew publishCheckout
