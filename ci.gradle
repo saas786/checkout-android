@@ -11,8 +11,12 @@ task testCheckout() {
     dependsOn ':checkout:test'
 }
 
-task publishCheckout() {
-    dependsOn ':checkout:publishCheckout'
+task publishShapshot() {
+    dependsOn ':checkout:publishSnapshot'
+}
+
+task publishRelease() {
+    dependsOn ':checkout:publishRelease'
 }
 
 task testExampleApps() {

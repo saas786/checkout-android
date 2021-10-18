@@ -81,7 +81,7 @@ jobs:
   publish:
     needs: release
     name: "Publish"
-    environment: Publish
+    environment: PackageCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -94,9 +94,9 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Clean Android Checkout SDK
         run: ./gradlew clean
-      - name: Publish checkout module
+      - name: Publish release artifact
         env:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
           PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
-        run: ./gradlew publishCheckout
+        run: ./gradlew publishRelease

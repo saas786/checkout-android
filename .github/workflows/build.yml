@@ -4,7 +4,7 @@ name: Build
 on:
   push:
     branches:
-      - "develop"
+      - "PCX-1662"
 
 jobs:
   build:
@@ -54,7 +54,6 @@ jobs:
   publish:
     needs: test
     name: "Publish"
-    environment: Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -67,9 +66,8 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Clean Android Checkout SDK
         run: ./gradlew clean
-      - name: Publish checkout module
+      - name: Publish snapshot artifact
         env:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-          PACKAGECLOUD_TOKEN: ${{ secrets.PACKAGECLOUD_TOKEN }}
-        run: ./gradlew publishCheckout
+        run: ./gradlew publishSnapshot
