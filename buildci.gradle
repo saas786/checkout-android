@@ -34,9 +34,3 @@ task buildci() {
     testExampleCheckout.mustRunAfter(assembleCheckout)
     testExampleShop.mustRunAfter(assembleCheckout)
 }
-
-task('createTestList') {
-    doLast {
-        new File('./shared-test/lists/test.json').createNewFile()
-    }
-}
