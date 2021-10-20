@@ -1,13 +1,13 @@
 # Workflow for running tests triggered by pull requests in the Android Checkout SDK
 
-name: Pull Request
+name: Test Pull Request
 on:
   pull_request:
     types: [ opened, reopened, labeled, synchronize ]
 
 jobs:
   test:
-    name: "Test"
+    name: "Test Checkout"
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,9 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Clean Android Checkout SDK
+      - name: Clean project
         run: ./gradlew clean
-      - name: Run Checkout unit-tests
+      - name: Build checkout module
+        run: ./gradlew buildCheckout
+      - name: Run checkout unit-tests
         run: ./gradlew testCheckout
