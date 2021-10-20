@@ -9,7 +9,6 @@ jobs:
 
   test-checkout:
     name: "Test checkout module"
-    environment: Browserstack
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
