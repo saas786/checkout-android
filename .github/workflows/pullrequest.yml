@@ -6,7 +6,7 @@ on:
     types: [ opened, reopened, labeled, synchronize ]
 
 jobs:
-  test:
+  test-checkout:
     name: "Test checkout module"
     runs-on: ubuntu-latest
 
