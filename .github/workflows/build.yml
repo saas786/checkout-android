@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: "Test Checkout and Examples"
+    name: "Test checkout and examples"
     environment: Browserstack
     runs-on: ubuntu-latest
     steps:
@@ -20,7 +20,7 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Clean project
+      - name: Clean checkout project
         run: ./gradlew clean
       - name: Build checkout module
         run: ./gradlew buildCheckout
@@ -37,7 +37,7 @@ jobs:
 
   publish:
     needs: test
-    name: "Publish Snapshot"
+    name: "Publish snapshot artifact"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,9 +48,9 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Clean project
+      - name: Clean checkout project
         run: ./gradlew clean
-      - name: Publish snapshot artifact
+      - name: Publish checkout artifact
         env:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
