@@ -1,6 +1,6 @@
 # Workflow for testing and publishing of the snapshot checkout artifact
 
-name: Publish Checkout Snapshot
+name: Publish checkout snapshot artifact
 on:
   push:
     branches:

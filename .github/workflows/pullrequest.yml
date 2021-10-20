@@ -1,6 +1,6 @@
 # Workflow for running tests triggered by pull requests
 
-name: Test Pull Request
+name: Test pull request
 on:
   pull_request:
     types: [ opened, reopened, labeled, synchronize ]

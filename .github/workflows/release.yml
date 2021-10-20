@@ -1,6 +1,6 @@
 # Workflow for testing and publishing of the release checkout artifact
 
-name: Publish Checkout Release
+name: Publish checkout release artifact
 on:
   push:
     branches:
