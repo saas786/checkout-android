@@ -28,6 +28,7 @@ jobs:
 
   test-examples:
     name: "Test example apps"
+    needs: test-checkout
     environment: Browserstack
     runs-on: ubuntu-latest
     steps:
