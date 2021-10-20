@@ -1,14 +1,14 @@
 # Workflow for testing and publishing of the snapshot checkout artifact
 
-name: Publish checkout snapshot artifact
+name: Publish snapshot artifact
 on:
   push:
     branches:
       - "develop"
 
 jobs:
-  test:
-    name: "Test checkout module and example apps"
+  test-checkout:
+    name: "Test checkout module"
     environment: Browserstack
     runs-on: ubuntu-latest
     steps:
@@ -24,8 +24,24 @@ jobs:
         run: ./gradlew clean
       - name: Build checkout module
         run: ./gradlew buildCheckout
-      - name: Run checkout unit-tests
+      - name: Run Checkout unit-tests
         run: ./gradlew testCheckout
+
+  test-examples:
+    name: "Test example apps"
+    environment: Browserstack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Clean checkout project
+        run: ./gradlew clean
       - name: Test examples on Browserstack
         env:
           MOBILE_MERCHANT_CODE: ${{ secrets.MOBILE_MERCHANT_CODE }}
@@ -36,7 +52,7 @@ jobs:
         run: ./gradlew testExampleApps
 
   publish:
-    needs: test
+    needs: test-examples
     name: "Publish snapshot artifact"
     runs-on: ubuntu-latest
     steps:
