@@ -1,3 +1,30 @@
+task publishSnapshot {
+    if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
+        logger.lifecycle('[PUBLISH-SNAPSHOT] Missing nexusUser and/or nexusPassword environment variables')
+        return
+    }
+    if (rootProject.isSnapshotVersion() == false) {
+        logger.lifecycle('[PUBLISH-SNAPSHOT] Only Snapshot artifacts can be published')
+        return
+    }
+    dependsOn 'publish'
+}
+
+task publishRelease {
+    if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
+        logger.lifecycle('[PUBLISH-RELEASE] Missing nexusUser and/or nexusPassword environment variables')
+        return
+    }
+    if (rootProject.packageCloudToken == null) {
+        logger.lifecycle('[PUBLISH-RELEASE] Missing packageCloudToken environment variable')
+        return
+    }
+    if (rootProject.isSnapshotVersion() == true) {
+        logger.lifecycle('[SNAPSHOT-RELEASE] Only Release artifacts may be published')
+    }
+    dependsOn 'publish'
+}
+
 afterEvaluate {
     tasks.withType(PublishToMavenRepository) {
         onlyIf {
@@ -40,23 +67,23 @@ afterEvaluate {
                 name 'nexusSnapshots'
                 url 'https://nexus.mgmt.oscato.com/repository/snapshots/'
                 credentials {
-                    username = mavenUser
-                    password = mavenPassword
+                    username = rootProject.nexusUser
+                    password = rootProject.nexusPassword
                 }
             }
             maven {
                 name 'nexusReleases'
                 url 'https://nexus.mgmt.oscato.com/repository/releases/'
                 credentials {
-                    username = mavenUser
-                    password = mavenPassword
+                    username = rootProject.nexusUser
+                    password = rootProject.nexusPassword
                 }
             }
             maven {
                 name = 'packagecloud'
                 url = 'https://packagecloud.io/optile/android/java/maven2/'
                 credentials {
-                    username = packageCloudMavenPassword
+                    username = rootProject.packageCloudToken
                     password = ''
                 }
             }

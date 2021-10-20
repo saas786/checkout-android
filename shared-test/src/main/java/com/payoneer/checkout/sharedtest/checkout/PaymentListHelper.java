@@ -95,7 +95,8 @@ public final class PaymentListHelper {
 
     public static void clickExtraElementLinkWithText(int cardIndex, String widgetName, String linkText) {
         intended(hasComponent(PaymentListActivity.class.getName()));
-        onView(withId(R.id.recyclerview_paymentlist)).perform(actionOnViewInWidget(cardIndex, clickClickableSpan(linkText), widgetName, R.id.label_checkbox));
+        onView(withId(R.id.recyclerview_paymentlist))
+            .perform(actionOnViewInWidget(cardIndex, clickClickableSpan(linkText), widgetName, R.id.label_checkbox));
     }
 
     public static void clickPaymentListCardButton(int cardIndex) {

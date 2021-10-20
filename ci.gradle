@@ -1,0 +1,32 @@
+/*
+ * Gradle file containing the tasks to build, test and publish the Android Checkout SDK
+ * from a CI system
+ */
+
+task buildCheckout() {
+    dependsOn ':checkout:assembleRelease'
+}
+
+task testCheckout() {
+    dependsOn ':checkout:test'
+}
+
+task publishShapshot() {
+    dependsOn ':checkout:publishSnapshot'
+}
+
+task publishRelease() {
+    dependsOn ':checkout:publishRelease'
+}
+
+task testExampleApps() {
+    def testExampleCheckout = tasks.findByPath(':example-checkout:runFunctionalTest')
+    def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
+    dependsOn testExampleCheckout
+    dependsOn testExampleShop
+    testExampleShop.mustRunAfter(testExampleCheckout)
+}
+
+// This task will be removed once GoCD pipelines for Checkout android have been removed
+task buildci() {
+}

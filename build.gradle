@@ -21,7 +21,8 @@ buildscript {
 allprojects {
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
-            options.compilerArgs.add("-Xlint:deprecation")
+            // Uncomment to see details deprecation warnings
+            //options.compilerArgs.add("-Xlint:deprecation")
         }
     }
     repositories {
@@ -32,13 +33,31 @@ allprojects {
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+    dependsOn(":checkout:clean")
+    dependsOn(":example-checkout:clean")
+    dependsOn(":example-shop:clean")
+    dependsOn(":shared-test:clean")
 }
 
 ext {
     versionCode = VERSIONCODE
     versionName = VERSIONNAME
     javaCompatVersion = JavaVersion.VERSION_1_8
+
+    nexusUser = System.getenv('NEXUS_USER')
+    nexusPassword = System.getenv('NEXUS_PASSWORD')
+    packageCloudToken = System.getenv('PACKAGECLOUD_TOKEN')
+    browserStackUser = System.getenv('BROWSERSTACK_USER')
+    browserStackKey = System.getenv('BROWSERSTACK_KEY')
+
+    merchantCode = System.getenv('MOBILE_MERCHANT_CODE')
+    merchantPaymentToken = System.getenv('MOBILE_MERCHANT_PAYMENT_TOKEN')
+    paymentApiListUrl = System.getenv('PAYMENTAPI_LISTURL')
+
+    playstoreStoreFile = System.getenv('PLAYSTORE_UPLOAD_STOREFILE')
+    playstoreStorePassword = System.getenv('PLAYSTORE_UPLOAD_STOREPASSWORD')
+    playstoreKeyAlias = System.getenv('PLAYSTORE_UPLOAD_KEYALIAS')
+    playstoreKeyPassword = System.getenv('PLAYSTORE_UPLOAD_KEYPASSWORD')
 
     minSdkVersion = 21
     compileSdkVersion = 30
@@ -74,4 +93,4 @@ static def getCurrentBranch() {
     branch
 }
 
-apply from: 'buildci.gradle'
+apply from: 'ci.gradle'

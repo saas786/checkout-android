@@ -112,13 +112,14 @@ class AbstractTest {
     }
 
     private String createListUrl(String operationType) {
-        String baseUrl = BuildConfig.baseurl;
-        String authHeader = BuildConfig.authheader;
+        String paymentApiListUrl = BuildConfig.paymentApiListUrl;
+        String merchantCode = BuildConfig.merchantCode;
+        String merchantPaymentToken = BuildConfig.merchantPaymentToken;
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         ListSettings settings = new ListSettings(com.payoneer.checkout.exampleshop.test.R.raw.listtemplate)
             .setAppId(context.getPackageName())
             .setOperationType(operationType);
-        return ListService.createListWithSettings(baseUrl, authHeader, settings);
+        return ListService.createListWithSettings(paymentApiListUrl, merchantCode, merchantPaymentToken, settings);
     }
 }

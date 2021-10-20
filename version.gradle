@@ -8,6 +8,11 @@ ext.isSnapshotVersion = { ->
     return versionName.endsWith('SNAPSHOT')
 }
 
+ext.removeSnapshotFromVersion = { ->
+    def curName = VERSIONNAME.split("-")
+    file('VERSIONNAME').text = curName[0]
+}
+
 ext.increaseVersionName = { index ->
     def curName = VERSIONNAME.split("-")
     def newName = curName[0].split("\\.")
@@ -36,6 +41,13 @@ ext.increaseVersionCode = { ->
     def versionCode = VERSIONCODE + 1
     file('VERSIONCODE').text = versionCode
 }
+
+task('removeSnapshot') {
+    doLast {
+        print "Remove -SNAPSHOT from VERSIONNAME"
+        removeSnapshotFromVersion()
+    }
+}    
 
 task('versionMajor') {
     doLast {
