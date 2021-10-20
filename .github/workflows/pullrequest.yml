@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: "Test checkout module"
+    name: "Test checkout"
     runs-on: ubuntu-latest
 
     steps:
