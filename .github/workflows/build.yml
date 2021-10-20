@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: "Test checkout and examples"
+    name: "Test checkout module and example apps"
     environment: Browserstack
     runs-on: ubuntu-latest
     steps:
