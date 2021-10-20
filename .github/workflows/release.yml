@@ -1,4 +1,4 @@
-# Workflow for releasing the Android Checkout SDK
+# Workflow for testing and publishing of the release checkout artifact
 
 name: Publish Checkout Release
 on:

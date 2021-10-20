@@ -1,4 +1,4 @@
-# Workflow for running tests triggered by pull requests in the Android Checkout SDK
+# Workflow for running tests triggered by pull requests
 
 name: Test Pull Request
 on:

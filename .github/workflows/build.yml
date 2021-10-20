@@ -1,4 +1,4 @@
-# Workflow for building snapshot versions of the Android Checkout SDK
+# Workflow for testing and publishing of the snapshot checkout artifact
 
 name: Publish Checkout Snapshot
 on:
