@@ -26,5 +26,5 @@ task runFunctionalTest {
 browserStackConfig {
     username = rootProject.browserStackUser
     accessKey = rootProject.browserStackKey
-    configFilePath = 'example-shop/browserstack.json'
+    configFilePath = 'example-checkout/browserstack.json'
 }
