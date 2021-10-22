@@ -90,7 +90,7 @@ public final class PaymentSessionBuilder {
             throw new IllegalStateException("paymentGroups may not be null");
         }
         String operationType = listResult.getOperationType();
-        List<PaymentSection> sections = new ArrayList<PaymentSection>();
+        List<PaymentSection> sections = new ArrayList<>();
         PaymentSection section = buildPresetSection(listResult);
         if (section != null) {
             sections.add(section);
