@@ -15,6 +15,7 @@ import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_NET
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_NETWORKS_OTHER;
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_NETWORKS_UPDATE;
 import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_PRESET;
+import static com.payoneer.checkout.localization.LocalizationKey.LIST_HEADER_PRESET_WARNING;
 import static com.payoneer.checkout.model.NetworkOperationType.PRESET;
 import static com.payoneer.checkout.model.NetworkOperationType.UPDATE;
 import static com.payoneer.checkout.model.RegistrationType.NONE;
@@ -113,7 +114,11 @@ public final class PaymentSessionBuilder {
         }
         List<PaymentCard> cards = new ArrayList<>();
         cards.add(buildPresetCard(account, listResult));
-        return new PaymentSection(LIST_HEADER_PRESET, cards);
+        if (!account.isRegistered() && !account.isAutoRegistration() && !account.isAllowRecurrence()) {
+            return new PaymentSection(LIST_HEADER_PRESET, LIST_HEADER_PRESET_WARNING, cards);
+        } else {
+            return new PaymentSection(LIST_HEADER_PRESET, cards);
+        }
     }
 
     private PaymentSection buildAccountSection(ListResult listResult) {
