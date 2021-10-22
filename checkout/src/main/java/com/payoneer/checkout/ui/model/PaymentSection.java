@@ -22,7 +22,21 @@ import com.payoneer.checkout.localization.Localization;
 public final class PaymentSection {
 
     private final String labelKey;
+    private String presetWarningKey;
     private final List<PaymentCard> cards;
+
+    /**
+     * Construct a new PaymentSection with the header label localization key and preset warning text
+     *
+     * @param labelKey localization key for the payment section header label
+     * @param presetWarningKey localization key for the warning text presented to the user during the preset flow
+     * @param cards the list of payment cards in this section
+     */
+    public PaymentSection(String labelKey, String presetWarningKey, List<PaymentCard> cards) {
+        this.labelKey = labelKey;
+        this.presetWarningKey = presetWarningKey;
+        this.cards = cards;
+    }
 
     /**
      * Construct a new PaymentSection with the header label localization key
@@ -51,6 +65,15 @@ public final class PaymentSection {
      */
     public String getLabel() {
         return Localization.translate(labelKey);
+    }
+
+    /**
+     * Get the preset warning text label
+     *
+     * @return preset warning text label
+     */
+    public String getPresetWarningKey() {
+        return Localization.translate(presetWarningKey);
     }
 
     /**
