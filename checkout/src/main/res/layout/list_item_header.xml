@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingStart="@dimen/pmborder_medium"
     android:paddingTop="@dimen/pmborder_medium"
     android:paddingEnd="@dimen/pmborder_medium"
@@ -9,8 +10,16 @@
 
     <TextView
         android:id="@+id/text_title"
-        android:textAppearance="?attr/textAppearanceSubtitle2"
-        android:textColor="?attr/colorOnBackground"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/pmborder_xxsmall"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:textColor="?attr/colorOnBackground" />
+
+    <TextView
+        android:id="@+id/text_preset_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:textColor="?attr/colorOnBackground" />
 </LinearLayout>

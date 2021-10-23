@@ -22,10 +22,12 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 public final class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView title;
+    private final TextView tvPresetWarningText;
 
     HeaderViewHolder(View parent) {
         super(parent);
         this.title = parent.findViewById(R.id.text_title);
+        tvPresetWarningText = parent.findViewById(R.id.text_preset_warning);
     }
 
     static ViewHolder createInstance(View parent) {
@@ -35,6 +37,7 @@ public final class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     void onBind(HeaderItem item) {
         PaymentUtils.setTestId(itemView, "label", "header");
-        title.setText(item.title);
+        title.setText(item.getTitle());
+        tvPresetWarningText.setText(item.getPresetWarning());
     }
 }
