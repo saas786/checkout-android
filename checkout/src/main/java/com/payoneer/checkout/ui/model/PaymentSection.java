@@ -72,7 +72,7 @@ public final class PaymentSection {
      *
      * @return preset warning text label
      */
-    public String getPresetWarningKey() {
+    public String getPresetWarning() {
         return Localization.translate(presetWarningKey);
     }
 
