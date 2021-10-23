@@ -11,6 +11,7 @@ package com.payoneer.checkout.ui.list;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,9 @@ public final class HeaderViewHolder extends RecyclerView.ViewHolder {
     void onBind(HeaderItem item) {
         PaymentUtils.setTestId(itemView, "label", "header");
         title.setText(item.getTitle());
-        tvPresetWarningText.setText(item.getPresetWarning());
+        if (!TextUtils.isEmpty(item.getPresetWarning())) {
+            tvPresetWarningText.setVisibility(View.VISIBLE);
+            tvPresetWarningText.setText(item.getPresetWarning());
+        }
     }
 }
