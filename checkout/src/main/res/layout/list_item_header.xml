@@ -20,7 +20,6 @@
         android:id="@+id/text_preset_warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceSubtitle2"
-        android:textColor="?attr/colorOnBackground"
+        android:fontFamily="@font/roboto_light"
         android:visibility="gone" />
 </LinearLayout>
