@@ -14,19 +14,19 @@ package com.payoneer.checkout.ui.list;
 final class HeaderItem extends ListItem {
 
     private final String title;
-    private final String presetWarning;
+    private final String message;
 
-    HeaderItem(int viewType, String title, String presetWarning) {
+    HeaderItem(int viewType, String title, String message) {
         super(viewType);
         this.title = title;
-        this.presetWarning = presetWarning;
+        this.message = message;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getPresetWarning() {
-        return presetWarning;
+    public String getMessage() {
+        return message;
     }
 }

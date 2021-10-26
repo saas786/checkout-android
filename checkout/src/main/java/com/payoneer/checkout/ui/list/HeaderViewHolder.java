@@ -39,9 +39,9 @@ public final class HeaderViewHolder extends RecyclerView.ViewHolder {
     void onBind(HeaderItem item) {
         PaymentUtils.setTestId(itemView, "label", "header");
         title.setText(item.getTitle());
-        if (!TextUtils.isEmpty(item.getPresetWarning())) {
+        if (!TextUtils.isEmpty(item.getMessage())) {
             tvPresetWarningText.setVisibility(View.VISIBLE);
-            tvPresetWarningText.setText(item.getPresetWarning());
+            tvPresetWarningText.setText(item.getMessage());
         }
     }
 }
