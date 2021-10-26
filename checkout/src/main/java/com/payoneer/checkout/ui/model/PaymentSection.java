@@ -15,7 +15,7 @@ import java.util.Map;
 import com.payoneer.checkout.localization.Localization;
 
 /**
- * Payment section containing a header label and payment cards.
+ * Payment section containing a header title and payment cards.
  * Currently there are three payment sections: preset accounts,
  * saved accounts, and payment networks.
  */
@@ -26,9 +26,9 @@ public final class PaymentSection {
     private final List<PaymentCard> cards;
 
     /**
-     * Construct a new PaymentSection with the header label localization key and message text
+     * Construct a new PaymentSection with the header title localization key and message text
      *
-     * @param titleKey localization key for the payment section header label
+     * @param titleKey localization key for the payment section header title
      * @param messageKey localization key for the message text presented to the user during the preset flow
      * @param cards the list of payment cards in this section
      */
@@ -41,7 +41,7 @@ public final class PaymentSection {
     /**
      * Construct a new PaymentSection with the header title localization key
      *
-     * @param titleKey localization key for the payment section header label
+     * @param titleKey localization key for the payment section header title
      * @param cards the list of payment cards in this section
      */
     public PaymentSection(String titleKey, List<PaymentCard> cards) {
@@ -59,18 +59,18 @@ public final class PaymentSection {
     }
 
     /**
-     * Get the localized header label
+     * Get the localized header title
      *
-     * @return localized header label
+     * @return localized header title
      */
     public String getTitle() {
         return Localization.translate(titleKey);
     }
 
     /**
-     * Get the message text label
+     * Get the message text
      *
-     * @return message text label
+     * @return message text
      */
     public String getMessage() {
         return Localization.translate(messageKey);
