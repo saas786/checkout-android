@@ -13,10 +13,20 @@ package com.payoneer.checkout.ui.list;
  */
 final class HeaderItem extends ListItem {
 
-    final String title;
+    private final String title;
+    private final String message;
 
-    HeaderItem(int viewType, String title) {
+    HeaderItem(int viewType, String title, String message) {
         super(viewType);
         this.title = title;
+        this.message = message;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

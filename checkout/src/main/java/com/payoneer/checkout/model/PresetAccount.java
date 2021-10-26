@@ -34,4 +34,8 @@ public class PresetAccount {
     /** Simple API, always present */
     @PaymentMethod.Definition
     private String method;
+    /** The following three booleans determine the visibility of the preset warning text */
+    private boolean registered;
+    private boolean autoRegistration;
+    private boolean allowRecurrence;
 }

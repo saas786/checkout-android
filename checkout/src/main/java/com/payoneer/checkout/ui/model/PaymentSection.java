@@ -15,23 +15,37 @@ import java.util.Map;
 import com.payoneer.checkout.localization.Localization;
 
 /**
- * Payment section containing a header label and payment cards.
+ * Payment section containing a header title and payment cards.
  * Currently there are three payment sections: preset accounts,
  * saved accounts, and payment networks.
  */
 public final class PaymentSection {
 
-    private final String labelKey;
+    private final String titleKey;
+    private String messageKey;
     private final List<PaymentCard> cards;
 
     /**
-     * Construct a new PaymentSection with the header label localization key
+     * Construct a new PaymentSection with the header title localization key and message text
      *
-     * @param labelKey localization key for the payment section header label
+     * @param titleKey localization key for the payment section header title
+     * @param messageKey localization key for the message text presented to the user during the preset flow
      * @param cards the list of payment cards in this section
      */
-    public PaymentSection(String labelKey, List<PaymentCard> cards) {
-        this.labelKey = labelKey;
+    public PaymentSection(String titleKey, String messageKey, List<PaymentCard> cards) {
+        this.titleKey = titleKey;
+        this.messageKey = messageKey;
+        this.cards = cards;
+    }
+
+    /**
+     * Construct a new PaymentSection with the header title localization key
+     *
+     * @param titleKey localization key for the payment section header title
+     * @param cards the list of payment cards in this section
+     */
+    public PaymentSection(String titleKey, List<PaymentCard> cards) {
+        this.titleKey = titleKey;
         this.cards = cards;
     }
 
@@ -45,12 +59,21 @@ public final class PaymentSection {
     }
 
     /**
-     * Get the localized header label
+     * Get the localized header title
      *
-     * @return localized header label
+     * @return localized header title
      */
-    public String getLabel() {
-        return Localization.translate(labelKey);
+    public String getTitle() {
+        return Localization.translate(titleKey);
+    }
+
+    /**
+     * Get the message text
+     *
+     * @return message text
+     */
+    public String getMessage() {
+        return Localization.translate(messageKey);
     }
 
     /**

@@ -203,7 +203,7 @@ public final class PaymentList {
     }
 
     private void addPaymentSectionItems(PaymentSection section) {
-        itemList.addItem(new HeaderItem(nextViewType(), section.getLabel()), false);
+        itemList.addItem(new HeaderItem(nextViewType(), section.getTitle(), section.getMessage()), false);
         for (PaymentCard card : section.getPaymentCards()) {
             PaymentCardItem item = new PaymentCardItem(nextViewType(), card);
             itemList.addItem(item, card.isPreselected());

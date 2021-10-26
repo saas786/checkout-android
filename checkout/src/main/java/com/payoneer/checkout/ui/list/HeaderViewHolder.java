@@ -11,6 +11,7 @@ package com.payoneer.checkout.ui.list;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.util.PaymentUtils;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,11 +22,13 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 public final class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextView title;
+    private final TextView titleTextView;
+    private final TextView messageTextView;
 
     HeaderViewHolder(View parent) {
         super(parent);
-        this.title = parent.findViewById(R.id.text_title);
+        this.titleTextView = parent.findViewById(R.id.text_title);
+        messageTextView = parent.findViewById(R.id.text_message);
     }
 
     static ViewHolder createInstance(View parent) {
@@ -35,6 +38,10 @@ public final class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     void onBind(HeaderItem item) {
         PaymentUtils.setTestId(itemView, "label", "header");
-        title.setText(item.title);
+        titleTextView.setText(item.getTitle());
+        if (!TextUtils.isEmpty(item.getMessage())) {
+            messageTextView.setVisibility(View.VISIBLE);
+            messageTextView.setText(item.getMessage());
+        }
     }
 }
