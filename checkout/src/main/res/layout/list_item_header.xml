@@ -17,7 +17,7 @@
         android:textColor="?attr/colorOnBackground" />
 
     <TextView
-        android:id="@+id/text_preset_warning"
+        android:id="@+id/text_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_light"
