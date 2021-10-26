@@ -26,7 +26,3 @@ task testExampleApps() {
     dependsOn testExampleShop
     testExampleShop.mustRunAfter(testExampleCheckout)
 }
-
-// This task will be removed once GoCD pipelines for Checkout android have been removed
-task buildci() {
-}
