@@ -22,12 +22,12 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
  */
 public final class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextView titletextView;
+    private final TextView titleTextView;
     private final TextView messageTextView;
 
     HeaderViewHolder(View parent) {
         super(parent);
-        this.titletextView = parent.findViewById(R.id.text_title);
+        this.titleTextView = parent.findViewById(R.id.text_title);
         messageTextView = parent.findViewById(R.id.text_message);
     }
 
@@ -38,7 +38,7 @@ public final class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     void onBind(HeaderItem item) {
         PaymentUtils.setTestId(itemView, "label", "header");
-        titletextView.setText(item.getTitle());
+        titleTextView.setText(item.getTitle());
         if (!TextUtils.isEmpty(item.getMessage())) {
             messageTextView.setVisibility(View.VISIBLE);
             messageTextView.setText(item.getMessage());
