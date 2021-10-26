@@ -21,31 +21,31 @@ import com.payoneer.checkout.localization.Localization;
  */
 public final class PaymentSection {
 
-    private final String labelKey;
-    private String presetWarningKey;
+    private final String titleKey;
+    private String messageKey;
     private final List<PaymentCard> cards;
 
     /**
-     * Construct a new PaymentSection with the header label localization key and preset warning text
+     * Construct a new PaymentSection with the header label localization key and message text
      *
-     * @param labelKey localization key for the payment section header label
-     * @param presetWarningKey localization key for the warning text presented to the user during the preset flow
+     * @param titleKey localization key for the payment section header label
+     * @param messageKey localization key for the message text presented to the user during the preset flow
      * @param cards the list of payment cards in this section
      */
-    public PaymentSection(String labelKey, String presetWarningKey, List<PaymentCard> cards) {
-        this.labelKey = labelKey;
-        this.presetWarningKey = presetWarningKey;
+    public PaymentSection(String titleKey, String messageKey, List<PaymentCard> cards) {
+        this.titleKey = titleKey;
+        this.messageKey = messageKey;
         this.cards = cards;
     }
 
     /**
-     * Construct a new PaymentSection with the header label localization key
+     * Construct a new PaymentSection with the header title localization key
      *
-     * @param labelKey localization key for the payment section header label
+     * @param titleKey localization key for the payment section header label
      * @param cards the list of payment cards in this section
      */
-    public PaymentSection(String labelKey, List<PaymentCard> cards) {
-        this.labelKey = labelKey;
+    public PaymentSection(String titleKey, List<PaymentCard> cards) {
+        this.titleKey = titleKey;
         this.cards = cards;
     }
 
@@ -63,17 +63,17 @@ public final class PaymentSection {
      *
      * @return localized header label
      */
-    public String getLabel() {
-        return Localization.translate(labelKey);
+    public String getTitle() {
+        return Localization.translate(titleKey);
     }
 
     /**
-     * Get the preset warning text label
+     * Get the message text label
      *
-     * @return preset warning text label
+     * @return message text label
      */
-    public String getPresetWarning() {
-        return Localization.translate(presetWarningKey);
+    public String getMessage() {
+        return Localization.translate(messageKey);
     }
 
     /**
