@@ -11,13 +11,9 @@ package com.payoneer.checkout.ui.page;
 import static com.payoneer.checkout.localization.LocalizationKey.CHARGE_TEXT;
 import static com.payoneer.checkout.localization.LocalizationKey.CHARGE_TITLE;
 
-import java.net.URL;
-import java.util.Map;
-
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.form.Operation;
 import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.model.PresetAccount;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +27,10 @@ import androidx.annotation.NonNull;
 public final class ChargePaymentActivity extends BasePaymentActivity implements BasePaymentView {
 
     private final static String EXTRA_OPERATION = "operation";
+    private final static String EXTRA_OPERATION_TYPE = "operation_type";
+    private final static int TYPE_CHARGE_OPERATION = 1;
+    private final static int TYPE_CHARGE_PRESET_ACCOUNT = 2;
+    private int OPERATION_TYPE;
     private ChargePaymentPresenter presenter;
     private Operation operation;
 
@@ -48,6 +48,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
             throw new IllegalArgumentException("operation may not be null");
         }
         Intent intent = new Intent(context, ChargePaymentActivity.class);
+        intent.putExtra(EXTRA_OPERATION_TYPE, TYPE_CHARGE_OPERATION);
         intent.putExtra(EXTRA_OPERATION, operation);
         return intent;
     }
@@ -56,24 +57,15 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
      * Create the start intent for this ChargePaymentActivity
      *
      * @param context Context to create the intent
-     * @param account the preset account that should be processed
      * @return newly created start intent
      */
-    public static Intent createStartIntent(Context context, PresetAccount account) {
+    public static Intent createStartIntent(Context context) {
         if (context == null) {
             throw new IllegalArgumentException("context may not be null");
         }
-        if (account == null) {
-            throw new IllegalArgumentException("account may not be null");
-        }
-        Map<String, URL> links = account.getLinks();
-        URL url = links != null ? links.get("operation") : null;
-
-        if (url == null) {
-            throw new IllegalArgumentException("PresetAccount does not contain an operation url");
-        }
-        Operation operation = new Operation(account.getCode(), account.getMethod(), account.getOperationType(), url);
-        return createStartIntent(context, operation);
+        Intent intent = new Intent(context, ChargePaymentActivity.class);
+        intent.putExtra(EXTRA_OPERATION_TYPE, TYPE_CHARGE_PRESET_ACCOUNT);
+        return intent;
     }
 
     /**
@@ -98,6 +90,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
         Bundle bundle = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
         if (bundle != null) {
             this.operation = bundle.getParcelable(EXTRA_OPERATION);
+            this.OPERATION_TYPE = bundle.getInt(EXTRA_OPERATION_TYPE);
         }
         setContentView(R.layout.activity_chargepayment);
 
@@ -131,6 +124,10 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
     @Override
     public void onResume() {
         super.onResume();
+        if (OPERATION_TYPE == TYPE_CHARGE_PRESET_ACCOUNT) {
+            // We need to create the operation object in the presenter here
+            presenter.createOperationForPreset();
+        }
         presenter.onStart(operation);
     }
 
