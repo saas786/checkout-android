@@ -28,8 +28,8 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
 
     private final static String EXTRA_OPERATION = "operation";
     private final static String EXTRA_OPERATION_TYPE = "operation_type";
-    private final static int TYPE_CHARGE_OPERATION = 1;
-    private final static int TYPE_CHARGE_PRESET_ACCOUNT = 2;
+    public final static int TYPE_CHARGE_OPERATION = 1;
+    public final static int TYPE_CHARGE_PRESET_ACCOUNT = 2;
     private int OPERATION_TYPE;
     private ChargePaymentPresenter presenter;
     private Operation operation;
@@ -124,11 +124,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
     @Override
     public void onResume() {
         super.onResume();
-        if (OPERATION_TYPE == TYPE_CHARGE_PRESET_ACCOUNT) {
-            // We need to create the operation object in the presenter here
-            presenter.createOperationForPreset();
-        }
-        presenter.onStart(operation);
+        presenter.onStart(operation, OPERATION_TYPE);
     }
 
     /**

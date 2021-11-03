@@ -12,6 +12,8 @@ import static com.payoneer.checkout.localization.LocalizationKey.CHARGE_INTERRUP
 import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_ERROR;
 import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_PROCEED;
 
+import java.net.URL;
+import java.util.Map;
 import java.util.Objects;
 
 import com.payoneer.checkout.core.PaymentException;
@@ -21,6 +23,7 @@ import com.payoneer.checkout.model.ErrorInfo;
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.ListResult;
+import com.payoneer.checkout.model.PresetAccount;
 import com.payoneer.checkout.redirect.RedirectRequest;
 import com.payoneer.checkout.redirect.RedirectService;
 import com.payoneer.checkout.ui.PaymentResult;
@@ -59,8 +62,11 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
         sessionService.setListener(this);
     }
 
-    void onStart(Operation operation) {
-        this.operation = operation;
+    void onStart(Operation operation, int operationType) {
+        if (operationType == ChargePaymentActivity.TYPE_CHARGE_OPERATION) {
+            // The operation object is available. If not, then we need to create the operation object in line 92
+            this.operation = operation;
+        }
         setState(STARTED);
 
         if (redirectRequest != null) {
@@ -83,7 +89,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     public void onPaymentSessionSuccess(PaymentSession session) {
         ListResult listResult = session.getListResult();
         Interaction interaction = listResult.getInteraction();
-
+        createOperationForChargePreset(listResult.getPresetAccount());
         if (Objects.equals(InteractionCode.PROCEED, interaction.getCode())) {
             handleLoadSessionProceed(session);
         } else {
@@ -252,5 +258,15 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
         this.session = null;
         view.showProgress(true);
         sessionService.loadPaymentSession(listUrl, view.getActivity());
+    }
+
+    public void createOperationForChargePreset(PresetAccount account) {
+        Map<String, URL> links = account.getLinks();
+        URL url = links != null ? links.get("operation") : null;
+
+        if (url == null) {
+            throw new IllegalArgumentException("PresetAccount does not contain an operation url");
+        }
+        this.operation = new Operation(account.getCode(), account.getMethod(), account.getOperationType(), url);
     }
 }
