@@ -27,7 +27,7 @@ import androidx.annotation.NonNull;
 public final class ChargePaymentActivity extends BasePaymentActivity implements BasePaymentView {
 
     private final static String EXTRA_OPERATION = "operation";
-    private final static String EXTRA_OPERATION_TYPE = "operation_type";
+    private final static String EXTRA_CHARGE_TYPE = "charge_type";
     public final static int TYPE_CHARGE_OPERATION = 1;
     public final static int TYPE_CHARGE_PRESET_ACCOUNT = 2;
     private int chargeType;
@@ -48,7 +48,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
             throw new IllegalArgumentException("operation may not be null");
         }
         Intent intent = new Intent(context, ChargePaymentActivity.class);
-        intent.putExtra(EXTRA_OPERATION_TYPE, TYPE_CHARGE_OPERATION);
+        intent.putExtra(EXTRA_CHARGE_TYPE, TYPE_CHARGE_OPERATION);
         intent.putExtra(EXTRA_OPERATION, operation);
         return intent;
     }
@@ -64,7 +64,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
             throw new IllegalArgumentException("context may not be null");
         }
         Intent intent = new Intent(context, ChargePaymentActivity.class);
-        intent.putExtra(EXTRA_OPERATION_TYPE, TYPE_CHARGE_PRESET_ACCOUNT);
+        intent.putExtra(EXTRA_CHARGE_TYPE, TYPE_CHARGE_PRESET_ACCOUNT);
         return intent;
     }
 
@@ -90,7 +90,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
         Bundle bundle = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
         if (bundle != null) {
             this.operation = bundle.getParcelable(EXTRA_OPERATION);
-            this.chargeType = bundle.getInt(EXTRA_OPERATION_TYPE);
+            this.chargeType = bundle.getInt(EXTRA_CHARGE_TYPE);
         }
         setContentView(R.layout.activity_chargepayment);
 
