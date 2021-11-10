@@ -13,8 +13,6 @@ import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_ERROR;
 import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_PROCEED;
 import static com.payoneer.checkout.ui.page.ChargePaymentActivity.TYPE_CHARGE_PRESET_ACCOUNT;
 
-import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 
 import com.payoneer.checkout.core.PaymentException;
@@ -156,7 +154,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
                 closeWithErrorCode("PresetAccount not found in ListResult");
                 return;
             }
-            this.operation = fromPresetAccount(account);
+            this.operation = Operation.fromPresetAccount(account);
         }
 
         if (!session.containsOperationLink(operation.getURL())) {
@@ -269,15 +267,5 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
         this.session = null;
         view.showProgress(true);
         sessionService.loadPaymentSession(listUrl, view.getActivity());
-    }
-
-    private Operation fromPresetAccount(PresetAccount account) {
-        Map<String, URL> links = account.getLinks();
-        URL url = links != null ? links.get("operation") : null;
-
-        if (url == null) {
-            throw new IllegalArgumentException("PresetAccount does not contain an operation url");
-        }
-        return new Operation(account.getCode(), account.getMethod(), account.getOperationType(), url);
     }
 }

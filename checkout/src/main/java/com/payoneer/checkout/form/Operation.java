@@ -12,6 +12,7 @@ import static com.payoneer.checkout.core.PaymentInputCategory.INPUTELEMENT;
 import static com.payoneer.checkout.core.PaymentInputCategory.REGISTRATION;
 
 import java.net.URL;
+import java.util.Map;
 
 import com.google.gson.JsonSyntaxException;
 import com.payoneer.checkout.core.PaymentException;
@@ -19,6 +20,7 @@ import com.payoneer.checkout.core.PaymentInputType;
 import com.payoneer.checkout.model.AccountInputData;
 import com.payoneer.checkout.model.BrowserData;
 import com.payoneer.checkout.model.OperationData;
+import com.payoneer.checkout.model.PresetAccount;
 import com.payoneer.checkout.util.GsonHelper;
 
 import android.os.Parcel;
@@ -262,5 +264,15 @@ public class Operation implements Parcelable {
 
     public URL getURL() {
         return url;
+    }
+
+    public static Operation fromPresetAccount(PresetAccount account) {
+        Map<String, URL> links = account.getLinks();
+        URL url = links != null ? links.get("operation") : null;
+
+        if (url == null) {
+            throw new IllegalArgumentException("PresetAccount does not contain an operation url");
+        }
+        return new Operation(account.getCode(), account.getMethod(), account.getOperationType(), url);
     }
 }
