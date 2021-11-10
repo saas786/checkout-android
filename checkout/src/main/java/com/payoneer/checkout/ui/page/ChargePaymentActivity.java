@@ -30,7 +30,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
     private final static String EXTRA_OPERATION_TYPE = "operation_type";
     public final static int TYPE_CHARGE_OPERATION = 1;
     public final static int TYPE_CHARGE_PRESET_ACCOUNT = 2;
-    private int OPERATION_TYPE;
+    private int chargeType;
     private ChargePaymentPresenter presenter;
     private Operation operation;
 
@@ -90,7 +90,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
         Bundle bundle = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
         if (bundle != null) {
             this.operation = bundle.getParcelable(EXTRA_OPERATION);
-            this.OPERATION_TYPE = bundle.getInt(EXTRA_OPERATION_TYPE);
+            this.chargeType = bundle.getInt(EXTRA_OPERATION_TYPE);
         }
         setContentView(R.layout.activity_chargepayment);
 
@@ -124,7 +124,7 @@ public final class ChargePaymentActivity extends BasePaymentActivity implements 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.onStart(operation, OPERATION_TYPE);
+        presenter.onStart(operation, chargeType);
     }
 
     /**

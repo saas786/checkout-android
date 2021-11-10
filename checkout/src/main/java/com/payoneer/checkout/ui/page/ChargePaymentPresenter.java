@@ -50,7 +50,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     private Operation operation;
     private NetworkService networkService;
     private RedirectRequest redirectRequest;
-    private int operationType;
+    private int chargeType;
 
     /**
      * Create a new ChargePaymentPresenter
@@ -63,9 +63,9 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
         sessionService.setListener(this);
     }
 
-    void onStart(Operation operation, int operationType) {
-        this.operationType = operationType;
-        if (operationType == ChargePaymentActivity.TYPE_CHARGE_OPERATION) {
+    void onStart(Operation operation, int chargeType) {
+        this.chargeType = chargeType;
+        if (chargeType == ChargePaymentActivity.TYPE_CHARGE_OPERATION) {
             // The operation object is available. If not, then we need to create the operation object in line 92
             this.operation = operation;
         }
@@ -91,7 +91,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     public void onPaymentSessionSuccess(PaymentSession session) {
         ListResult listResult = session.getListResult();
         Interaction interaction = listResult.getInteraction();
-        if (operationType == ChargePaymentActivity.TYPE_CHARGE_PRESET_ACCOUNT) {
+        if (chargeType == ChargePaymentActivity.TYPE_CHARGE_PRESET_ACCOUNT) {
             // No point wasting resources in creating an object that's not needed if charging an operation
             createOperationForChargePreset(listResult.getPresetAccount());
         }
