@@ -65,7 +65,6 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     void onStart(Operation operation, int chargeType) {
         this.chargeType = chargeType;
         if (chargeType == ChargePaymentActivity.TYPE_CHARGE_OPERATION) {
-            // The operation object is available. If not, then we need to create the operation object in line 92
             this.operation = operation;
         }
         setState(STARTED);
