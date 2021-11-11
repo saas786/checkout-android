@@ -148,6 +148,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     }
 
     private void handleLoadSessionProceed(PaymentSession session) {
+        // When charging PresetAccounts, the Operation object will be created after the ListResult has been loaded.
         if (chargeType == TYPE_CHARGE_PRESET_ACCOUNT) {
             PresetAccount account = session.getListResult().getPresetAccount();
             if (account == null) {
