@@ -11,6 +11,7 @@ package com.payoneer.checkout.ui.page;
 import static com.payoneer.checkout.localization.LocalizationKey.CHARGE_INTERRUPTED;
 import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_ERROR;
 import static com.payoneer.checkout.ui.PaymentActivityResult.RESULT_CODE_PROCEED;
+import static com.payoneer.checkout.ui.page.ChargePaymentActivity.TYPE_CHARGE_PRESET_ACCOUNT;
 
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ import com.payoneer.checkout.model.ErrorInfo;
 import com.payoneer.checkout.model.Interaction;
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.ListResult;
+import com.payoneer.checkout.model.PresetAccount;
 import com.payoneer.checkout.redirect.RedirectRequest;
 import com.payoneer.checkout.redirect.RedirectService;
 import com.payoneer.checkout.ui.PaymentResult;
@@ -47,6 +49,7 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     private Operation operation;
     private NetworkService networkService;
     private RedirectRequest redirectRequest;
+    private int chargeType;
 
     /**
      * Create a new ChargePaymentPresenter
@@ -59,8 +62,11 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
         sessionService.setListener(this);
     }
 
-    void onStart(Operation operation) {
-        this.operation = operation;
+    void onStart(Operation operation, int chargeType) {
+        this.chargeType = chargeType;
+        if (chargeType == ChargePaymentActivity.TYPE_CHARGE_OPERATION) {
+            this.operation = operation;
+        }
         setState(STARTED);
 
         if (redirectRequest != null) {
@@ -83,7 +89,6 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     public void onPaymentSessionSuccess(PaymentSession session) {
         ListResult listResult = session.getListResult();
         Interaction interaction = listResult.getInteraction();
-
         if (Objects.equals(InteractionCode.PROCEED, interaction.getCode())) {
             handleLoadSessionProceed(session);
         } else {
@@ -142,6 +147,16 @@ final class ChargePaymentPresenter extends BasePaymentPresenter implements Payme
     }
 
     private void handleLoadSessionProceed(PaymentSession session) {
+        // When charging PresetAccounts, the Operation object will be created after the ListResult has been loaded.
+        if (chargeType == TYPE_CHARGE_PRESET_ACCOUNT) {
+            PresetAccount account = session.getListResult().getPresetAccount();
+            if (account == null) {
+                closeWithErrorCode("PresetAccount not found in ListResult");
+                return;
+            }
+            this.operation = Operation.fromPresetAccount(account);
+        }
+
         if (!session.containsOperationLink(operation.getURL())) {
             closeWithErrorCode("operation not found in ListResult");
             return;

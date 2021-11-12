@@ -85,17 +85,9 @@ public final class SummaryActivity extends BaseActivity implements SummaryView {
         presetSubtitle = findViewById(R.id.label_subtitle);
 
         Button edit = findViewById(R.id.button_edit);
-        edit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showPaymentList();
-            }
-        });
+        edit.setOnClickListener(v -> showPaymentList());
         Button button = findViewById(R.id.button_pay);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onPayClicked();
-            }
-        });
+        button.setOnClickListener(v -> onPayClicked());
         this.presenter = new SummaryPresenter(this);
     }
 
@@ -274,7 +266,7 @@ public final class SummaryActivity extends BaseActivity implements SummaryView {
     private void onPayClicked() {
         if (presetAccount != null) {
             PaymentUI paymentUI = PaymentUI.getInstance();
-            paymentUI.chargePresetAccount(this, PAYMENT_REQUEST_CODE, presetAccount);
+            paymentUI.chargePresetAccount(this, PAYMENT_REQUEST_CODE);
         }
     }
 

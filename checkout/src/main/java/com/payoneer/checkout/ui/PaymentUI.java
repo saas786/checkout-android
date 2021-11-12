@@ -11,7 +11,6 @@ package com.payoneer.checkout.ui;
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.localization.LocalLocalizationHolder;
 import com.payoneer.checkout.localization.Localization;
-import com.payoneer.checkout.model.PresetAccount;
 import com.payoneer.checkout.ui.page.ChargePaymentActivity;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
 
@@ -135,10 +134,9 @@ public final class PaymentUI {
      *
      * @param activity the activity that will be notified when this PaymentPage is finished
      * @param requestCode the requestCode to be used for identifying results in the parent activity
-     * @param presetAccount account that has been preset and should be charged
      */
-    public void chargePresetAccount(Activity activity, int requestCode, PresetAccount presetAccount) {
-        Intent intent = ChargePaymentActivity.createStartIntent(activity, presetAccount);
+    public void chargePresetAccount(Activity activity, int requestCode) {
+        Intent intent = ChargePaymentActivity.createStartIntent(activity);
         launchActivity(activity, intent, requestCode);
         activity.overridePendingTransition(ChargePaymentActivity.getStartTransition(), R.anim.no_animation);
     }
