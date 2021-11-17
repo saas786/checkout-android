@@ -90,12 +90,18 @@ public final class PaymentList {
 
         setVisible(true);
         adapter.notifyDataSetChanged();
-
-        recyclerView.scrollToPosition(itemList.getSelectedIndex());
+        scrollToSelectedCard();
     }
 
     public void setVisible(boolean visible) {
         recyclerView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void scrollToSelectedCard() {
+        int selectedIndex = itemList.getSelectedIndex();
+        if (selectedIndex > 1) {
+            recyclerView.scrollToPosition(selectedIndex);
+        }
     }
 
     private PaymentCardListener createCardListener() {

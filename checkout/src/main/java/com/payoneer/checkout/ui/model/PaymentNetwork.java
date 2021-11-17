@@ -73,7 +73,7 @@ public final class PaymentNetwork {
         return registrationOptions;
     }
 
-    public boolean isPreselected() {
+    public boolean hasSelectedNetwork() {
         return PaymentUtils.isTrue(network.getSelected());
     }
 

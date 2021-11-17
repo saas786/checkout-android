@@ -35,6 +35,16 @@ public final class NetworkCard extends PaymentCard {
     }
 
     @Override
+    public boolean hasSelectedNetwork() {
+        for (PaymentNetwork network : networks) {
+            if (network.hasSelectedNetwork()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void putLanguageLinks(Map<String, URL> links) {
         for (PaymentNetwork network : networks) {
             network.putLanguageLink(links);
@@ -82,16 +92,6 @@ public final class NetworkCard extends PaymentCard {
     @Override
     public List<InputElement> getInputElements() {
         return getVisibleNetwork().getInputElements();
-    }
-
-    @Override
-    public boolean isPreselected() {
-        for (PaymentNetwork network : networks) {
-            if (network.isPreselected()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

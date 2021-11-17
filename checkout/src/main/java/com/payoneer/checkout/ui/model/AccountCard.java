@@ -90,7 +90,7 @@ public final class AccountCard extends PaymentCard {
     }
 
     @Override
-    public boolean isPreselected() {
+    public boolean hasSelectedNetwork() {
         return PaymentUtils.isTrue(account.getSelected());
     }
 
