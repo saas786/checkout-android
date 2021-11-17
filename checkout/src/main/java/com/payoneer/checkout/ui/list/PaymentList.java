@@ -90,16 +90,13 @@ public final class PaymentList {
 
         setVisible(true);
         adapter.notifyDataSetChanged();
-        scrollToSelectedCard();
+
+        int scrollPosition = calculateScrollPosition(itemList.getSelectedIndex());
+        recyclerView.scrollToPosition(scrollPosition);
     }
 
     public void setVisible(boolean visible) {
         recyclerView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    private void scrollToSelectedCard() {
-        int scrollPosition = calculateScrollPosition(itemList.getSelectedIndex());
-        recyclerView.scrollToPosition(scrollPosition);
     }
 
     private int calculateScrollPosition(int index) {
@@ -181,8 +178,7 @@ public final class PaymentList {
             itemList.setSelectedIndex(position);
             adapter.notifyItemChanged(curIndex);
             adapter.notifyItemChanged(position);
-            int scrollPosition = calculateScrollPosition(position);
-            scrollAndCloseKeyboard(scrollPosition);
+            scrollAndCloseKeyboard(calculateScrollPosition(position));
         }
     }
 
