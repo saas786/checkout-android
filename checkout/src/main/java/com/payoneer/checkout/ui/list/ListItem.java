@@ -20,4 +20,14 @@ abstract class ListItem {
     ListItem(int viewType) {
         this.viewType = viewType;
     }
+
+    /**
+     * Check if this ListItem is a HeaderItem
+     *
+     * @param listItem the item to be checked
+     * @return true when a HeaderItem, false otherwise
+     */
+    public final static boolean isHeaderItem(ListItem listItem) {
+        return (listItem != null) && (listItem instanceof HeaderItem);
+    }
 }

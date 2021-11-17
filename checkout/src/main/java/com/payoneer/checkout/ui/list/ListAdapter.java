@@ -34,7 +34,7 @@ final class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public @NonNull
     ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItem item = itemList.getItemWithViewType(viewType);
-        if (item instanceof HeaderItem) {
+        if (ListItem.isHeaderItem(item)) {
             return HeaderViewHolder.createInstance(parent);
         }
         PaymentCard card = ((PaymentCardItem)item).getPaymentCard();
@@ -51,12 +51,12 @@ final class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ListItem item = itemList.getItem(position);
 
-        if (item instanceof PaymentCardItem) {
+        if (ListItem.isHeaderItem(item)) {
+            ((HeaderViewHolder) holder).onBind((HeaderItem) item);
+        } else {
             PaymentCardViewHolder ph = (PaymentCardViewHolder) holder;
             ph.onBind();
             ph.expand(itemList.getSelectedIndex() == position);
-        } else {
-            ((HeaderViewHolder) holder).onBind((HeaderItem) item);
         }
     }
 

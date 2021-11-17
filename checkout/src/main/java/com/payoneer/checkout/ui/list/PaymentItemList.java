@@ -57,13 +57,6 @@ final class PaymentItemList {
         return items.size();
     }
 
-    boolean isHeaderItem(int index) {
-        if ((index < 0) || (index >= items.size())) {
-            return false;
-        }
-        return (items.get(index) instanceof HeaderItem);
-    }
-
     int getItemViewType(int index) {
         return items.get(index).viewType;
     }
