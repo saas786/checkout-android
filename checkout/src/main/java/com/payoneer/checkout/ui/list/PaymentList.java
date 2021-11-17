@@ -98,10 +98,13 @@ public final class PaymentList {
     }
 
     private void scrollToSelectedCard() {
-        int selectedIndex = itemList.getSelectedIndex();
-        if (selectedIndex > 1) {
-            recyclerView.scrollToPosition(selectedIndex);
-        }
+        int scrollPosition = calculateScrollPosition(itemList.getSelectedIndex());
+        recyclerView.scrollToPosition(scrollPosition);
+    }
+
+    private int calculateScrollPosition(int index) {
+        int headerIndex = (index - 1);
+        return (itemList.isHeaderItem(headerIndex)) ? headerIndex : index;
     }
 
     private PaymentCardListener createCardListener() {
@@ -178,7 +181,8 @@ public final class PaymentList {
             itemList.setSelectedIndex(position);
             adapter.notifyItemChanged(curIndex);
             adapter.notifyItemChanged(position);
-            scrollAndCloseKeyboard(position);
+            int scrollPosition = calculateScrollPosition(position);
+            scrollAndCloseKeyboard(scrollPosition);
         }
     }
 

@@ -20,12 +20,4 @@ abstract class ListItem {
     ListItem(int viewType) {
         this.viewType = viewType;
     }
-
-    boolean hasPaymentCard() {
-        return false;
-    }
-
-    PaymentCard getPaymentCard() {
-        return null;
-    }
 }

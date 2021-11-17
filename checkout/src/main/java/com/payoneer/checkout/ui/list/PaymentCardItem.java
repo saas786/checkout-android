@@ -25,8 +25,4 @@ final class PaymentCardItem extends ListItem {
     PaymentCard getPaymentCard() {
         return paymentCard;
     }
-
-    boolean hasPaymentCard() {
-        return true;
-    }
 }
