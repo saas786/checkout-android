@@ -102,7 +102,7 @@ public final class PaymentList {
     private int calculateScrollPosition(int index) {
         int headerIndex = index - 1;
         ListItem item = itemList.getItem(headerIndex);
-        return (ListItem.isHeaderItem(item)) ? headerIndex : index;
+        return (HeaderItem.isHeaderItem(item)) ? headerIndex : index;
     }
 
     private PaymentCardListener createCardListener() {
