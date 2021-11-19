@@ -29,4 +29,14 @@ final class HeaderItem extends ListItem {
     public String getMessage() {
         return message;
     }
+
+    /**
+     * Check if the provided ListItem is a HeaderItem
+     *
+     * @param listItem the list item to be checked
+     * @return true when a HeaderItem, false otherwise
+     */
+    public final static boolean isHeaderItem(ListItem listItem) {
+        return (listItem != null) && (listItem instanceof HeaderItem);
+    }
 }

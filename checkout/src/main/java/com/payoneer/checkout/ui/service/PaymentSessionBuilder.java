@@ -103,6 +103,7 @@ public final class PaymentSessionBuilder {
         if (section != null) {
             sections.add(section);
         }
+        setPreselectedCard(sections);
         boolean refreshable = UPDATE.equals(operationType);
         return new PaymentSession(listResult, sections, refreshable);
     }
@@ -291,5 +292,35 @@ public final class PaymentSessionBuilder {
             return;
         }
         card.getSmartSwitch().addSelectionRegex(code, regex);
+    }
+
+    /**
+     * Set the card that should be expanded when the list is shown for the first time.
+     * A card is marked as preselected in the following order:
+     *
+     * 1. The card has a network that is marked selected by the Payment API
+     * 2. The card is presenting a PresetAccount
+     * 3. It is the only card in the entire list
+     *
+     * @param paymentSections containing the sections of PaymentCards
+     */
+    private void setPreselectedCard(List<PaymentSection> paymentSections) {
+        List<PaymentCard> cards = new ArrayList<>();
+        for (PaymentSection section : paymentSections) {
+            cards.addAll(section.getPaymentCards());
+        }
+        if (cards.size() == 0) {
+            return;
+        }
+        for (PaymentCard card : cards) {
+            if (card.hasSelectedNetwork()) {
+                card.setPreselected(true);
+                return;
+            }
+        }
+        PaymentCard card = cards.get(0);
+        if ((card instanceof PresetCard) || cards.size() == 1) {
+            card.setPreselected(true);
+        }
     }
 }

@@ -33,6 +33,7 @@ public abstract class PaymentCard {
     private boolean checkable;
     private boolean hideInputForm;
     private boolean disabled;
+    private boolean preselected;
     final List<String> userInputTypes;
 
     /**
@@ -171,6 +172,25 @@ public abstract class PaymentCard {
     }
 
     /**
+     * Set the PaymentCard to being preselected, this means that the card will be expanded
+     * when the list is shown for the first time.
+     *
+     * @param preselected expand the card when true, false show a collapsed card
+     */
+    public void setPreselected(final boolean preselected) {
+        this.preselected = preselected;
+    }
+
+    /**
+     * Is this card preselected
+     *
+     * @return true when preselected, false otherwise
+     */
+    public boolean isPreselected() {
+        return preselected;
+    }
+
+    /**
      * Does this PaymentCard has any form elements
      *
      * @return true when the form has elements, false otherwise
@@ -239,6 +259,13 @@ public abstract class PaymentCard {
     }
 
     /**
+     * Does this PaymentCard has a network that is selected by the Payment API
+     *
+     * @return true when selected, false otherwise
+     */
+    public abstract boolean hasSelectedNetwork();
+
+    /**
      * Check if this card contains a link with the provided name. If the card contains multiple networks then
      * all networks must be checked if at least one of them contains the link.
      *
@@ -283,13 +310,6 @@ public abstract class PaymentCard {
      * @return network code of this PaymentCard
      */
     public abstract String getNetworkCode();
-
-    /**
-     * Is this card preselected
-     *
-     * @return true when preselected, false otherwise
-     */
-    public abstract boolean isPreselected();
 
     /**
      * Get the title of this PaymentCard

@@ -91,11 +91,18 @@ public final class PaymentList {
         setVisible(true);
         adapter.notifyDataSetChanged();
 
-        recyclerView.scrollToPosition(itemList.getSelectedIndex());
+        int scrollPosition = calculateScrollPosition(itemList.getSelectedIndex());
+        recyclerView.scrollToPosition(scrollPosition);
     }
 
     public void setVisible(boolean visible) {
         recyclerView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private int calculateScrollPosition(int index) {
+        int headerIndex = index - 1;
+        ListItem item = itemList.getItem(headerIndex);
+        return (HeaderItem.isHeaderItem(item)) ? headerIndex : index;
     }
 
     private PaymentCardListener createCardListener() {
@@ -172,7 +179,7 @@ public final class PaymentList {
             itemList.setSelectedIndex(position);
             adapter.notifyItemChanged(curIndex);
             adapter.notifyItemChanged(position);
-            scrollAndCloseKeyboard(position);
+            scrollAndCloseKeyboard(calculateScrollPosition(position));
         }
     }
 

@@ -34,16 +34,16 @@ final class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public @NonNull
     ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ListItem item = itemList.getItemWithViewType(viewType);
-        PaymentCard card = item != null ? item.getPaymentCard() : null;
-
+        if (HeaderItem.isHeaderItem(item)) {
+            return HeaderViewHolder.createInstance(parent);
+        }
+        PaymentCard card = ((PaymentCardItem)item).getPaymentCard();
         if (card instanceof NetworkCard) {
             return NetworkCardViewHolder.createInstance(this, (NetworkCard) card, parent);
         } else if (card instanceof AccountCard) {
             return AccountCardViewHolder.createInstance(this, (AccountCard) card, parent);
-        } else if (card instanceof PresetCard) {
-            return PresetCardViewHolder.createInstance(this, (PresetCard) card, parent);
         } else {
-            return HeaderViewHolder.createInstance(parent);
+            return PresetCardViewHolder.createInstance(this, (PresetCard) card, parent);
         }
     }
 
@@ -51,12 +51,12 @@ final class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ListItem item = itemList.getItem(position);
 
-        if (item.hasPaymentCard()) {
+        if (HeaderItem.isHeaderItem(item)) {
+            ((HeaderViewHolder) holder).onBind((HeaderItem) item);
+        } else {
             PaymentCardViewHolder ph = (PaymentCardViewHolder) holder;
             ph.onBind();
             ph.expand(itemList.getSelectedIndex() == position);
-        } else {
-            ((HeaderViewHolder) holder).onBind((HeaderItem) item);
         }
     }
 

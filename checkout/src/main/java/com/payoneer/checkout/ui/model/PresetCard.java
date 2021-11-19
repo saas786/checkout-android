@@ -54,6 +54,11 @@ public final class PresetCard extends PaymentCard {
     }
 
     @Override
+    public boolean hasSelectedNetwork() {
+        return false;
+    }
+
+    @Override
     public String getPaymentMethod() {
         return account.getMethod();
     }

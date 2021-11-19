@@ -364,8 +364,4 @@ public abstract class PaymentCardViewHolder extends RecyclerView.ViewHolder {
             }
         }
     }
-
-    String createWidgetKey(String inputCategory, String inputName) {
-        return inputCategory + "." + inputName;
-    }
 }
