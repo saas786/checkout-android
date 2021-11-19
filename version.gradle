@@ -1,81 +1,80 @@
 //
 // File for increasing the Android version patch, minor and major
 //
-ext.VERSIONCODE = file('VERSIONCODE').text.trim().toInteger()
-ext.VERSIONNAME = file('VERSIONNAME').text.trim()
-
-ext.isSnapshotVersion = { ->
-    return versionName.endsWith('SNAPSHOT')
+ext.isReleaseVersion = { ->
+    def branchName = getBranchName()
+    return branchName.contentEquals('master') || branchName.startsWith('release/')
 }
 
-ext.removeSnapshotFromVersion = { ->
-    def curName = VERSIONNAME.split("-")
-    file('VERSIONNAME').text = curName[0]
+ext.getVersionCodeFromFile = { ->
+    return file('VERSIONCODE').text.trim().toInteger()
+}
+
+ext.getVersionNameFromFile = { ->
+    return file('VERSIONNAME').text.trim()
+}
+
+ext.getVersionCode = { ->
+   return getVersionCodeFromFile()
+}
+
+ext.getVersionName = { ->
+    def versionName = getVersionNameFromFile()
+    return isReleaseVersion() ? versionName : (versionName  + '-SNAPSHOT')
 }
 
 ext.increaseVersionName = { index ->
-    def curName = VERSIONNAME.split("-")
-    def newName = curName[0].split("\\.")
+    def currentName = getVersionNameFromFile()
+    def versions = currentName.split("\\.")
     def size = 3
 
-    if (newName.length != size) {
-        throw new GradleException("versionName has invalid format, should be: <major>.<minor>.<patch> with optional -SNAPSHOT")
+    if (versions.length != size) {
+        throw new GradleException("versionName has invalid format, should be: <major>.<minor>.<patch>")
     }
     index.upto(size - 1) {
         if (it == index) {
-            def val = Integer.parseInt(newName[it])
-            newName[it] = Integer.toString(val + 1)
+            def val = Integer.parseInt(versions[it])
+            versions[it] = Integer.toString(val + 1)
         } else if (it > index) {
-            newName[it] = Integer.toString(0)
+            versions[it] = Integer.toString(0)
         }
     }
-    newName = newName.join(".")
-
-    if (curName.length == 2) {
-        newName += "-" + curName[1]
-    }
+    def newName = versions.join(".")
     file('VERSIONNAME').text = newName
+    logger.lifecycle("versionName increased from " + currentName + " to " + newName)
 }
 
 ext.increaseVersionCode = { ->
-    def versionCode = VERSIONCODE + 1
-    file('VERSIONCODE').text = versionCode
+    def currentCode = getVersionCodeFromFile()
+    def newCode = currentCode + 1
+    file('VERSIONCODE').text = newCode
+    logger.lifecycle("versionCode increased from " + currentCode + " to " + newCode)
+
 }
 
-task('removeSnapshot') {
+task('increaseVersionMajor') {
     doLast {
-        print "Remove -SNAPSHOT from VERSIONNAME"
-        removeSnapshotFromVersion()
-    }
-}    
-
-task('versionMajor') {
-    doLast {
-        print "Increasing major of versionName and versionCode"
         increaseVersionName(0)
         increaseVersionCode()
     }
 }
 
-task('versionMinor') {
+task('increaseVersionMinor') {
     doLast {
-        print "Increasing minor of versionName and versionCode"
         increaseVersionName(1)
         increaseVersionCode()
     }
 }
 
-task('versionPatch') {
+task('increaseVersionPatch') {
     doLast {
-        print "Increasing patch of versionName and versionCode"
         increaseVersionName(2)
         increaseVersionCode()
     }
 }
 
-task('versionCode') {
+task('increaseVersionCode') {
     doLast {
-        print "Increasing versionCode"
         increaseVersionCode()
     }
 }
