@@ -22,4 +22,10 @@ jobs:
       - name: Clean checkout project
         run: ./gradlew clean
       - name: Upload to App Live
+        env:
+          MOBILE_MERCHANT_CODE: ${{ secrets.MOBILE_MERCHANT_CODE }}
+          MOBILE_MERCHANT_PAYMENT_TOKEN: ${{ secrets.MOBILE_MERCHANT_PAYMENT_TOKEN }}
+          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+          BROWSERSTACK_KEY: ${{ secrets.BROWSERSTACK_KEY }}
+          PAYMENTAPI_LISTURL: ${{ secrets.PAYMENTAPI_LISTURL }}
         run: ./gradlew :example-shop:uploadToAppLive
