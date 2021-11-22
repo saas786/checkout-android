@@ -1,13 +1,13 @@
-# Workflow for running tests triggered by pull requests
+# Workflow for executing androidTests of Checkout Example app on Browserstack App Automate
 
-name: Test pull request
+name: ACTION Test Example-Checkout on App Automate
+
 on:
-  pull_request:
-    types: [ opened, reopened, labeled, synchronize ]
+  workflow_dispatch:
 
 jobs:
-  test-checkout:
-    name: Test checkout module
+  test-app-automate:
+    name: Test on App Automate
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,5 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Clean checkout project
         run: ./gradlew clean
-      - name: Build checkout module
-        run: ./gradlew buildCheckout
-      - name: Run checkout unit-tests
-        run: ./gradlew testCheckout
+      - name: Test on App Automate
+        run: ./gradlew :example-checkout:executeTestsOnAppAutomate

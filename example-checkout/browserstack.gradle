@@ -10,7 +10,7 @@ task uploadToAppLive {
     dependsOn('uploadExampleCheckoutDebugToBrowserstackAppLive')
 }
 
-task runFunctionalTest {
+task executeTestsOnAppAutomate {
     if ((rootProject.merchantCode == null) || (rootProject.merchantPaymentToken == null) ||
             (rootProject.paymentApiListUrl == null)) {
         logger.lifecycle('[BROWSERSTACK] Missing functional test settings')

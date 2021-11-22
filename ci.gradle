@@ -20,8 +20,8 @@ task publishRelease() {
 }
 
 task testExampleApps() {
-    def testExampleCheckout = tasks.findByPath(':example-checkout:runFunctionalTest')
-    def testExampleShop = tasks.findByPath(':example-shop:runFunctionalTest')
+    def testExampleCheckout = tasks.findByPath(':example-checkout:executeTestsOnAppAutomate')
+    def testExampleShop = tasks.findByPath(':example-shop:executeTestsOnAppAutomate')
     dependsOn testExampleCheckout
     dependsOn testExampleShop
     testExampleShop.mustRunAfter(testExampleCheckout)
