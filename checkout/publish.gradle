@@ -3,7 +3,7 @@ task publishSnapshot {
         logger.lifecycle('[PUBLISH-SNAPSHOT] Missing nexusUser and/or nexusPassword environment variables')
         return
     }
-    if (rootProject.isReleaseVersion() == true) {
+    if (rootProject.isReleaseVersion()) {
         logger.lifecycle('[PUBLISH-SNAPSHOT] Only Snapshot artifacts can be published')
         return
     }
@@ -19,8 +19,9 @@ task publishRelease {
         logger.lifecycle('[PUBLISH-RELEASE] Missing packageCloudToken environment variable')
         return
     }
-    if (rootProject.isReleaseVersion() == false) {
+    if (!(rootProject.isReleaseVersion())) {
         logger.lifecycle('[SNAPSHOT-RELEASE] Only Release artifacts may be published')
+        return
     }
     dependsOn 'publish'
 }
@@ -30,15 +31,15 @@ afterEvaluate {
         onlyIf {
             ((repository == publishing.repositories.nexusSnapshots) &&
                     (publication == publishing.publications.nexusSnapshots) &&
-                    (rootProject.isReleaseVersion() == false)) ||
+                    (!(rootProject.isReleaseVersion()))) ||
 
                     ((repository == publishing.repositories.nexusReleases) &&
                             (publication == publishing.publications.nexusReleases) &&
-                            (rootProject.isReleaseVersion() == true)) ||
+                            (rootProject.isReleaseVersion())) ||
 
                     ((repository == publishing.repositories.packagecloud) &&
                             (publication == publishing.publications.packagecloud) &&
-                            (rootProject.isReleaseVersion() == true))
+                            (rootProject.isReleaseVersion()))
         }
     }
     publishing {
