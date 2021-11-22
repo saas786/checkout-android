@@ -40,8 +40,8 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = VERSIONCODE
-    versionName = VERSIONNAME
+    versionCode = getVersionCode()
+    versionName = getVersionName()
     javaCompatVersion = JavaVersion.VERSION_1_8
 
     nexusUser = System.getenv('NEXUS_USER')
@@ -84,13 +84,17 @@ ext {
     tngDataProviderVersion = '2.8'
 }
 
-static def getCurrentBranch() {
+static def getBranchName() {
     def branch = ''
     def proc = 'git rev-parse --abbrev-ref HEAD'.execute()
     proc.in.eachLine { line -> branch = line }
     proc.err.eachLine { line -> println line }
     proc.waitFor()
     branch
+}
+
+static def getBranchLabel() {
+    return getBranchName().replace('/', '-')
 }
 
 apply from: 'ci.gradle'

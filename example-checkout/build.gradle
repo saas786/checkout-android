@@ -53,7 +53,7 @@ android {
 
             testVariants.all { testVariant ->
                 testVariant.outputs.all { output ->
-                    outputFileName = "ExampleCheckout-${testVariant.buildType.name}-${getCurrentBranch()}-androidTest.apk"
+                    outputFileName = "ExampleCheckout-${testVariant.buildType.name}_${getBranchLabel()}-androidTest.apk"
                 }
             }
         }
@@ -66,7 +66,7 @@ android {
         }
         applicationVariants.all { variant ->
             variant.outputs.all {
-                outputFileName = "ExampleCheckout-${variant.buildType.name}-${getCurrentBranch()}.apk"
+                outputFileName = "ExampleCheckout-${variant.buildType.name}_${getBranchLabel()}.apk"
             }
         }
     }
