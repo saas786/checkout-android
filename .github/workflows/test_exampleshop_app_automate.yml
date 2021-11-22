@@ -1,6 +1,6 @@
 # Workflow for executing androidTests of Checkout Example app on Browserstack App Automate
 
-name: "ACTION: Test example-checkout on App Automate"
+name: "ACTION: Test example-shop on App Automate"
 
 on:
   workflow_dispatch:
@@ -22,4 +22,4 @@ jobs:
       - name: Clean checkout project
         run: ./gradlew clean
       - name: Test on App Automate
-        run: ./gradlew :example-checkout:executeTestsOnAppAutomate
+        run: ./gradlew :example-shop:executeTestsOnAppAutomate

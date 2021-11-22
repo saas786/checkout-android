@@ -1,6 +1,6 @@
 # Workflow for publishing the Checkout Example app to Browserstack App Live
 
-name: ACTION Upload Example-Checkout to App Live
+name: "ACTION: Upload example-checkout to App Live"
 
 on:
   workflow_dispatch:

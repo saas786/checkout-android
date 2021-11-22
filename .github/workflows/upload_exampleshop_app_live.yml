@@ -1,13 +1,13 @@
-# Workflow for executing androidTests of Checkout Example app on Browserstack App Automate
+# Workflow for publishing the Shop Example app to Browserstack App Live
 
-name: "ACTION: Test example-checkout on App Automate"
+name: "ACTION: Upload example-shop to App Live"
 
 on:
   workflow_dispatch:
 
 jobs:
-  test-app-automate:
-    name: Test on App Automate
+  upload-app-live:
+    name: Upload to App Live
     runs-on: ubuntu-latest
 
     steps:
@@ -21,5 +21,5 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
       - name: Clean checkout project
         run: ./gradlew clean
-      - name: Test on App Automate
-        run: ./gradlew :example-checkout:executeTestsOnAppAutomate
+      - name: Upload to App Live
+        run: ./gradlew :example-shop:uploadToAppLive
