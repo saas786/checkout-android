@@ -26,3 +26,7 @@ task testExampleApps() {
     dependsOn testExampleShop
     testExampleShop.mustRunAfter(testExampleCheckout)
 }
+
+task uploadExampleCheckout() {
+    dependsOn ':example-checkout:uploadToAppLive'
+}
