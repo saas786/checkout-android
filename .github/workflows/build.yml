@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-checkout:
-    name: "Test checkout module"
+    name: Test checkout module
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
         run: ./gradlew testCheckout
 
   test-examples:
-    name: "Test example apps"
+    name: Test example apps
     needs: test-checkout
     environment: Browserstack
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
 
   publish:
     needs: test-examples
-    name: "Publish snapshot artifact"
+    name: Publish snapshot artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
