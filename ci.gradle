@@ -28,5 +28,6 @@ task testExampleApps() {
 }
 
 task uploadExampleCheckout() {
+    print "TEST: " + System.getenv('BROWSERSTACK_TEST')
     dependsOn ':example-checkout:uploadToAppLive'
 }
