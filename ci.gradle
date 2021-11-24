@@ -11,23 +11,34 @@ task testCheckout() {
     dependsOn ':checkout:test'
 }
 
-task publishShapshot() {
-    dependsOn ':checkout:publishSnapshot'
+task publishCheckoutShapshotVersion() {
+    dependsOn ':checkout:publishSnapshotVersion'
 }
 
-task publishRelease() {
-    dependsOn ':checkout:publishRelease'
+task publishCheckoutReleaseVersion() {
+    dependsOn ':checkout:publishReleaseVersion'
 }
 
-task testExampleApps() {
-    def testExampleCheckout = tasks.findByPath(':example-checkout:executeTestsOnAppAutomate')
-    def testExampleShop = tasks.findByPath(':example-shop:executeTestsOnAppAutomate')
+task uploadExampleCheckoutToAppLive() {
+    dependsOn ':example-checkout:uploadToAppLive'
+}
+
+task uploadExampleShopToAppLive() {
+    dependsOn ':example-shop:uploadToAppLive'
+}
+
+task testExampleCheckoutOnAppAutomate() {
+    dependsOn ':example-checkout:testOnAppAutomate'
+}
+
+task testExampleShopOnAppAutomate() {
+    dependsOn ':example-shop:testOnAppAutomate'
+}
+
+task testExampleAppsOnAppAutomate() {
+    def testExampleCheckout = tasks.findByPath(':example-checkout:testOnAppAutomate')
+    def testExampleShop = tasks.findByPath(':example-shop:testOnAppAutomate')
     dependsOn testExampleCheckout
     dependsOn testExampleShop
     testExampleShop.mustRunAfter(testExampleCheckout)
-}
-
-task uploadExampleCheckout() {
-    print "TEST: " + System.getenv('BROWSERSTACK_TEST')
-    dependsOn ':example-checkout:uploadToAppLive'
 }

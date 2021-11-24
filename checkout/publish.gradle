@@ -1,4 +1,4 @@
-task publishSnapshot {
+task publishSnapshotVersion {
     if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
         logger.lifecycle('[PUBLISH-SNAPSHOT] Missing nexusUser and/or nexusPassword environment variables')
         return
@@ -10,7 +10,7 @@ task publishSnapshot {
     dependsOn 'publish'
 }
 
-task publishRelease {
+task publishReleaseVersion {
     if (rootProject.nexusUser == null || rootProject.nexusPassword == null) {
         logger.lifecycle('[PUBLISH-RELEASE] Missing nexusUser and/or nexusPassword environment variables')
         return
