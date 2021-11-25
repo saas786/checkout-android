@@ -11,7 +11,7 @@ task testCheckout() {
     dependsOn ':checkout:test'
 }
 
-task publishCheckoutShapshotVersion() {
+task publishCheckoutSnapshotVersion() {
     dependsOn ':checkout:publishSnapshotVersion'
 }
 
