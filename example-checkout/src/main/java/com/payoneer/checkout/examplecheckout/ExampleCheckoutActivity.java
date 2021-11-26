@@ -69,7 +69,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         interactionReasonView = findViewById(R.id.text_interactionreason);
         paymentErrorView = findViewById(R.id.text_paymenterror);
 
-        Button button = findViewById(R.id.button_action);
+        Button button = findViewById(R.id.button_show_payment_action);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 openPaymentPage();
