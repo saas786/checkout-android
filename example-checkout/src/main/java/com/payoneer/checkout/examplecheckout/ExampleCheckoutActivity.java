@@ -70,11 +70,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         paymentErrorView = findViewById(R.id.text_paymenterror);
 
         Button button = findViewById(R.id.button_show_payment_action);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openPaymentPage();
-            }
-        });
+        button.setOnClickListener(v -> openPaymentPage());
     }
 
     /**
