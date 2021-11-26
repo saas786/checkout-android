@@ -37,6 +37,7 @@ import androidx.test.espresso.IdlingResource;
 public final class ExampleCheckoutActivity extends AppCompatActivity {
 
     private final static int PAYMENT_REQUEST_CODE = 1;
+    private final static int CHARGE_PRESET_ACCOUNT_REQUEST_CODE = 34123;
     private PaymentActivityResult activityResult;
     private EditText listInput;
     private View resultLayout;
@@ -50,6 +51,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     private String listUrl;
     private SimpleIdlingResource resultHandledIdlingResource;
     private boolean resultHandled;
+    private final PaymentUI paymentUI = PaymentUI.getInstance();
 
     /**
      * {@inheritDoc}
@@ -69,8 +71,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         interactionReasonView = findViewById(R.id.text_interactionreason);
         paymentErrorView = findViewById(R.id.text_paymenterror);
 
-        Button button = findViewById(R.id.button_show_payment_action);
-        button.setOnClickListener(v -> openPaymentPage());
+        Button chargePresetAccountButton = findViewById(R.id.button_charge_preset_action);
+        Button showPaymentScreenButton = findViewById(R.id.button_show_payment_action);
+        showPaymentScreenButton.setOnClickListener(v -> openPaymentPage());
+        chargePresetAccountButton.setOnClickListener(v -> chargePresetAccount());
     }
 
     /**
@@ -103,7 +107,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PAYMENT_REQUEST_CODE) {
+        if (requestCode == PAYMENT_REQUEST_CODE || requestCode == CHARGE_PRESET_ACCOUNT_REQUEST_CODE) {
             activityResult = PaymentActivityResult.fromActivityResult(requestCode, resultCode, data);
         }
     }
@@ -164,7 +168,6 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
             showErrorDialog(getString(R.string.dialog_error_listurl_invalid));
             return;
         }
-        PaymentUI paymentUI = PaymentUI.getInstance();
         paymentUI.setListUrl(listUrl);
         paymentUI.setPaymentTheme(createPaymentTheme());
 
@@ -172,6 +175,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         //paymentUI.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         paymentUI.showPaymentPage(this, PAYMENT_REQUEST_CODE);
+    }
+
+    private void chargePresetAccount() {
+        paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
     }
 
     private PaymentTheme createPaymentTheme() {
