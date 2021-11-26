@@ -78,10 +78,20 @@ class AbstractTest {
         return ListService.createListWithSettings(paymentApiListUrl, merchantCode, merchantPaymentToken, settings);
     }
 
-    void clickActionButton() {
+    void clickShowPaymentScreenActionButton() {
         onView(withId(R.id.button_show_payment_action)).perform(click());
         intended(hasComponent(PaymentListActivity.class.getName()));
         onView(withId(R.id.layout_paymentlist)).check(matches(isDisplayed()));
+    }
+
+    void clickChargePresetAccountWithValidPresetAccountButton() {
+        onView(withId(R.id.button_show_payment_action)).perform(click());
+        intended(hasComponent(PaymentListActivity.class.getName()));
+        onView(withId(R.id.layout_paymentlist)).check(matches(isDisplayed()));
+    }
+
+    void clickChargePresetAccountWithInvalidPresetAccountButton() {
+        onView(withId(R.id.button_show_payment_action)).perform(click());
     }
 
     void register(IdlingResource resource) {

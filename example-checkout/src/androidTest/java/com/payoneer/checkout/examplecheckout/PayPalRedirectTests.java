@@ -38,7 +38,7 @@ public final class PayPalRedirectTests extends AbstractTest {
     public void testPayPalRedirect_directCharge_browserClosed() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         enterListUrl(createListUrl());
-        clickActionButton();
+        clickShowPaymentScreenActionButton();
 
         int networkCardIndex = 3;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -57,7 +57,7 @@ public final class PayPalRedirectTests extends AbstractTest {
     public void testPayPalRedirect_directCharge_customerAccept() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         enterListUrl(createListUrl());
-        clickActionButton();
+        clickShowPaymentScreenActionButton();
 
         int networkCardIndex = 3;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -75,7 +75,7 @@ public final class PayPalRedirectTests extends AbstractTest {
     @Test
     public void testPayPalRedirect_directCharge_customerAbort() {
         enterListUrl(createListUrl());
-        clickActionButton();
+        clickShowPaymentScreenActionButton();
 
         int networkCardIndex = 3;
         PaymentListHelper.waitForPaymentListLoaded(1);

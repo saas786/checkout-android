@@ -35,7 +35,7 @@ public final class RegistrationTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.UPDATE);
         enterListUrl(createListUrl(settings));
-        clickActionButton();
+        clickShowPaymentScreenActionButton();
 
         int cardIndex = 1;
 
@@ -56,7 +56,7 @@ public final class RegistrationTests extends AbstractTest {
         settings.setOperationType(NetworkOperationType.UPDATE);
         settings.setAmount(MagicNumbers.UPDATE_PROCEED_PENDING);
         enterListUrl(createListUrl(settings));
-        clickActionButton();
+        clickShowPaymentScreenActionButton();
 
         int cardIndex = 1;
 
@@ -76,7 +76,7 @@ public final class RegistrationTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.UPDATE);
         enterListUrl(createListUrl(settings));
-        clickActionButton();
+        clickShowPaymentScreenActionButton();
 
         int cardIndex = 1;
 
