@@ -178,7 +178,13 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     }
 
     private void chargePresetAccount() {
-        paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
+        try {
+            paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
+        } catch (IllegalStateException illegalStateException) {
+            showErrorDialog(getString(R.string.dialog_error_preset_account_unavailable));
+        } catch (Exception exception) {
+            showErrorDialog(getString(R.string.dialog_error_generic_error));
+        }
     }
 
     private PaymentTheme createPaymentTheme() {
