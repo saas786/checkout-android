@@ -84,14 +84,8 @@ class AbstractTest {
         onView(withId(R.id.layout_paymentlist)).check(matches(isDisplayed()));
     }
 
-    void clickChargePresetAccountWithValidPresetAccountButton() {
-        onView(withId(R.id.button_show_payment_action)).perform(click());
-        intended(hasComponent(PaymentListActivity.class.getName()));
-        onView(withId(R.id.layout_paymentlist)).check(matches(isDisplayed()));
-    }
-
-    void clickChargePresetAccountWithInvalidPresetAccountButton() {
-        onView(withId(R.id.button_show_payment_action)).perform(click());
+    void clickChargePresetAccountButton() {
+        onView(withId(R.id.button_charge_preset_action)).perform(click());
     }
 
     void register(IdlingResource resource) {

@@ -39,6 +39,7 @@ import org.hamcrest.Matcher;
 
 import com.payoneer.checkout.R;
 import com.payoneer.checkout.sharedtest.view.ActivityHelper;
+import com.payoneer.checkout.ui.page.ChargePaymentActivity;
 import com.payoneer.checkout.ui.page.PaymentListActivity;
 import com.payoneer.checkout.ui.page.idlingresource.PaymentIdlingResources;
 
@@ -61,6 +62,19 @@ public final class PaymentListHelper {
         idlingResources.resetLoadIdlingResource();
         IdlingRegistry.getInstance().unregister(loadIdlingResource);
         return listActivity;
+    }
+
+    public static void waitForChargePresetLoaded() {
+        intended(hasComponent(ChargePaymentActivity.class.getName()), times(2));
+        ChargePaymentActivity chargePaymentActivity = (ChargePaymentActivity) ActivityHelper.getCurrentActivity();
+        PaymentIdlingResources idlingResources = chargePaymentActivity.getPaymentIdlingResources();
+        IdlingResource loadIdlingResource = idlingResources.getLoadIdlingResource();
+
+        IdlingRegistry.getInstance().register(loadIdlingResource);
+        onView(withId(R.id.layout_chargepayment)).check(matches(isDisplayed()));
+
+        idlingResources.resetLoadIdlingResource();
+        IdlingRegistry.getInstance().unregister(loadIdlingResource);
     }
 
     public static void waitForPaymentListDialog() {
