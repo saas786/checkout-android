@@ -51,12 +51,11 @@ public class PresetAccountTests extends AbstractTest {
     }
 
     @Test
-    public void testChargePresentAccount_PROCEED_OK() {
+    public void testChargePresetAccount_PROCEED_OK() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
 
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.PRESET);
-        settings.setAmount(MagicNumbers.CHARGE_PROCEED_OK);
         enterListUrl(createListUrl(settings));
         clickShowPaymentListButton();
 
@@ -81,7 +80,6 @@ public class PresetAccountTests extends AbstractTest {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.PRESET);
-        settings.setAmount(MagicNumbers.CHARGE_PROCEED_OK);
         enterListUrl(createListUrl(settings));
         clickShowPaymentListButton();
 
@@ -98,5 +96,34 @@ public class PresetAccountTests extends AbstractTest {
         register(resultIdlingResource);
         clickCustomerDecisionPageButton("customer-accept");
         waitForAppRelaunch();
+    }
+
+    @Test
+    public void testChargingPresetAccountWith3DS2_PROCEED_OK() {
+        IdlingResource resultIdlingResource = getResultIdlingResource();
+
+        ListSettings settings = createDefaultListSettings();
+        settings.setOperationType(NetworkOperationType.PRESET);
+        settings.setAmount(MagicNumbers.THREE3DS2);
+        enterListUrl(createListUrl(settings));
+        clickShowPaymentListButton();
+
+        int groupCardIndex = 1;
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
+        PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.amexCardTestData());
+        PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
+
+        register(resultIdlingResource);
+        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
+        unregister(resultIdlingResource);
+
+        clickChargePresetAccountButton();
+        clickDeviceCollectionPagePageButton("customer-accept");
+        waitForAppRelaunch();
+
+        register(resultIdlingResource);
+        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
+        unregister(resultIdlingResource);
     }
 }
