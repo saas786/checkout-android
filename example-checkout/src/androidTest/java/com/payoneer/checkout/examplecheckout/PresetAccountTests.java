@@ -10,8 +10,6 @@
 
 package com.payoneer.checkout.examplecheckout;
 
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
