@@ -161,8 +161,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     private void openPaymentPage() {
         closeKeyboard();
         clearPaymentResult();
-        setListUrl();
 
+        if (!setListUrl()) {
+            return;
+        }
         paymentUI.setPaymentTheme(createPaymentTheme());
 
         // Set the orientation to be fixed to landscape mode
@@ -174,7 +176,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     private void chargePresetAccount() {
         closeKeyboard();
         clearPaymentResult();
-        setListUrl();
+
+        if (!setListUrl()) {
+            return;
+        }
         paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
     }
 

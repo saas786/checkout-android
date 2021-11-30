@@ -67,6 +67,7 @@ public class PresetAccountTests extends AbstractTest {
         PaymentListHelper.openPaymentListCard(groupCardIndex, "card.group");
         PaymentListHelper.fillPaymentListCard(groupCardIndex, TestDataProvider.amexCardTestData());
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
+
         register(resultIdlingResource);
         matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
         unregister(resultIdlingResource);
