@@ -77,7 +77,7 @@ public class PresetAccountTests extends AbstractTest {
     }
 
     @Test
-    public void testChargingPresetAccountWithRedirectNetwork_PROCEED_OK() throws InterruptedException {
+    public void testChargingPresetAccountWithRedirectNetwork_PROCEED_OK() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         ListSettings settings = createDefaultListSettings();
         settings.setOperationType(NetworkOperationType.PRESET);
