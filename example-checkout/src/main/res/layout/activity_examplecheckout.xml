@@ -76,13 +76,13 @@
                     android:id="@+id/button_show_payment_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_show_payment_list" />
+                    android:text="@string/button_show_payment_list" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_charge_preset_action"
+                    android:id="@+id/button_charge_preset_acount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_charge_preset_account_button" />
+                    android:text="@string/button_charge_preset_account" />
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

@@ -71,7 +71,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         interactionReasonView = findViewById(R.id.text_interactionreason);
         paymentErrorView = findViewById(R.id.text_paymenterror);
 
-        Button chargePresetAccountButton = findViewById(R.id.button_charge_preset_action);
+        Button chargePresetAccountButton = findViewById(R.id.button_charge_preset_acount);
         Button showPaymentScreenButton = findViewById(R.id.button_show_payment_list);
         showPaymentScreenButton.setOnClickListener(v -> openPaymentPage());
         chargePresetAccountButton.setOnClickListener(v -> chargePresetAccount());

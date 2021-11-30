@@ -84,7 +84,7 @@ class AbstractTest {
     }
 
     void clickChargePresetAccountButton() {
-        onView(withId(R.id.button_charge_preset_action)).perform(click());
+        onView(withId(R.id.button_charge_preset_acount)).perform(click());
         intended(hasComponent(ChargePaymentActivity.class.getName()));
     }
 
