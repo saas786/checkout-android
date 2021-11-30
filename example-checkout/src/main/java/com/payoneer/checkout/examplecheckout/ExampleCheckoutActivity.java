@@ -37,7 +37,7 @@ import androidx.test.espresso.IdlingResource;
 public final class ExampleCheckoutActivity extends AppCompatActivity {
 
     private final static int PAYMENT_REQUEST_CODE = 1;
-    private final static int CHARGE_PRESET_ACCOUNT_REQUEST_CODE = 34123;
+    private final static int CHARGE_PRESET_ACCOUNT_REQUEST_CODE = 2;
     private PaymentActivityResult activityResult;
     private EditText listInput;
     private View resultLayout;
@@ -72,7 +72,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         paymentErrorView = findViewById(R.id.text_paymenterror);
 
         Button chargePresetAccountButton = findViewById(R.id.button_charge_preset_action);
-        Button showPaymentScreenButton = findViewById(R.id.button_show_payment_action);
+        Button showPaymentScreenButton = findViewById(R.id.button_show_payment_list);
         showPaymentScreenButton.setOnClickListener(v -> openPaymentPage());
         chargePresetAccountButton.setOnClickListener(v -> chargePresetAccount());
     }

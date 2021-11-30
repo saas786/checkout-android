@@ -79,7 +79,7 @@ class AbstractTest {
     }
 
     void clickShowPaymentListButton() {
-        onView(withId(R.id.button_show_payment_action)).perform(click());
+        onView(withId(R.id.button_show_payment_list)).perform(click());
         intended(hasComponent(PaymentListActivity.class.getName()));
     }
 
