@@ -76,7 +76,7 @@
                     android:id="@+id/button_show_payment_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/action_show_payment_screen_button" />
+                    android:text="@string/action_show_payment_list" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_charge_preset_action"

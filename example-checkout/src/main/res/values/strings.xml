@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Checkout Example</string>
 
-    <string name="action_show_payment_screen_button">Show Payment List</string>
+    <string name="action_show_payment_list">Show Payment List</string>
     <string name="action_charge_preset_account_button">Charge Preset Account</string>
     <string name="list_hint">List URL</string>
     <string name="empty_label">n/a</string>
@@ -18,6 +18,4 @@
     <string name="dialog_error_title">Error</string>
     <string name="dialog_error_button">Close</string>
     <string name="dialog_error_listurl_invalid">Please paste a valid List URL in the input field.</string>
-    <string name="dialog_error_preset_account_unavailable">You have not set a preset account to be charged at the moment. Please set it and try again.</string>
-    <string name="dialog_error_generic_error">Something went wrong. Please try again.</string>
 </resources>
