@@ -37,7 +37,7 @@ public final class ExtraElementTests extends AbstractTest {
         settings.setDivision(DIVISION);
         settings.setCheckoutConfigurationName(EXTRAELEMENTS_TOP_CONFIG);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int networkCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -53,7 +53,7 @@ public final class ExtraElementTests extends AbstractTest {
         settings.setDivision(DIVISION);
         settings.setCheckoutConfigurationName(EXTRAELEMENTS_BOTTOM_CONFIG);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int networkCardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -69,7 +69,7 @@ public final class ExtraElementTests extends AbstractTest {
         settings.setDivision(DIVISION);
         settings.setCheckoutConfigurationName(EXTRAELEMENTS_BOTTOM_CONFIG);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int networkCardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -88,7 +88,7 @@ public final class ExtraElementTests extends AbstractTest {
         settings.setDivision(DIVISION);
         settings.setCheckoutConfigurationName(EXTRAELEMENTS_TOPBOTTOM_CONFIG);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int networkCardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);

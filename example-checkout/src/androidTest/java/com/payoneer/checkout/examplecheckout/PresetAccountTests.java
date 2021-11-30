@@ -10,9 +10,6 @@
 
 package com.payoneer.checkout.examplecheckout;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import org.junit.Rule;
@@ -21,6 +18,7 @@ import org.junit.runner.RunWith;
 
 import com.payoneer.checkout.model.InteractionCode;
 import com.payoneer.checkout.model.InteractionReason;
+import com.payoneer.checkout.model.NetworkOperationType;
 import com.payoneer.checkout.sharedtest.checkout.MagicNumbers;
 import com.payoneer.checkout.sharedtest.checkout.PaymentListHelper;
 import com.payoneer.checkout.sharedtest.checkout.TestDataProvider;
@@ -40,23 +38,29 @@ public class PresetAccountTests extends AbstractTest {
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
-    public void testInvalidPresetAccountShowsErrorDialog() {
-        ListSettings settings = createDefaultListSettings();
-        settings.setAmount(MagicNumbers.CHARGE_TRY_OTHER_ACCOUNT);
-        enterListUrl(createListUrl(settings));
-        clickChargePresetAccountButton();
-        onView(withText("You have not set a preset account to be charged at the moment. Please set it and try again."))
-            .check((matches(isDisplayed())));
-    }
-
-    @Test
-    public void testValidPresentAccountShouldNotReturnError() {
+    public void testMissingPresetAccount_ABORT_CLIENTSIDE_ERROR() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
 
         ListSettings settings = createDefaultListSettings();
+        settings.setOperationType(NetworkOperationType.PRESET);
+        settings.setAmount(MagicNumbers.CHARGE_TRY_OTHER_ACCOUNT);
+        enterListUrl(createListUrl(settings));
+        clickChargePresetAccountButton();
+
+        register(resultIdlingResource);
+        matchResultInteraction(InteractionCode.ABORT, InteractionReason.CLIENTSIDE_ERROR);
+        unregister(resultIdlingResource);
+    }
+
+    @Test
+    public void testChargePresentAccount_PROCEED_OK() {
+        IdlingResource resultIdlingResource = getResultIdlingResource();
+
+        ListSettings settings = createDefaultListSettings();
+        settings.setOperationType(NetworkOperationType.PRESET);
         settings.setAmount(MagicNumbers.CHARGE_PROCEED_OK);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -65,8 +69,10 @@ public class PresetAccountTests extends AbstractTest {
         PaymentListHelper.clickPaymentListCardButton(groupCardIndex);
         register(resultIdlingResource);
         matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
+        unregister(resultIdlingResource);
+
         clickChargePresetAccountButton();
-        PaymentListHelper.waitForChargePresetLoaded();
+        register(resultIdlingResource);
         matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
         unregister(resultIdlingResource);
     }

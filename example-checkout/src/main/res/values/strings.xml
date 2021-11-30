@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Checkout Example</string>
 
-    <string name="action_show_payment_screen_button">Show Payment Page</string>
-    <string name="action_charge_preset_account_button">Charge Preset Acount</string>
+    <string name="action_show_payment_screen_button">Show Payment List</string>
+    <string name="action_charge_preset_account_button">Charge Preset Account</string>
     <string name="list_hint">List URL</string>
     <string name="empty_label">n/a</string>
 

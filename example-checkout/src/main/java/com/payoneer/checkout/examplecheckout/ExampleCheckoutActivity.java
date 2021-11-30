@@ -94,16 +94,13 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         resultHandled = false;
         if (activityResult != null) {
             showPaymentActivityResult(activityResult);
-            setResultHandledIdleState();
+            setResultHandledIdleState(true);
         }
         if (listUrl != null) {
             listInput.setText(listUrl);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -112,7 +109,9 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         }
     }
 
-    private void clearPaymentActivityResult() {
+    private void clearPaymentResult() {
+        setResultHandledIdleState(false);
+
         resultHeaderView.setVisibility(View.GONE);
         resultLayout.setVisibility(View.GONE);
         this.activityResult = null;
@@ -161,14 +160,9 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
 
     private void openPaymentPage() {
         closeKeyboard();
-        clearPaymentActivityResult();
+        clearPaymentResult();
+        setListUrl();
 
-        String listUrl = listInput.getText().toString().trim();
-        if (TextUtils.isEmpty(listUrl) || !Patterns.WEB_URL.matcher(listUrl).matches()) {
-            showErrorDialog(getString(R.string.dialog_error_listurl_invalid));
-            return;
-        }
-        paymentUI.setListUrl(listUrl);
         paymentUI.setPaymentTheme(createPaymentTheme());
 
         // Set the orientation to be fixed to landscape mode
@@ -178,13 +172,20 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     }
 
     private void chargePresetAccount() {
-        try {
-            paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
-        } catch (IllegalStateException illegalStateException) {
-            showErrorDialog(getString(R.string.dialog_error_preset_account_unavailable));
-        } catch (Exception exception) {
-            showErrorDialog(getString(R.string.dialog_error_generic_error));
+        closeKeyboard();
+        clearPaymentResult();
+        setListUrl();
+        paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
+    }
+
+    private boolean setListUrl() {
+        String listUrl = listInput.getText().toString().trim();
+        if (TextUtils.isEmpty(listUrl) || !Patterns.WEB_URL.matcher(listUrl).matches()) {
+            showErrorDialog(getString(R.string.dialog_error_listurl_invalid));
+            return false;
         }
+        paymentUI.setListUrl(listUrl);
+        return true;
     }
 
     private PaymentTheme createPaymentTheme() {
@@ -217,10 +218,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     /**
      * Set the result handled idle state for the IdlingResource
      */
-    private void setResultHandledIdleState() {
-        resultHandled = true;
+    private void setResultHandledIdleState(boolean val) {
+        resultHandled = val;
         if (resultHandledIdlingResource != null) {
-            resultHandledIdlingResource.setIdleState(true);
+            resultHandledIdlingResource.setIdleState(val);
         }
     }
 

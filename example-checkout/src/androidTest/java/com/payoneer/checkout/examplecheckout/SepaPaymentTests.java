@@ -33,7 +33,7 @@ public final class SepaPaymentTests extends AbstractTest {
     public void testSepa_PROCEED_SCHEDULED() {
         IdlingResource resultIdlingResource = getResultIdlingResource();
         enterListUrl(createListUrl());
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int cardIndex = 2;
         PaymentListHelper.waitForPaymentListLoaded(1);

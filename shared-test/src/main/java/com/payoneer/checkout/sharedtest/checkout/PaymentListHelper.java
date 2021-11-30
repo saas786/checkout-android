@@ -64,19 +64,6 @@ public final class PaymentListHelper {
         return listActivity;
     }
 
-    public static void waitForChargePresetLoaded() {
-        intended(hasComponent(ChargePaymentActivity.class.getName()), times(2));
-        ChargePaymentActivity chargePaymentActivity = (ChargePaymentActivity) ActivityHelper.getCurrentActivity();
-        PaymentIdlingResources idlingResources = chargePaymentActivity.getPaymentIdlingResources();
-        IdlingResource loadIdlingResource = idlingResources.getLoadIdlingResource();
-
-        IdlingRegistry.getInstance().register(loadIdlingResource);
-        onView(withId(R.id.layout_chargepayment)).check(matches(isDisplayed()));
-
-        idlingResources.resetLoadIdlingResource();
-        IdlingRegistry.getInstance().unregister(loadIdlingResource);
-    }
-
     public static void waitForPaymentListDialog() {
         intended(hasComponent(PaymentListActivity.class.getName()));
         PaymentListActivity listActivity = (PaymentListActivity) ActivityHelper.getCurrentActivity();
