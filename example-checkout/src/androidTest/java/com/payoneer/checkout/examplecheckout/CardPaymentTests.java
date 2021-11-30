@@ -42,7 +42,7 @@ public final class CardPaymentTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(CHARGE_PROCEED_OK);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -62,7 +62,7 @@ public final class CardPaymentTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.CHARGE_PROCEED_PENDING);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -80,7 +80,7 @@ public final class CardPaymentTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.CHARGE_RETRY);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -102,7 +102,7 @@ public final class CardPaymentTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.CHARGE_TRY_OTHER_NETWORK);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -125,7 +125,7 @@ public final class CardPaymentTests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.CHARGE_TRY_OTHER_ACCOUNT);
         enterListUrl(createListUrl(settings));
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
 
@@ -149,7 +149,7 @@ public final class CardPaymentTests extends AbstractTest {
         IdlingResource resultIdlingResource = getResultIdlingResource();
 
         enterListUrl(createListUrl());
-        clickShowPaymentScreenActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
