@@ -75,4 +75,28 @@ public class PresetAccountTests extends AbstractTest {
         matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
         unregister(resultIdlingResource);
     }
+
+    @Test
+    public void testChargingPresetAccountWithRedirectNetwork_PROCEED_OK() throws InterruptedException {
+        IdlingResource resultIdlingResource = getResultIdlingResource();
+        ListSettings settings = createDefaultListSettings();
+        settings.setOperationType(NetworkOperationType.PRESET);
+        settings.setAmount(MagicNumbers.CHARGE_PROCEED_OK);
+        enterListUrl(createListUrl(settings));
+        clickShowPaymentListButton();
+
+        int networkCardIndex = 3;
+        PaymentListHelper.waitForPaymentListLoaded(1);
+        PaymentListHelper.openPaymentListCard(networkCardIndex, "card.network");
+        PaymentListHelper.clickPaymentListCardButton(networkCardIndex);
+
+        register(resultIdlingResource);
+        matchResultInteraction(InteractionCode.PROCEED, InteractionReason.OK);
+        unregister(resultIdlingResource);
+
+        clickChargePresetAccountButton();
+        register(resultIdlingResource);
+        clickCustomerDecisionPageButton("customer-accept");
+        waitForAppRelaunch();
+    }
 }
