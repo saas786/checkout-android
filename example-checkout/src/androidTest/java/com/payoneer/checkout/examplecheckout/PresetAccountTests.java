@@ -27,12 +27,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 
-@SuppressWarnings("deprecation")
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class PresetAccountTests extends AbstractTest {
 
     @Rule
+    @SuppressWarnings("deprecation")
     public ActivityTestRule<ExampleCheckoutActivity> rule = new ActivityTestRule<>(ExampleCheckoutActivity.class);
 
     @Test
