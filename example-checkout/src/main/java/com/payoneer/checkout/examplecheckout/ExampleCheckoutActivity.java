@@ -81,14 +81,6 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
      * {@inheritDoc}
      */
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void onResume() {
         super.onResume();
         resultHandled = false;
