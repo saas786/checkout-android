@@ -95,7 +95,7 @@ public class PresetAccountTests extends AbstractTest {
         clickChargePresetAccountButton();
         register(resultIdlingResource);
         clickCustomerDecisionPageButton("customer-accept");
-        waitForAppRelaunch();
+        unregister(resultIdlingResource);
     }
 
     @Test
