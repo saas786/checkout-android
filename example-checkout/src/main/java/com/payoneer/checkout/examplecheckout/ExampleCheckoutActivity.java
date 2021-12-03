@@ -48,14 +48,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     private TextView interactionCodeView;
     private TextView interactionReasonView;
     private TextView paymentErrorView;
-    private String listUrl;
     private SimpleIdlingResource resultHandledIdlingResource;
     private boolean resultHandled;
     private final PaymentUI paymentUI = PaymentUI.getInstance();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,9 +73,6 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         chargePresetAccountButton.setOnClickListener(v -> chargePresetAccount());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onResume() {
         super.onResume();
@@ -87,9 +80,6 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         if (activityResult != null) {
             showPaymentActivityResult(activityResult);
             setResultHandledIdleState(true);
-        }
-        if (listUrl != null) {
-            listInput.setText(listUrl);
         }
     }
 
@@ -103,7 +93,6 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
 
     private void clearPaymentResult() {
         setResultHandledIdleState(false);
-
         resultHeaderView.setVisibility(View.GONE);
         resultLayout.setVisibility(View.GONE);
         this.activityResult = null;
@@ -151,27 +140,25 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     }
 
     private void openPaymentPage() {
-        closeKeyboard();
-        clearPaymentResult();
-
         if (!setListUrl()) {
             return;
         }
+        closeKeyboard();
+        clearPaymentResult();
         paymentUI.setPaymentTheme(createPaymentTheme());
 
-        // Set the orientation to be fixed to landscape mode
-        //paymentUI.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        // Uncomment if you like to fix e.g. the orientation to landscape mode
+        // paymentUI.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         paymentUI.showPaymentPage(this, PAYMENT_REQUEST_CODE);
     }
 
     private void chargePresetAccount() {
-        closeKeyboard();
-        clearPaymentResult();
-
         if (!setListUrl()) {
             return;
         }
+        closeKeyboard();
+        clearPaymentResult();
         paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
     }
 
@@ -213,7 +200,7 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     }
 
     /**
-     * Set the result handled idle state for the IdlingResource
+     * For testing only, set the result handled idle state for the IdlingResource
      */
     private void setResultHandledIdleState(boolean val) {
         resultHandled = val;
