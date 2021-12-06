@@ -82,11 +82,12 @@ public class NetworkServiceLookup {
     }
 
     private static void getFactories() {
+        Log.i("AAAAAA", "load factories");
         ServiceLoader<NetworkServiceFactory> factories
             = ServiceLoader.load(NetworkServiceFactory.class);
 
         for (NetworkServiceFactory factory : factories) {
-            Log.e(NetworkServiceLookup.class.getSimpleName(), "getFactories:  ----------- " + factory);
+            Log.i("AAAAAA", "getFactory:  ----------- " + factory);
         }
     }
 }
