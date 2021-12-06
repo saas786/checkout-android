@@ -39,7 +39,7 @@ public final class Three3DS2Tests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.THREE3DS2);
         enterListUrl(createListUrl(settings));
-        clickActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -61,7 +61,7 @@ public final class Three3DS2Tests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.THREE3DS2);
         enterListUrl(createListUrl(settings));
-        clickActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);
@@ -83,7 +83,7 @@ public final class Three3DS2Tests extends AbstractTest {
         ListSettings settings = createDefaultListSettings();
         settings.setAmount(MagicNumbers.THREE3DS2);
         enterListUrl(createListUrl(settings));
-        clickActionButton();
+        clickShowPaymentListButton();
 
         int groupCardIndex = 1;
         PaymentListHelper.waitForPaymentListLoaded(1);

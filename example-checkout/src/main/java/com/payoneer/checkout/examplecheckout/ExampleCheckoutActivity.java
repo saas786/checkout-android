@@ -37,6 +37,7 @@ import androidx.test.espresso.IdlingResource;
 public final class ExampleCheckoutActivity extends AppCompatActivity {
 
     private final static int PAYMENT_REQUEST_CODE = 1;
+    private final static int CHARGE_PRESET_ACCOUNT_REQUEST_CODE = 2;
     private PaymentActivityResult activityResult;
     private EditText listInput;
     private View resultLayout;
@@ -47,13 +48,10 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     private TextView interactionCodeView;
     private TextView interactionReasonView;
     private TextView paymentErrorView;
-    private String listUrl;
     private SimpleIdlingResource resultHandledIdlingResource;
     private boolean resultHandled;
+    private final PaymentUI paymentUI = PaymentUI.getInstance();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,50 +67,32 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
         interactionReasonView = findViewById(R.id.text_interactionreason);
         paymentErrorView = findViewById(R.id.text_paymenterror);
 
-        Button button = findViewById(R.id.button_action);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openPaymentPage();
-            }
-        });
+        Button chargePresetAccountButton = findViewById(R.id.button_charge_preset_acount);
+        Button showPaymentScreenButton = findViewById(R.id.button_show_payment_list);
+        showPaymentScreenButton.setOnClickListener(v -> openPaymentPage());
+        chargePresetAccountButton.setOnClickListener(v -> chargePresetAccount());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onResume() {
         super.onResume();
         resultHandled = false;
         if (activityResult != null) {
             showPaymentActivityResult(activityResult);
-            setResultHandledIdleState();
-        }
-        if (listUrl != null) {
-            listInput.setText(listUrl);
+            setResultHandledIdleState(true);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PAYMENT_REQUEST_CODE) {
+        if (requestCode == PAYMENT_REQUEST_CODE || requestCode == CHARGE_PRESET_ACCOUNT_REQUEST_CODE) {
             activityResult = PaymentActivityResult.fromActivityResult(requestCode, resultCode, data);
         }
     }
 
-    private void clearPaymentActivityResult() {
+    private void clearPaymentResult() {
+        setResultHandledIdleState(false);
         resultHeaderView.setVisibility(View.GONE);
         resultLayout.setVisibility(View.GONE);
         this.activityResult = null;
@@ -160,22 +140,36 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     }
 
     private void openPaymentPage() {
+        if (!setListUrl()) {
+            return;
+        }
         closeKeyboard();
-        clearPaymentActivityResult();
+        clearPaymentResult();
+        paymentUI.setPaymentTheme(createPaymentTheme());
 
+        // Uncomment if you like to fix e.g. the orientation to landscape mode
+        // paymentUI.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        paymentUI.showPaymentPage(this, PAYMENT_REQUEST_CODE);
+    }
+
+    private void chargePresetAccount() {
+        if (!setListUrl()) {
+            return;
+        }
+        closeKeyboard();
+        clearPaymentResult();
+        paymentUI.chargePresetAccount(this, CHARGE_PRESET_ACCOUNT_REQUEST_CODE);
+    }
+
+    private boolean setListUrl() {
         String listUrl = listInput.getText().toString().trim();
         if (TextUtils.isEmpty(listUrl) || !Patterns.WEB_URL.matcher(listUrl).matches()) {
             showErrorDialog(getString(R.string.dialog_error_listurl_invalid));
-            return;
+            return false;
         }
-        PaymentUI paymentUI = PaymentUI.getInstance();
         paymentUI.setListUrl(listUrl);
-        paymentUI.setPaymentTheme(createPaymentTheme());
-
-        // Set the orientation to be fixed to landscape mode
-        //paymentUI.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-        paymentUI.showPaymentPage(this, PAYMENT_REQUEST_CODE);
+        return true;
     }
 
     private PaymentTheme createPaymentTheme() {
@@ -206,12 +200,12 @@ public final class ExampleCheckoutActivity extends AppCompatActivity {
     }
 
     /**
-     * Set the result handled idle state for the IdlingResource
+     * For testing only, set the result handled idle state for the IdlingResource
      */
-    private void setResultHandledIdleState() {
-        resultHandled = true;
+    private void setResultHandledIdleState(boolean val) {
+        resultHandled = val;
         if (resultHandledIdlingResource != null) {
-            resultHandledIdlingResource.setIdleState(true);
+            resultHandledIdlingResource.setIdleState(val);
         }
     }
 
