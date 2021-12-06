@@ -10,6 +10,7 @@ package com.payoneer.checkout.ui.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.content.Context;
@@ -71,11 +72,21 @@ public class NetworkServiceLookup {
     }
 
     private static void loadFactory(String className) {
+        getFactories();
         try {
             NetworkServiceFactory factory = (NetworkServiceFactory) Class.forName(className).newInstance();
             factories.add(factory);
         } catch (Exception e) {
             Log.w("sdk_NetworkService", e);
+        }
+    }
+
+    private static void getFactories() {
+        ServiceLoader<NetworkServiceFactory> factories
+            = ServiceLoader.load(NetworkServiceFactory.class);
+
+        for (NetworkServiceFactory factory : factories) {
+            Log.e(NetworkServiceLookup.class.getSimpleName(), "getFactories:  ----------- " + factory);
         }
     }
 }

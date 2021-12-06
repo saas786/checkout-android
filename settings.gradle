@@ -1,1 +1,2 @@
 include ':checkout', ':example-checkout', ':example-shop', ':shared-test'
+include ':network-service-googlepay'
