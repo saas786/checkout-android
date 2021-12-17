@@ -11,6 +11,7 @@
 
         <activity
             android:name=".ExampleCheckoutActivity"
+            android:exported="true"
             android:theme="@style/PaymentTheme.Toolbar"
             android:windowSoftInputMode="stateHidden">
 
@@ -22,8 +23,9 @@
 
         <activity
             android:name="com.payoneer.checkout.redirect.PaymentRedirectActivity"
-            android:theme="@style/PaymentTheme.NoToolbar"
-            android:launchMode="singleTask">
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/PaymentTheme.NoToolbar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data android:scheme="${applicationId}.mobileredirect" />

@@ -11,6 +11,7 @@
 
         <activity
             android:name=".settings.SettingsActivity"
+            android:exported="true"
             android:theme="@style/PaymentTheme.Toolbar"
             android:windowSoftInputMode="stateHidden">
 
@@ -22,22 +23,26 @@
 
         <activity
             android:name=".checkout.CheckoutActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/PaymentTheme.CollapsingToolbar" />
+            android:exported="true"
+            android:theme="@style/PaymentTheme.CollapsingToolbar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
             android:name=".summary.SummaryActivity"
+            android:exported="true"
             android:theme="@style/PaymentTheme.CollapsingToolbar" />
 
         <activity
             android:name=".confirm.ConfirmActivity"
+            android:exported="true"
             android:noHistory="true"
             android:theme="@style/PaymentTheme.NoToolbar" />
 
         <activity
             android:name="com.payoneer.checkout.redirect.PaymentRedirectActivity"
-            android:theme="@style/PaymentTheme.NoToolbar"
-            android:launchMode="singleTask">
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/PaymentTheme.NoToolbar">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

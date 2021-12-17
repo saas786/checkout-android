@@ -11,9 +11,11 @@
     <application android:hardwareAccelerated="true">
         <activity
             android:name="com.payoneer.checkout.ui.page.PaymentListActivity"
+            android:exported="true"
             android:theme="@style/PaymentTheme" />
         <activity
             android:name="com.payoneer.checkout.ui.page.ChargePaymentActivity"
+            android:exported="true"
             android:theme="@style/PaymentTheme" />
     </application>
 </manifest>
